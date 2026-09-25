@@ -128,7 +128,6 @@ def cta_block(r, path=""):
           <h2>{T("Parlons de votre prochaine panne, avant qu'elle n'arrive.", "Let's talk about your next outage before it happens.")}</h2>
           <p>{T("Un premier échange de 30 minutes, sans engagement, pour faire le point sur vos risques et vos priorités.", "A free 30-minute intro call to review your risks and priorities.")}</p>
           <div class="cta-actions">{book}{selfassess}</div>
-          <p class="mail-fallback">{T("Vous préférez le courriel ?", "Prefer email?")} <a href="mailto:{EMAIL}">{EMAIL}</a></p>
         </div>
         <form class="cform mini" id="contact-form" data-endpoint="{"https://formspree.io/f/" + E(FORMSPREE_ID) if FORMSPREE_ID else ""}" data-email="{EMAIL}" novalidate>
           <h3>{T("Nous écrire", "Send us a message")}</h3>
@@ -465,7 +464,6 @@ def build_lang():
     b += f'''<section class="block contact-grid">
       <div class="side">
         <h2>{T("Réserver un appel", "Book a call")}</h2>{book}
-        <h2>{T("Par courriel", "By email")}</h2><p><a class="textlink" href="mailto:{EMAIL}">{EMAIL}</a></p>
         <h2>{T("Avant l'appel", "Before the call")}</h2>
         <p class="muted">{T("L'auto-évaluation prend cinq minutes et donne une bonne base de discussion.", "The self-assessment takes five minutes and gives us a good starting point.")}</p>
         <p><a class="textlink" href="{r}self-assessment.html">{T("Faire l'auto-évaluation", "Take the self-assessment")} {ARROW}</a></p>
