@@ -525,7 +525,7 @@ def build_privacy():
       T(f"Le responsable du traitement est FZ Consultation. Pour toute question sur vos renseignements personnels, écrivez à <a href=\"mailto:{EMAIL}\">{EMAIL}</a>. ",
         f"The data controller is FZ Consultation. For any question about your personal information, email <a href=\"mailto:{EMAIL}\">{EMAIL}</a>. ") +
       T("La personne responsable de la protection des renseignements personnels est : ", "The person in charge of the protection of personal information is: ") +
-      TODO("titre de la personne responsable, par ex. « Directeur général »", "title of the person in charge, e.g. “Managing Director”") + "."))
+      f"Fabien Mariou, <a href=\"mailto:{EMAIL}\">{EMAIL}</a>."))
     items = [
       (T("Messages que vous nous envoyez", "Messages you send us"),
        T("Nom, courriel, organisation et contenu du message, lorsque vous nous écrivez par courriel ou par le formulaire. Nous les utilisons uniquement pour vous répondre et assurer le suivi de votre demande.",
@@ -563,8 +563,8 @@ def build_legal():
     path = "legal.html"; r = ""
     S = [
      (("Éditeur du site", "Site publisher"),
-      f"<p>FZ Consultation — {TODO('forme juridique', 'legal form')}<br>{TODO('adresse postale', 'postal address')}<br>{TODO('numéro d’immatriculation (SIREN/RCS ou NEQ)', 'registration number (e.g. SIREN/RCS, NEQ or Companies House)')}<br>{T('Courriel', 'Email')} : <a href=\"mailto:{EMAIL}\">{EMAIL}</a></p>"),
-     (("Directeur de la publication", "Publication director"), f"<p>{TODO('nom du directeur de la publication', 'name of the publication director')}</p>"),
+      f"<p>FZ Consultation<br>621 rue Massena<br>Greenfield Park (Québec) J4V 1E3<br>Canada<br>{T('Numéro d’entreprise du Québec (NEQ)', 'Quebec Enterprise Number (NEQ)')}{T(' : ', ': ')}1181466344<br>{T('Courriel', 'Email')}{T(' : ', ': ')}<a href=\"mailto:{EMAIL}\">{EMAIL}</a></p>"),
+     (("Directeur de la publication", "Publication director"), "<p>Fabien Mariou</p>"),
      (("Hébergement", "Hosting"), "<p>GitHub, Inc. — 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, " + T("États-Unis", "United States") + " — <a href=\"https://github.com\" rel=\"noopener\">github.com</a></p>"),
      (("Propriété intellectuelle", "Intellectual property"), "<p>" + T("Le contenu de ce site (textes, logo, graphismes) appartient à FZ Consultation, sauf mention contraire. Toute reproduction sans autorisation est interdite. La police Schibsted Grotesk est utilisée sous licence SIL Open Font License 1.1.",
         "The content of this site (text, logo, graphics) belongs to FZ Consultation unless stated otherwise. Reproduction without permission is prohibited. The Schibsted Grotesk font is used under the SIL Open Font License 1.1.") + "</p>"),
