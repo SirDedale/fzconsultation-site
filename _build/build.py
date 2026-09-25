@@ -15,7 +15,7 @@ SITE = "https://fzconsultation.xyz"
 EMAIL = "contact@fzconsultation.xyz"
 BOOKING_URL = ""          # e.g. your Cal.com or Calendly link; leave "" to hide the booking button
 FORMSPREE_ID = "mkjgvpwo"       # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
-CF_ANALYTICS_TOKEN = ""   # Cloudflare Web Analytics token; leave "" for no analytics
+CF_ANALYTICS_TOKEN = "b23a07ee11d3441f89c969fc2c62f224"   # Cloudflare Web Analytics token; leave "" for no analytics
 UPDATED = ("25 septembre 2026", "September 25, 2026")
 # ==========================================
 
@@ -563,7 +563,7 @@ def build_legal():
     path = "legal.html"; r = ""
     S = [
      (("Éditeur du site", "Site publisher"),
-      f"<p>FZ Consultation<br>621 rue Massena<br>Greenfield Park (Québec) J4V 1E3<br>Canada<br>{T('Numéro d’entreprise du Québec (NEQ)', 'Quebec Enterprise Number (NEQ)')}{T(' : ', ': ')}1181466344<br>{T('Courriel', 'Email')}{T(' : ', ': ')}<a href=\"mailto:{EMAIL}\">{EMAIL}</a></p>"),
+      f"<p>FZ Consultation — {T('entreprise individuelle', 'sole proprietorship')}<br>621 rue Massena<br>Greenfield Park (Québec) J4V 1E3<br>Canada<br>{T('Numéro d’entreprise du Québec (NEQ)', 'Quebec Enterprise Number (NEQ)')}{T(' : ', ': ')}1181466344<br>{T('Courriel', 'Email')}{T(' : ', ': ')}<a href=\"mailto:{EMAIL}\">{EMAIL}</a></p>"),
      (("Directeur de la publication", "Publication director"), "<p>Fabien Mariou</p>"),
      (("Hébergement", "Hosting"), "<p>GitHub, Inc. — 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, " + T("États-Unis", "United States") + " — <a href=\"https://github.com\" rel=\"noopener\">github.com</a></p>"),
      (("Propriété intellectuelle", "Intellectual property"), "<p>" + T("Le contenu de ce site (textes, logo, graphismes) appartient à FZ Consultation, sauf mention contraire. Toute reproduction sans autorisation est interdite. La police Schibsted Grotesk est utilisée sous licence SIL Open Font License 1.1.",
