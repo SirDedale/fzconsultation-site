@@ -14,7 +14,7 @@
   function closeMega(){if(mg){mg.classList.remove("open");mgb.setAttribute("aria-expanded","false")}}
   if(mgb)mgb.addEventListener("click",function(e){e.stopPropagation();var o=!mg.classList.contains("open");mg.classList.toggle("open",o);mgb.setAttribute("aria-expanded",o?"true":"false")});
   if(mt)mt.addEventListener("click",function(){var o=!header.classList.contains("nav-open");header.classList.toggle("nav-open",o);mt.setAttribute("aria-expanded",o?"true":"false")});
-  document.addEventListener("click",function(e){if(mg&&!mg.contains(e.target)&&window.innerWidth>980)closeMega()});
+  document.addEventListener("click",function(e){if(mg&&!mg.contains(e.target)&&window.innerWidth>1100)closeMega()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeMega();if(header.classList.contains("nav-open")){header.classList.remove("nav-open");mt.setAttribute("aria-expanded","false")}}});
   document.querySelectorAll("#primary-nav a").forEach(function(a){a.addEventListener("click",function(){closeMega();header.classList.remove("nav-open");if(mt)mt.setAttribute("aria-expanded","false")})});
   document.querySelectorAll(".year").forEach(function(y){y.textContent=new Date().getFullYear()});
