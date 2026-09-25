@@ -5,6 +5,7 @@ The site's HTML pages are generated. Don't edit the files in `fr/` or `en/` by h
 - `content.py` — expertise, services, methodology, FAQ
 - `industries.py` — industry pages and example engagements
 - `cases.py` — case studies (public sources only)
+- `partners.py` — ecosystem and partnerships page
 - `ai.py` — AI pages, Microsoft Foundry Citadel page, vision questionnaire
 - `newcontent.py` — resilience self-assessment questions
 - `build.py` — layout, contact, legal pages, and the CONFIG block (booking link, Formspree ID, analytics token)

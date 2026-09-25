@@ -414,3 +414,7 @@ mark.todo{background:#FFE9A8;color:#5b4300;padding:1px 6px;border-radius:4px;fon
 .tags li a{color:var(--ink);text-decoration:none}.tags li:has(a:hover){border-color:var(--brand)}.tags li a:hover{color:var(--brand)}
 .regtags{align-self:start}.regtags li{line-height:1.2}
 @media (max-width:900px){.cases{grid-template-columns:1fr}}
+.pillars .pcard{display:flex;flex-direction:column;padding:28px 28px 32px 0;border-right:1px solid var(--line);margin-right:28px}
+.pillars .pcard:last-child{border-right:0;margin-right:0}
+.pillars .pcard h3{font-size:1.25rem;margin:10px 0 8px}.pillars .pcard p{color:var(--muted);margin:0}
+@media (max-width:860px){.pillars .pcard{border-right:0;margin-right:0;border-bottom:1px solid var(--line);padding-right:0}}

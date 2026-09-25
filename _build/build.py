@@ -8,12 +8,13 @@ from cases import CASES
 from newcontent import *
 from industries import IND
 from ai import *
+from partners import *
 
 # ================= CONFIG =================
 SITE = "https://fzconsultation.xyz"
 EMAIL = "contact@fzconsultation.xyz"
 BOOKING_URL = ""          # e.g. your Cal.com or Calendly link; leave "" to hide the booking button
-FORMSPREE_ID = ""         # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
+FORMSPREE_ID = "mkjgvpwo"       # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
 CF_ANALYTICS_TOKEN = ""   # Cloudflare Web Analytics token; leave "" for no analytics
 UPDATED = ("25 septembre 2026", "September 25, 2026")
 # ==========================================
@@ -49,6 +50,7 @@ OTHER = {
  "privacy.html": ("Politique de confidentialité", "Privacy policy"),
  "legal.html": ("Mentions légales", "Legal notice"),
  "ai/index.html": ("Intelligence artificielle", "Artificial intelligence"),
+ "partners.html": ("Écosystème et partenariats", "Ecosystem and partnerships"),
  "ai/vision-questionnaire.html": ("Questionnaire de vision IA", "AI vision questionnaire"),
 }
 def name_of(key):
@@ -75,7 +77,7 @@ def header(r, current):
         f'<div class="mcol"><a class="mhead" href="{r}{title_key}">{P(OTHER[title_key])} {ARROW}</a><ul>' +
         "".join(f'<li>{a(p["path"], p["short"])}</li>' for p in items) + "</ul></div>")
     approach = ('<div class="mcol"><span class="mhead plain">' + T("Approche", "Approach") + '</span><ul>' +
-        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "case-studies/index.html", "self-assessment.html"]) +
+        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "case-studies/index.html", "partners.html", "self-assessment.html"]) +
         f'</ul><a class="mall" href="{r}what-we-do/index.html">{T("Voir tout ce que nous faisons", "View everything we do")} {ARROW}</a></div>')
     fr_cur = ' aria-current="true"' if LANG == "fr" else ""
     en_cur = ' aria-current="true"' if LANG == "en" else ""
@@ -139,7 +141,7 @@ def footer(r):
     <div><h3>{T("Services", "Services")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
     <div><h3>{T("IA", "AI")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in AI_PAGES + [CITADEL])}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
     <div><h3>{T("Secteurs", "Industries")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
-    <div><h3>{T("Ressources", "Resources")}</h3><ul>{"".join(li(k, OTHER[k]) for k in ["case-studies/index.html", "what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "contact.html"])}</ul></div>
+    <div><h3>{T("Ressources", "Resources")}</h3><ul>{"".join(li(k, OTHER[k]) for k in ["case-studies/index.html", "partners.html", "what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "contact.html"])}</ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
@@ -378,7 +380,7 @@ def build_lang():
     path = "contact.html"; r = ""
     book = (f'<a class="btn primary" href="{E(BOOKING_URL)}" target="_blank" rel="noopener">{T("Choisir un créneau", "Pick a time")}</a>' if BOOKING_URL
             else f'<p class="muted">{T("Proposez-nous quelques créneaux dans votre message et nous vous confirmerons un horaire.", "Suggest a few time slots in your message and we will confirm one.")}</p>')
-    subjects = [("Premier échange", "Intro call"), ("Évaluation", "Assessment"), ("Reprise après sinistre", "Disaster recovery"), ("Cybersécurité", "Cybersecurity"), ("Exercice ou test", "Exercise or test"), ("Autre", "Other")]
+    subjects = [("Premier échange", "Intro call"), ("Évaluation", "Assessment"), ("Reprise après sinistre", "Disaster recovery"), ("Cybersécurité", "Cybersecurity"), ("Exercice ou test", "Exercise or test"), ("Intelligence artificielle", "Artificial intelligence"), ("Partenariat", "Partnership"), ("Autre", "Other")]
     b = page_hero(r, [(path, OTHER[path])], ("Contact", "Contact"), ("Parlons de votre situation", "Let's talk about your situation"),
         ("Un premier échange de 30 minutes, sans engagement, en français ou en anglais.", "A free 30-minute intro call, in French or English."))
     b += f'''<section class="block contact-grid">
@@ -400,6 +402,7 @@ def build_lang():
           <label>{T("Sujet", "Topic")}<select name="topic">{"".join(f"<option>{P(s)}</option>" for s in subjects)}</select></label>
         </div>
         <label>{T("Message", "Message")} <span aria-hidden="true">*</span><textarea name="message" rows="6" required></textarea></label>
+        <input type="hidden" name="_subject" value="{T("Nouveau message — site FZ Consultation", "New message — FZ Consultation website")}">
         <label class="hp" aria-hidden="true">Website<input name="_gotcha" tabindex="-1" autocomplete="off"></label>
         <label class="consent"><input type="checkbox" name="consent" required> <span>{T("J'accepte que mes informations soient utilisées pour répondre à ma demande, conformément à la", "I agree that my information will be used to respond to my request, in line with the")} <a href="{r}privacy.html">{T("politique de confidentialité", "privacy policy")}</a>.</span></label>
         <button class="btn primary" type="submit">{T("Envoyer", "Send")}</button>
@@ -428,6 +431,7 @@ def build_lang():
          ("Évaluez gratuitement la résilience de votre organisation en cinq minutes.", "Assess your organization's resilience in five minutes, for free."), b, extra_js=js)
 
     build_ai()
+    build_partners()
 
     # privacy
     build_privacy(); build_legal()
@@ -496,6 +500,21 @@ def build_ai():
     </ol></section>
     <section class="block split"><div><h2>{T("Pourquoi un cabinet de résilience ?", "Why a resilience firm?")}</h2></div>{T("Les agents IA deviennent des systèmes critiques : ils ont des accès, prennent des décisions et peuvent tomber en panne. Nous les traitons comme tels, avec identités, limites, supervision et plan de reprise dès la conception.", "AI agents are becoming critical systems: they have access, make decisions and can fail. We treat them that way, with identity, limits, monitoring and a recovery plan from the start.", tag="p", cls="big")}</section>"""
     page(path, ("Intelligence artificielle | FZ Consultation", "Artificial intelligence | FZ Consultation"), ("Stratégie IA, agents, gouvernance et Microsoft Foundry Citadel.", "AI strategy, agents, governance and Microsoft Foundry Citadel."), b)
+
+def build_partners():
+    path = "partners.html"; r = ""
+    card = lambda n, d: f'<div class="citem"><h3>{n}</h3>{P(d, tag="p")}</div>'
+    b = page_hero(r, [(path, OTHER[path])], ("Partenariats", "Partnerships"), ("Tous les nuages, publics et privés", "Every cloud, public and private"),
+        ("Nous travaillons sur les plateformes que vous avez choisies, sans vous en imposer une. Et nous collaborons avec ceux qui servent les mêmes clients.", "We work on the platforms you have chosen, without pushing one on you. And we team up with those who serve the same clients."))
+    b += f'<section class="block split"><div><h2>{T("Indépendants de toute plateforme", "Platform-independent")}</h2></div>{T("La plupart des organisations combinent plusieurs nuages publics et une infrastructure privée. Les récents changements de licences dans la virtualisation ont aussi poussé beaucoup d&#39;entre elles à revoir leur plateforme. Notre rôle : que vos services restent disponibles, quel que soit l&#39;endroit où ils tournent.", "Most organizations combine several public clouds with private infrastructure. Recent virtualization licensing changes have also pushed many of them to reconsider their platform. Our role: keep your services available, wherever they run.", tag="p", cls="big")}</section>'
+    b += f'<section class="block"><h2>{T("Nuages publics", "Public clouds")}</h2><div class="cover grid2">' + "".join(card(n, d) for n, d in PUBLIC) + "</div></section>"
+    b += f'<section class="block"><h2>{T("Nuage privé et hybride", "Private and hybrid cloud")}</h2><div class="cover grid2">' + "".join(card(n, d) for n, d in PRIVATE) + "</div></section>"
+    b += f'<section class="block"><h2>{T("Ce que nous faisons entre les plateformes", "What we do across platforms")}</h2><div class="cover grid2">' + "".join(card(P(h), d) for h, d in CROSS) + f'</div><p><a class="textlink" href="{r}what-we-do/expertise/cloud-resilience.html">{P(name_of("what-we-do/expertise/cloud-resilience.html"))} {ARROW}</a></p></section>'
+    b += f'<section class="block"><h2>{T("Devenir partenaire", "Partner with us")}</h2>{T("Nous travaillons avec les acteurs qui servent les mêmes clients que nous.", "We work with organizations that serve the same clients as we do.", tag="p", cls="intro")}<div class="pillars">' + "".join(f'<div class="pcard"><span class="pk">0{i}</span><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for i, (h, d) in enumerate(WAYS, 1)) + "</div></section>"
+    b += f'<section class="block split"><div><h2>{T("Modes de collaboration", "Ways to work together")}</h2></div><div class="cover">' + "".join(card(P(h), d) for h, d in MODELS) + f'</div></section>'
+    b += f'<section class="block"><div class="band ai"><div><h2>{T("Parlons partenariat", "Let&#39;s talk partnership")}</h2>{T("Présentez-nous votre organisation et vos clients : nous verrons ensemble comment nous compléter.", "Tell us about your organization and clients, and we will see together how we can complement each other.", tag="p")}</div><a class="btn primary" href="{r}contact.html">{T("Nous écrire", "Send us a message")}</a></div>'
+    b += f'{T("Les plateformes citées le sont pour décrire notre expertise ; leur mention n&#39;implique pas un partenariat officiel avec leurs éditeurs. Toutes les marques appartiennent à leurs propriétaires respectifs.", "Platforms are named to describe our expertise; naming them does not imply an official partnership with their vendors. All trademarks belong to their respective owners.", tag="p", cls="note")}</section>'
+    page(path, ("Écosystème et partenariats | FZ Consultation", "Ecosystem and partnerships | FZ Consultation"), ("Résilience sur tous les nuages publics et privés, et partenariats avec intégrateurs, éditeurs et cabinets.", "Resilience across every public and private cloud, and partnerships with integrators, vendors and firms."), b)
 
 def TODO(fr, en): return f'<mark class="todo">[{T("À compléter", "To complete")} : {T(fr, en)}]</mark>' if LANG == "fr" else f'<mark class="todo">[To complete: {en}]</mark>'
 

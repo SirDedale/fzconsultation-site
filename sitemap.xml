@@ -371,6 +371,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/ai/"/>
   </url>
   <url>
+    <loc>https://fzconsultation.xyz/fr/partners.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/partners.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/partners.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/partners.html"/>
+  </url>
+  <url>
     <loc>https://fzconsultation.xyz/fr/privacy.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/privacy.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/privacy.html"/>
