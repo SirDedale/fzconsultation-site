@@ -418,3 +418,76 @@ mark.todo{background:#FFE9A8;color:#5b4300;padding:1px 6px;border-radius:4px;fon
 .pillars .pcard:last-child{border-right:0;margin-right:0}
 .pillars .pcard h3{font-size:1.25rem;margin:10px 0 8px}.pillars .pcard p{color:var(--muted);margin:0}
 @media (max-width:860px){.pillars .pcard{border-right:0;margin-right:0;border-bottom:1px solid var(--line);padding-right:0}}
+
+/* radar chart (self-assessment) */
+.radar-wrap{display:flex;justify-content:center;margin:8px 0 24px}
+.radar{width:100%;max-width:420px;height:auto}
+.rring{fill:none;stroke:var(--line);stroke-width:1}
+.raxis{stroke:var(--line);stroke-width:1}
+.rshape{fill:color-mix(in srgb, var(--brand) 22%, transparent);stroke:var(--brand);stroke-width:2}
+.rlabel{fill:var(--ink);font-family:var(--font);font-size:11px;font-weight:700}
+.ctxline{margin:16px 0 0;color:var(--muted)}
+.ctxline a{color:var(--brand);font-weight:700}
+
+/* mini contact form embedded in dark CTA band */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.contact-top .cta-actions{margin-top:24px}
+.mail-fallback{margin:18px 0 0;font-size:.92rem;color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.mail-fallback a{color:var(--signal);font-weight:700}
+.cform.mini{background:color-mix(in srgb, var(--bg) 8%, transparent);border:1px solid color-mix(in srgb, var(--bg) 22%, transparent);border-radius:10px;padding:24px}
+.cform.mini h3{margin:0 0 16px;font-size:1.15rem;color:var(--bg)}
+.cform.mini label{color:color-mix(in srgb, var(--bg) 82%, transparent);font-size:.88rem;margin-bottom:12px}
+.cform.mini input,.cform.mini textarea{background:color-mix(in srgb, var(--bg) 94%, transparent);border:1px solid transparent;color:var(--ink)}
+.cform.mini .consent{color:color-mix(in srgb, var(--bg) 70%, transparent);font-size:.82rem}
+.cform.mini .fstatus.ok{color:#8fe3b0}.cform.mini .fstatus.err{color:#ff9c92}
+@media (max-width:860px){.contact{grid-template-columns:1fr;gap:28px}}
+
+/* cost-of-downtime page */
+.dt-bench{display:grid;gap:0;border-top:2px solid var(--ink)}
+.dt-b{padding:18px 0;border-bottom:1px solid var(--line)}
+.dt-b strong{display:block;margin-bottom:4px}
+.dt-b sup a{color:var(--brand);text-decoration:none;font-size:.75em}
+.dt-table{border-top:2px solid var(--ink)}
+.dt-row{display:grid;grid-template-columns:1.1fr .9fr 1.6fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
+.dt-head{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--ink)}
+.dt-i{font-weight:700}
+.dt-r{font-weight:800;color:var(--brand)}
+.dt-n{color:var(--muted)}
+.dt-n sup a{color:var(--brand);text-decoration:none;font-size:.85em}
+@media (max-width:760px){.dt-row{grid-template-columns:1fr}.dt-r{margin:2px 0}}
+.dt-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.dt-card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px}
+.dt-card .pk{font-weight:800;color:var(--brand);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.dt-card h3{margin:8px 0 8px;font-size:1.1rem}
+.dt-card p{margin:0 0 6px;color:var(--muted)}
+.dt-cost{font-weight:700;color:var(--ink) !important}
+@media (max-width:760px){.dt-cards{grid-template-columns:1fr}}
+
+/* hub-and-spoke diagram */
+.hubdiag-wrap{display:flex;justify-content:center;padding:12px 0}
+.hubdiag{width:100%;max-width:420px;height:auto}
+.hd-line{stroke:var(--line);stroke-width:2}
+.hd-center{fill:var(--brand)}
+.hd-clabel{fill:#fff;font-family:var(--font);font-weight:800;font-size:17px}
+.hd-node{fill:var(--surface);stroke:var(--brand);stroke-width:2.5}
+.hd-num{fill:var(--brand);font-family:var(--font);font-weight:800;font-size:15px;text-anchor:middle;dominant-baseline:middle}
+.hd-label{fill:var(--ink);font-family:var(--font);font-weight:700;font-size:13px}
+
+/* timeline diagram (assessments) */
+.tldiag-wrap{width:100%;max-width:100%;overflow-x:auto}
+.tldiag{width:100%;max-width:100%;height:auto;display:block}
+.tldiag-mobile{display:none}
+@media (max-width:640px){
+  .tldiag-wrap{display:none}
+  .tldiag-mobile{display:block;list-style:none;margin:0;padding:0;border-left:3px solid var(--line)}
+  .tldiag-mobile li{position:relative;padding:0 0 26px 26px;display:flex;flex-direction:column;gap:2px}
+  .tldiag-mobile li::before{content:"";position:absolute;left:-9px;top:4px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--signal)}
+  .tdm-dur{font-weight:800;color:var(--brand);font-size:.85rem}
+  .tldiag-mobile strong{font-size:1.05rem}
+  .tdm-desc{color:var(--muted);font-size:.92rem}
+}
+.td-axis{stroke:var(--ink);stroke-width:2}
+.td-dot{fill:var(--signal);stroke:var(--ink);stroke-width:1.5}
+.td-dur{fill:var(--brand);font-family:var(--font);font-weight:800;font-size:14px}
+.td-label{fill:var(--ink);font-family:var(--font);font-weight:800;font-size:14px}
+.td-desc{fill:var(--muted);font-family:var(--font);font-size:11px}

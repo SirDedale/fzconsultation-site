@@ -17,10 +17,11 @@
       e.preventDefault();
       if(f._gotcha.value)return;
       if(!f.name.value.trim()||!f.email.checkValidity()||!f.email.value.trim()||!f.message.value.trim()||!f.consent.checked){say("missing","err");return}
+      var org=f.organization?f.organization.value:"", topic=f.topic?f.topic.value:"Website";
       var ep=f.getAttribute("data-endpoint");
       if(!ep){
-        var body=f.message.value+"\n\n— "+f.name.value+(f.organization.value?" ("+f.organization.value+")":"")+"\n"+f.email.value;
-        location.href="mailto:"+f.getAttribute("data-email")+"?subject="+encodeURIComponent("[FZ Consultation] "+f.topic.value)+"&body="+encodeURIComponent(body);
+        var body=f.message.value+"\n\n— "+f.name.value+(org?" ("+org+")":"")+"\n"+f.email.value;
+        location.href="mailto:"+f.getAttribute("data-email")+"?subject="+encodeURIComponent("[FZ Consultation] "+topic)+"&body="+encodeURIComponent(body);
         say("mailto","ok");return;
       }
       var btn=f.querySelector('button[type="submit"]');btn.disabled=true;

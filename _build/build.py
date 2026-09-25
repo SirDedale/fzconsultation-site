@@ -9,11 +9,12 @@ from newcontent import *
 from industries import IND
 from ai import *
 from partners import *
+from downtime import *
 
 # ================= CONFIG =================
 SITE = "https://fzconsultation.xyz"
 EMAIL = "contact@fzconsultation.xyz"
-BOOKING_URL = ""          # e.g. your Cal.com or Calendly link; leave "" to hide the booking button
+BOOKING_URL = "https://calendly.com/fabien-mariou"  # Calendly link; leave "" to hide the booking button
 FORMSPREE_ID = "mkjgvpwo"       # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
 CF_ANALYTICS_TOKEN = "b23a07ee11d3441f89c969fc2c62f224"   # Cloudflare Web Analytics token; leave "" for no analytics
 UPDATED = ("25 septembre 2026", "September 25, 2026")
@@ -51,6 +52,7 @@ OTHER = {
  "legal.html": ("Mentions légales", "Legal notice"),
  "ai/index.html": ("Intelligence artificielle", "Artificial intelligence"),
  "partners.html": ("Écosystème et partenariats", "Ecosystem and partnerships"),
+ "resources/cost-of-downtime.html": ("Coût des interruptions", "Cost of downtime"),
  "ai/vision-questionnaire.html": ("Questionnaire de vision IA", "AI vision questionnaire"),
 }
 def name_of(key):
@@ -77,7 +79,7 @@ def header(r, current):
         f'<div class="mcol"><a class="mhead" href="{r}{title_key}">{P(OTHER[title_key])} {ARROW}</a><ul>' +
         "".join(f'<li>{a(p["path"], p["short"])}</li>' for p in items) + "</ul></div>")
     approach = ('<div class="mcol"><span class="mhead plain">' + T("Approche", "Approach") + '</span><ul>' +
-        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "case-studies/index.html", "partners.html", "self-assessment.html"]) +
+        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "case-studies/index.html", "resources/cost-of-downtime.html", "partners.html", "self-assessment.html"]) +
         f'</ul><a class="mall" href="{r}what-we-do/index.html">{T("Voir tout ce que nous faisons", "View everything we do")} {ARROW}</a></div>')
     fr_cur = ' aria-current="true"' if LANG == "fr" else ""
     en_cur = ' aria-current="true"' if LANG == "en" else ""
@@ -119,12 +121,26 @@ def header(r, current):
 
 def cta_block(r, path=""):
     book = (f'<a class="btn signal" href="{E(BOOKING_URL)}" target="_blank" rel="noopener">{T("Réserver un appel de 30 minutes", "Book a 30-minute call")}</a>' if BOOKING_URL else "")
+    selfassess = "" if path == "self-assessment.html" else f'<a class="btn outline-light" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a>'
     return f'''<section class="block" id="contact" style="border-top:0;padding-top:24px">
       <div class="contact">
-        <h2>{T("Parlons de votre prochaine panne, avant qu'elle n'arrive.", "Let's talk about your next outage before it happens.")}</h2>
-        <p>{T("Un premier échange de 30 minutes, sans engagement, pour faire le point sur vos risques et vos priorités.", "A free 30-minute intro call to review your risks and priorities.")}</p>
-        <div class="cta-actions">{book}<a class="btn light" href="{r}contact.html">{T("Nous écrire", "Send us a message")}</a>{"" if path == "self-assessment.html" else f'<a class="btn outline-light" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a>'}</div>
-        <a class="mail" href="mailto:{EMAIL}">{EMAIL}</a>
+        <div class="contact-top">
+          <h2>{T("Parlons de votre prochaine panne, avant qu'elle n'arrive.", "Let's talk about your next outage before it happens.")}</h2>
+          <p>{T("Un premier échange de 30 minutes, sans engagement, pour faire le point sur vos risques et vos priorités.", "A free 30-minute intro call to review your risks and priorities.")}</p>
+          <div class="cta-actions">{book}{selfassess}</div>
+          <p class="mail-fallback">{T("Vous préférez le courriel ?", "Prefer email?")} <a href="mailto:{EMAIL}">{EMAIL}</a></p>
+        </div>
+        <form class="cform mini" id="contact-form" data-endpoint="{"https://formspree.io/f/" + E(FORMSPREE_ID) if FORMSPREE_ID else ""}" data-email="{EMAIL}" novalidate>
+          <h3>{T("Nous écrire", "Send us a message")}</h3>
+          <label>{T("Nom", "Name")} <span aria-hidden="true">*</span><input name="name" autocomplete="name" required></label>
+          <label>{T("Courriel", "Email")} <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required></label>
+          <label>{T("Message", "Message")} <span aria-hidden="true">*</span><textarea name="message" rows="3" required></textarea></label>
+          <input type="hidden" name="_subject" value="{T("Nouveau message — site FZ Consultation", "New message — FZ Consultation website")}">
+          <label class="hp" aria-hidden="true">Website<input name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          <label class="consent"><input type="checkbox" name="consent" required> <span>{T("J&#39;accepte que mes informations soient utilisées pour répondre à ma demande, conformément à la", "I agree that my information will be used to respond to my request, in line with the")} <a href="{r}privacy.html">{T("politique de confidentialité", "privacy policy")}</a>.</span></label>
+          <button class="btn signal" type="submit">{T("Envoyer", "Send")}</button>
+          <p class="fstatus" role="status" aria-live="polite" data-ok="{T("Merci, votre message a bien été envoyé. Nous vous répondrons rapidement.", "Thank you, your message has been sent. We will get back to you shortly.")}" data-err="{T("L&#39;envoi a échoué. Écrivez-nous directement à", "Sending failed. Please email us directly at")} {EMAIL}." data-missing="{T("Merci de remplir les champs obligatoires et d&#39;accepter la politique de confidentialité.", "Please fill in the required fields and accept the privacy policy.")}" data-mailto="{T("Votre application de courriel va s&#39;ouvrir avec votre message.", "Your email app will open with your message.")}"></p>
+        </form>
       </div>
     </section>'''
 
@@ -141,7 +157,7 @@ def footer(r):
     <div><h3>{T("Services", "Services")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
     <div><h3>{T("IA", "AI")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in AI_PAGES + [CITADEL])}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
     <div><h3>{T("Secteurs", "Industries")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
-    <div><h3>{T("Ressources", "Resources")}</h3><ul>{"".join(li(k, OTHER[k]) for k in ["case-studies/index.html", "partners.html", "what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "contact.html"])}</ul></div>
+    <div><h3>{T("Ressources", "Resources")}</h3><ul>{"".join(li(k, OTHER[k]) for k in ["case-studies/index.html", "resources/cost-of-downtime.html", "partners.html", "what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "contact.html"])}</ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
@@ -200,6 +216,61 @@ def page(path, title, desc, body, extra_head="", extra_js=""):
     if LANG == "fr": PAGES.append(path)
     return r
 
+import math
+def hub_diagram(center, nodes, size=420, pad=110):
+    cx = cy = size/2 + pad; R = size*0.34; nr = size*0.115
+    vb = size + pad*2
+    parts = [f'<svg class="hubdiag" viewBox="0 0 {vb} {vb}" role="img" aria-label="{E(P(center))}">']
+    N = len(nodes)
+    coords = []
+    for k in range(N):
+        ang = -math.pi/2 + k*2*math.pi/N
+        x, y = cx + R*math.cos(ang), cy + R*math.sin(ang)
+        coords.append((x, y, ang))
+        parts.append(f'<line x1="{cx}" y1="{cy}" x2="{x}" y2="{y}" class="hd-line"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{size*0.185}" class="hd-center"/>')
+    parts.append(f'<text x="{cx}" y="{cy}" text-anchor="middle" dominant-baseline="middle" class="hd-clabel">{E(P(center))}</text>')
+    for k, (label, sub) in enumerate(nodes):
+        x, y, ang = coords[k]
+        parts.append(f'<circle cx="{x}" cy="{y}" r="{nr}" class="hd-node"/>')
+        parts.append(f'<text x="{x}" y="{y-4}" text-anchor="middle" dominant-baseline="middle" class="hd-num">{k+1:02d}</text>')
+        cosA, sinA = math.cos(ang), math.sin(ang)
+        if abs(cosA) < 0.35:
+            anchor_pos = "middle"; lx = x; ly = y + nr + 22 if sinA > 0 else y - nr - 14
+        elif cosA > 0:
+            anchor_pos = "start"; lx = x + nr + 12; ly = y + nr + 20 if sinA > 0.35 else (y - nr - 14 if sinA < -0.35 else y + 5)
+        else:
+            anchor_pos = "end"; lx = x - nr - 12; ly = y + nr + 20 if sinA > 0.35 else (y - nr - 14 if sinA < -0.35 else y + 5)
+        parts.append(f'<text x="{lx}" y="{ly}" text-anchor="{anchor_pos}" class="hd-label">{E(P(label))}</text>')
+    parts.append('</svg>')
+    return '<div class="hubdiag-wrap">' + "".join(parts) + '</div>'
+
+def timeline_diagram(phases, size_w=1040, size_h=190):
+    n = len(phases); parts = [f'<svg class="tldiag" viewBox="0 0 {size_w} {size_h}" role="img" aria-label="timeline">']
+    y = 70; x0, x1 = 130, size_w-130
+    parts.append(f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" class="td-axis"/>')
+    for k, (label, dur, desc) in enumerate(phases):
+        x = x0 + (x1-x0) * k/(n-1) if n > 1 else (x0+x1)/2
+        parts.append(f'<circle cx="{x}" cy="{y}" r="9" class="td-dot"/>')
+        parts.append(f'<text x="{x}" y="{y-22}" text-anchor="middle" class="td-dur">{E(P(dur))}</text>')
+        parts.append(f'<text x="{x}" y="{y+34}" text-anchor="middle" class="td-label">{E(P(label))}</text>')
+        for i, line in enumerate(wrap_text(P(desc), 26)):
+            parts.append(f'<text x="{x}" y="{y+54+i*16}" text-anchor="middle" class="td-desc">{E(line)}</text>')
+    parts.append('</svg>')
+    svg_html = '<div class="tldiag-wrap">' + "".join(parts) + '</div>'
+    mobile = '<ol class="tldiag-mobile">' + "".join(
+        f'<li><span class="tdm-dur">{E(P(dur))}</span><strong>{E(P(label))}</strong><span class="tdm-desc">{E(P(desc))}</span></li>'
+        for label, dur, desc in phases) + '</ol>'
+    return svg_html + mobile
+
+def wrap_text(text, width):
+    words = text.split(); lines = []; cur = ""
+    for w in words:
+        if len(cur) + len(w) + 1 <= width: cur = (cur + " " + w).strip()
+        else: lines.append(cur); cur = w
+    if cur: lines.append(cur)
+    return lines[:3]
+
 def crumbs(r, trail):
     items = [f'<li><a href="{r}index.html">{T("Accueil", "Home")}</a></li>']
     for key, pair in trail[:-1]:
@@ -250,6 +321,13 @@ def build_lang():
         trail = [WWD, (section_key, OTHER[section_key]), (p["path"], p["short"])]
         b = page_hero(r, trail, OTHER[section_key], p["title"], p["lede"])
         b += f'<section class="block split"><div><h2>{T("Ce que nous couvrons", "What we cover")}</h2>{P(p["intro"], tag="p", cls="intro")}</div><div class="cover">'
+        if p["path"] == "what-we-do/services/assessments.html":
+            phases = [
+                (("Entretiens et collecte", "Interviews and discovery"), ("1 à 2 semaines", "1 to 2 weeks"), ("Direction, TI, opérations, fournisseurs", "Leadership, IT, operations, suppliers")),
+                (("Analyse", "Analysis"), ("1 semaine", "1 week"), ("Comparaison aux référentiels et à vos cibles", "Comparison to frameworks and your targets")),
+                (("Restitution", "Readout"), ("Une demi-journée", "Half a day"), ("Constats et feuille de route pour la direction", "Findings and roadmap for leadership")),
+            ]
+            b += f'<section class="block">{timeline_diagram(phases)}</section>'
         b += "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in p["cover"]) + "</div></section>"
         b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">'
         b += "".join(f'<li>{P(d)}</li>' for d in p["deliverables"]) + "</ul></section>"
@@ -276,6 +354,7 @@ def build_lang():
     path = "what-we-do/methodology.html"; r = "../"
     b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], ("Notre méthodologie", "Our methodology"),
         ("Un cycle simple, répété jusqu'à ce que la reprise devienne une routine plutôt qu'une improvisation.", "A simple cycle, repeated until recovery becomes routine rather than improvisation."))
+    b += f'<section class="block">{hub_diagram(("Résilience", "Resilience"), [(t, d) for t, d, outs in METHOD])}</section>'
     b += '<section class="block"><ol class="phases">'
     for i, (t, d, outs) in enumerate(METHOD, 1):
         b += f'<li><div class="pn">{i:02d}</div><div><h3>{P(t)}</h3>{P(d, tag="p")}<p class="outs"><strong>{T("Livrables", "Outputs")}</strong> ' + " · ".join(P(o) for o in outs) + "</p></div></li>"
@@ -288,7 +367,7 @@ def build_lang():
     b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], ("Secteurs d'activité", "Industries"),
         ("Chaque secteur a ses propres risques, contraintes et attentes réglementaires.", "Every sector has its own risks, constraints and regulatory expectations."))
     b += f'<section class="block">{link_rows(r, IND)}</section>'
-    b += f'<section class="block"><h2>{T("Leçons tirées d&#39;incidents publics", "Lessons from public incidents")}</h2>{case_cards(r)}</section>'
+    b += f'<section class="block"><h2>{T("Leçons tirées d&#39;incidents publics", "Lessons from public incidents")}</h2>{case_cards(r)}<p style="margin-top:20px"><a class="textlink" href="{r}resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption par secteur", "What an hour of downtime costs by industry")} {ARROW}</a></p></section>'
     page(path, ("Secteurs | FZ Consultation", "Industries | FZ Consultation"), ("Secteurs que nous accompagnons.", "Industries we support."), b)
     for ind in IND:
         r = rprefix(ind["path"])
@@ -342,7 +421,7 @@ def build_lang():
     path = "case-studies/index.html"
     b = page_hero("../", [(path, OTHER[path])], OTHER[path], ("Leçons tirées d'incidents publics", "Lessons from public incidents"),
         ("Des incidents réels et documentés en finance, en énergie et dans le commerce de détail, et ce qu'ils enseignent sur la résilience.", "Real, documented incidents in finance, energy and retail, and what they teach about resilience."))
-    b += f'<section class="block">{case_cards("../")}<p class="note">{T("Analyses fondées uniquement sur des informations publiques, avec sources. FZ Consultation n&#39;a participé à aucun de ces incidents et n&#39;a aucun lien avec les organisations mentionnées.", "Analyses based solely on public information, with sources. FZ Consultation was not involved in any of these incidents and has no affiliation with the organizations named.")}</p></section>'
+    b += f'<section class="block">{case_cards("../")}<p class="note">{T("Analyses fondées uniquement sur des informations publiques, avec sources. FZ Consultation n&#39;a participé à aucun de ces incidents et n&#39;a aucun lien avec les organisations mentionnées.", "Analyses based solely on public information, with sources. FZ Consultation was not involved in any of these incidents and has no affiliation with the organizations named.")}</p><p><a class="textlink" href="../resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs")} {ARROW}</a></p></section>'
     b += quiz_band("../")
     page(path, ("Études de cas | FZ Consultation", "Case studies | FZ Consultation"), ("Leçons tirées d'incidents publics.", "Lessons from public incidents."), b)
 
@@ -416,22 +495,26 @@ def build_lang():
     qdata = {
         "domains": {k: {"name": P(v[0]), "href": v[1]} for k, v in QUIZ_DOMAINS.items()},
         "options": [P(o) for o in QUIZ_OPTIONS],
-        "questions": [{"d": d, "q": P(q), "rec": P(rec)} for d, q, rec in QUIZ],
+        "questions": [{"d": d, "q": P(q), "w": w} for d, q, w in QUIZ],
+        "industries": [P(x) for x in QUIZ_INDUSTRIES],
+        "sizes": [P(x) for x in QUIZ_SIZES],
+        "narrative": {k: P(v) for k, v in QUIZ_NARRATIVE.items()},
         "ui": QUIZ_UI[LANG],
     }
-    b = page_hero(r, [(path, OTHER[path])], ("Gratuit · 5 minutes", "Free · 5 minutes"), ("Auto-évaluation de la résilience", "Resilience self-assessment"),
-        ("Douze questions sur la continuité, la reprise, la sécurité et vos tiers. Vous obtenez un score par domaine et vos trois priorités.", "Twelve questions on continuity, recovery, security and third parties. You get a score by area and your top three priorities."))
+    b = page_hero(r, [(path, OTHER[path])], ("Gratuit · 8 minutes", "Free · 8 minutes"), ("Auto-évaluation de la résilience", "Resilience self-assessment"),
+        ("Vingt questions pondérées sur la continuité, la reprise, la sécurité et vos tiers, avec le contexte de votre secteur. Vous obtenez un score par domaine sous forme de diagramme, et une lecture de votre point le plus fragile.", "Twenty weighted questions on continuity, recovery, security and third parties, with context from your industry. You get a score by area as a diagram, and a read on your most fragile spot."))
     b += f'''<section class="block quiz-wrap">
       <div id="quiz" class="quiz" aria-live="polite"></div>
       <noscript><p>{T("Cette auto-évaluation nécessite JavaScript.", "This self-assessment requires JavaScript.")}</p></noscript>
-      <p class="note">{T("Vos réponses sont traitées uniquement dans votre navigateur. Elles ne sont ni envoyées ni enregistrées. Ce résultat est indicatif et ne remplace pas une évaluation complète.", "Your answers are processed only in your browser. They are never sent or stored. This result is indicative and does not replace a full assessment.")}</p>
+      <p class="note">{T("Vos réponses, y compris votre secteur et la taille de votre organisation, sont traitées uniquement dans votre navigateur. Elles ne sont ni envoyées ni enregistrées. Ce résultat est indicatif et ne remplace pas une évaluation complète.", "Your answers, including your industry and organization size, are processed only in your browser. They are never sent or stored. This result is indicative and does not replace a full assessment.")}</p>
     </section>'''
     js = f'<script>window.QUIZ={json.dumps(qdata, ensure_ascii=False)};window.QUIZ_ROOT="{r}";</script><script src="{r}../assets/quiz.js?v={VER}"></script>'
     page(path, ("Auto-évaluation de la résilience | FZ Consultation", "Resilience self-assessment | FZ Consultation"),
-         ("Évaluez gratuitement la résilience de votre organisation en cinq minutes.", "Assess your organization's resilience in five minutes, for free."), b, extra_js=js)
+         ("Évaluez gratuitement la résilience de votre organisation en huit minutes.", "Assess your organization's resilience in eight minutes, for free."), b, extra_js=js)
 
     build_ai()
     build_partners()
+    build_downtime()
 
     # privacy
     build_privacy(); build_legal()
@@ -463,6 +546,7 @@ def build_ai():
     c = CITADEL; r = "../"
     b = page_hero(r, [WWD, (c["path"], c["short"])], ("IA · Plateforme", "AI · Platform"), c["title"], c["lede"])
     b += f'<section class="block split"><div><h2>{T("Qu&#39;est-ce que Citadel ?", "What is Citadel?")}</h2></div>{P(c["what"], tag="p", cls="big")}</section>'
+    b += hub_diagram(("Citadel", "Citadel"), [(("Gouvernance", "Governance"), ""), (("Opérations", "Operations"), ""), (("Identité", "Identity"), ""), (("Sécurité", "Security"), "")])
     b += f'<section class="block"><h2>{T("Quatre couches de gouvernance", "Four layers of governance")}</h2><ol class="layers">' + "".join(f'<li><span class="lnum">{i}</span><div><h3>{P(h)}</h3>{P(d, tag="p")}</div></li>' for i, (h, d) in enumerate(c["layers"], 1)) + "</ol></section>"
     b += f'<section class="block"><h2>{T("Pourquoi c&#39;est utile", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in c["why"]) + "</div></section>"
     b += f'<section class="block"><h2>{T("Notre accompagnement Citadel", "How we help with Citadel")}</h2><ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(h)}</h3>{P(d, tag="p")}</div></li>' for i, (h, d) in enumerate(c["our"], 1)) + "</ol>"
@@ -515,6 +599,35 @@ def build_partners():
     b += f'<section class="block"><div class="band ai"><div><h2>{T("Parlons partenariat", "Let&#39;s talk partnership")}</h2>{T("Présentez-nous votre organisation et vos clients : nous verrons ensemble comment nous compléter.", "Tell us about your organization and clients, and we will see together how we can complement each other.", tag="p")}</div><a class="btn primary" href="{r}contact.html">{T("Nous écrire", "Send us a message")}</a></div>'
     b += f'{T("Les plateformes citées le sont pour décrire notre expertise ; leur mention n&#39;implique pas un partenariat officiel avec leurs éditeurs. Toutes les marques appartiennent à leurs propriétaires respectifs.", "Platforms are named to describe our expertise; naming them does not imply an official partnership with their vendors. All trademarks belong to their respective owners.", tag="p", cls="note")}</section>'
     page(path, ("Écosystème et partenariats | FZ Consultation", "Ecosystem and partnerships | FZ Consultation"), ("Résilience sur tous les nuages publics et privés, et partenariats avec intégrateurs, éditeurs et cabinets.", "Resilience across every public and private cloud, and partnerships with integrators, vendors and firms."), b)
+
+def build_downtime():
+    path = "resources/cost-of-downtime.html"; r = rprefix(path)
+    b = page_hero(r, [(path, OTHER[path])], ("Ressources", "Resources"), ("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs"),
+        ("Des ordres de grandeur publics, par secteur, et des incidents réels pour donner une idée concrète de l&#39;enjeu.", "Public benchmarks, by industry, and real incidents to give a concrete sense of what's at stake."))
+    b += f'<section class="block"><h2>{T("Repères généraux", "General benchmarks")}</h2><div class="dt-bench">'
+    for h, d, src in BENCH_GENERAL:
+        b += f'<div class="dt-b"><strong>{P(h)}</strong> {P(d)} <sup><a href="#dt-src-{src}">[{src+1}]</a></sup></div>'
+    b += "</div></section>"
+    b += f'<section class="block"><h2>{T("Par secteur", "By industry")}</h2><div class="dt-table"><div class="dt-row dt-head"><span>{T("Secteur", "Industry")}</span><span>{T("Ordre de grandeur", "Order of magnitude")}</span><span>{T("Contexte", "Context")}</span></div>'
+    for row in BY_INDUSTRY:
+        b += f'<div class="dt-row"><span class="dt-i">{P(row["industry"])}</span><span class="dt-r">{P(row["range"])}</span><span class="dt-n">{P(row["note"])} <sup><a href="#dt-src-{row["src"]}">[{row["src"]+1}]</a></sup></span></div>'
+    b += "</div></section>"
+    b += f'<section class="block"><h2>{T("Incidents réels", "Real incidents")}</h2><div class="dt-cards">'
+    for inc in INCIDENTS:
+        link = f'{r}{inc["case"]}' if inc["case"] else None
+        srcnote = f' <sup><a href="#dt-src-{inc["src"]}">[{inc["src"]+1}]</a></sup>' if inc["src"] is not None else ""
+        b += f'<div class="dt-card"><span class="pk">{P(inc["sector"])}</span><h3>{P(inc["name"])}</h3><p>{P(inc["fact"])}</p><p class="dt-cost">{P(inc["cost"])}{srcnote}</p>'
+        if link: b += f'<a class="textlink" href="{link}">{T("Lire l&#39;étude de cas", "Read the case study")} {ARROW}</a>'
+        b += "</div>"
+    b += "</div></section>"
+    b += f'<section class="block"><p class="note">{P(METHOD_NOTE)}</p></section>'
+    b += f'<section class="block"><h2>Sources</h2><ol class="sources" id="dt-sources">'
+    for i, (t, u) in enumerate(SOURCES):
+        b += f'<li id="dt-src-{i}"><a href="{E(u)}" target="_blank" rel="noopener noreferrer">{E(t)}</a></li>'
+    b += "</ol></section>"
+    b += f'<section class="block"><h2>{T("Estimer votre propre coût", "Estimate your own cost")}</h2>{T("Ces repères donnent un ordre de grandeur. Pour connaître le coût réel d&#39;une heure d&#39;interruption dans votre organisation, une analyse d&#39;impact reste la seule méthode fiable.", "These benchmarks give an order of magnitude. To know the real cost of an hour of interruption for your organization, a business impact analysis remains the only reliable method.", tag="p", cls="intro")}<div class="cta-actions" style="margin-top:8px"><a class="btn primary" href="{r}what-we-do/services/assessments.html">{T("Découvrir nos évaluations", "See our assessments")}</a><a class="btn ghost" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a></div></section>'
+    page(path, ("Coût des interruptions | FZ Consultation", "Cost of downtime | FZ Consultation"),
+         ("Ordres de grandeur publics du coût d'une heure d'interruption, par secteur, avec sources et incidents réels.", "Public benchmarks for the cost of an hour of downtime, by industry, with sources and real incidents."), b)
 
 def TODO(fr, en): return f'<mark class="todo">[{T("À compléter", "To complete")} : {T(fr, en)}]</mark>' if LANG == "fr" else f'<mark class="todo">[To complete: {en}]</mark>'
 
