@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI agent design and build | FZ Consultation</title>
 <meta name="description" content="Design and build agents that are useful, supervised and safe.">
+
 <link rel="canonical" href="https://fzconsultation.xyz/en/ai/agents.html">
 <link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/ai/agents.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/ai/agents.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
 <meta property="og:type" content="website">
@@ -18,8 +20,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../../assets/mark.webp" type="image/webp">
 <link rel="preload" href="../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=e4cb3054">
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../insights/feed.xml">
+<script src="../../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Artificial intelligence", "item": "https://fzconsultation.xyz/en/ai/"}, {"@type": "ListItem", "position": 3, "name": "AI agent design and build", "item": "https://fzconsultation.xyz/en/ai/agents.html"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can an agent act on its own?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, within defined limits. We recommend starting with agents that propose actions and increasing autonomy as trust builds."}}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -46,24 +50,32 @@
       </div>
       <a href="../ai/index.html">AI</a>
       <a href="../case-studies/index.html">Case studies</a>
-      <a href="../self-assessment.html">Self-assessment</a>
+      <a href="../resources/index.html">Resources</a>
       <a href="../contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="../search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
     </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
     <nav class="lang" aria-label="Langue / Language">
       <a href="../../fr/ai/agents.html" hreflang="fr" data-lang="fr">FR</a>
       <a href="../ai/agents.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
     </nav>
   </div>
 </header>
-<main id="main">
+<main id="main" data-pagefind-body>
   <div class="wrap">
 <section class="phero">
-      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../ai/index.html">Artificial intelligence</a></li><li aria-current="page">AI agent design and build</li></ol></nav>
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../ai/index.html">Artificial intelligence</a></li><li aria-current="page">AI agent design and build</li></ol></nav>
       <p class="eyebrow">AI</p>
       <h1>AI agent design and build</h1>
       <p class="lede">Agents that save time, with clear limits and a human in the right places.</p>
     </section><section class="block split"><div><h2>What we cover</h2><p class="intro">An agent is not just an assistant: it acts in your systems. We design each agent with its scope, tools, access rights, human approval points and metrics, then evaluate it before production.</p></div><div class="cover"><div class="citem"><h3>Design</h3><p>We define tasks, tools, accessible data and each agent's autonomy level with the business teams before writing a line of code. This step avoids building an agent that is technically impressive but poorly aligned with the real need.</p></div><div class="citem"><h3>Build</h3><p>We build on the platform of your choice, including Microsoft Foundry and Copilot Studio, without locking you into a single ecosystem. The platform choice follows your existing constraints rather than our preferences.</p></div><div class="citem"><h3>Evaluation and testing</h3><p>We build representative test sets, run prompt injection attack tests, and track quality metrics over time. An agent that works once in a demo is not yet an agent ready for production.</p></div><div class="citem"><h3>Production</h3><p>Each agent gets its own identity, complete logging of its actions, active monitoring and a ready-to-use rollback plan. These guardrails let you increase autonomy gradually, as trust builds.</p></div></div></section><section class="block split"><div><h2>What you get</h2></div><ul class="checks"><li>Agent design brief</li><li>Working, documented agent</li><li>Evaluation and security report</li><li>Operating and shutdown procedures</li></ul></section><section class="block"><h2>Frequently asked questions</h2><div class="faq"><details><summary>Can an agent act on its own?</summary><div><p>Yes, within defined limits. We recommend starting with agents that propose actions and increasing autonomy as trust builds.</p></div></details></div></section><section class="block"><h2>Related</h2><ul class="rows"><li><a href="../ai/citadel.html"><span class="rt">Microsoft Foundry Citadel</span><span class="rs">A governance platform for deploying AI agents at scale on Azure.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../ai/governance.html"><span class="rt">AI governance and risk</span><span class="rs">Policy, inventory, risk classification and regulatory compliance.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></section>
-<section class="block" id="contact" style="border-top:0;padding-top:24px">
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
       <div class="contact">
         <div class="contact-top">
           <h2>Let's talk about your next outage before it happens.</h2>
@@ -92,19 +104,19 @@
       <p>Business resilience, security and disaster recovery.</p>
       <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
     </div>
-    <div><h3>Expertise</h3><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
-    <div><h3>Services</h3><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
-    <div><h3>AI</h3><ul><li><a href="../ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="../ai/agents.html">AI agent design and build</a></li><li><a href="../ai/governance.html">AI governance and risk</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
-    <div><h3>Industries</h3><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
-    <div><h3>Resources</h3><ul><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../what-we-do/methodology.html">Methodology</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+    <div><h2 class="fh">AI</h2><ul><li><a href="../ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="../ai/agents.html">AI agent design and build</a></li><li><a href="../ai/governance.html">AI governance and risk</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
+    <div><h2 class="fh">Industries</h2><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+    <div><h2 class="fh">Resources</h2><ul><li><a href="../resources/index.html">Resources</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../resources/glossary.html">Glossary</a></li><li><a href="../insights/index.html">Insights</a></li><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a></span>
+    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a><a href="../accessibility.html">Accessibility</a><a href="../security.html">Site security</a><a href="../governance.html">Governance and corrections</a></span>
     <span>Europe · UK · Canada · United States</span>
   </div>
 </footer>
-<script src="../../assets/site.js?v=e4cb3054"></script>
+<script src="../../assets/site.js?v=a72c29ff"></script>
 
 </body>
 </html>

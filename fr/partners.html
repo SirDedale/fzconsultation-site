@@ -2,9 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Écosystème et partenariats | FZ Consultation</title>
 <meta name="description" content="Résilience sur tous les nuages publics et privés, et partenariats avec intégrateurs, éditeurs et cabinets.">
+
 <link rel="canonical" href="https://fzconsultation.xyz/fr/partners.html">
 <link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/partners.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/partners.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
 <meta property="og:type" content="website">
@@ -18,8 +20,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/mark.webp" type="image/webp">
 <link rel="preload" href="../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=e4cb3054">
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="insights/feed.xml">
+<script src="../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://fzconsultation.xyz/fr/"}, {"@type": "ListItem", "position": 2, "name": "Écosystème et partenariats", "item": "https://fzconsultation.xyz/fr/partners.html"}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
 </head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -46,24 +50,32 @@
       </div>
       <a href="ai/index.html">IA</a>
       <a href="case-studies/index.html">Études de cas</a>
-      <a href="self-assessment.html">Auto-évaluation</a>
+      <a href="resources/index.html">Ressources</a>
       <a href="contact.html" class="nav-cta">Nous joindre</a>
+      <div class="nav-tools">
+        <a href="search.html">Rechercher dans le site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Passer au thème clair" data-label-dark="Passer au thème sombre">Changer de thème</button>
+      </div>
     </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="search.html" aria-label="Rechercher"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Passer au thème clair" data-label-dark="Passer au thème sombre" aria-label="Changer de thème"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
     <nav class="lang" aria-label="Langue / Language">
       <a href="partners.html" hreflang="fr" data-lang="fr" aria-current="true">FR</a>
       <a href="../en/partners.html" hreflang="en" data-lang="en">EN</a>
     </nav>
   </div>
 </header>
-<main id="main">
+<main id="main" data-pagefind-body>
   <div class="wrap">
 <section class="phero">
-      <nav class="crumbs" aria-label="Fil d&#39;Ariane"><ol><li><a href="index.html">Accueil</a></li><li aria-current="page">Écosystème et partenariats</li></ol></nav>
+      <nav class="crumbs" data-pagefind-ignore aria-label="Fil d&#39;Ariane"><ol><li><a href="index.html">Accueil</a></li><li aria-current="page">Écosystème et partenariats</li></ol></nav>
       <p class="eyebrow">Partenariats</p>
       <h1>Tous les nuages, publics et privés</h1>
       <p class="lede">Nous travaillons sur les plateformes que vous avez choisies, sans vous en imposer une. Et nous collaborons avec ceux qui servent les mêmes clients.</p>
     </section><section class="block split"><div><h2>Indépendants de toute plateforme</h2></div><p class="big">La plupart des organisations combinent plusieurs nuages publics et une infrastructure privée. Les récents changements de licences dans la virtualisation ont aussi poussé beaucoup d&#39;entre elles à revoir leur plateforme. Notre rôle : que vos services restent disponibles, quel que soit l&#39;endroit où ils tournent.</p></section><section class="block"><h2>Nuages publics</h2><div class="cover grid2"><div class="citem"><h3>Microsoft Azure</h3><p>Zones et régions, Azure Site Recovery et Azure Backup, gouvernance de l'IA avec Citadel.</p></div><div class="citem"><h3>Amazon Web Services (AWS)</h3><p>Architectures multizones et multirégions, AWS Elastic Disaster Recovery, AWS Backup, pilier fiabilité du Well-Architected Framework.</p></div><div class="citem"><h3>Google Cloud</h3><p>Conception régionale, service Backup and DR, résilience des charges de données et d'IA.</p></div><div class="citem"><h3>Oracle Cloud Infrastructure</h3><p>Résilience des bases Oracle, réplication et reprise des applications critiques.</p></div></div></section><section class="block"><h2>Nuage privé et hybride</h2><div class="cover grid2"><div class="citem"><h3>VMware by Broadcom</h3><p>Reprise de site, protection contre les rançongiciels et évaluation des options après les changements de licences.</p></div><div class="citem"><h3>Nutanix</h3><p>Reprise intégrée à la plateforme, réplication entre sites et vers le nuage public.</p></div><div class="citem"><h3>Red Hat OpenShift</h3><p>Résilience des conteneurs et des machines virtuelles, sauvegarde et reprise des applications.</p></div><div class="citem"><h3>Microsoft Azure Local</h3><p>Infrastructure hybride sur site gérée depuis Azure, pour les données qui doivent rester chez vous.</p></div><div class="citem"><h3>HPE GreenLake</h3><p>Nuage privé en mode service : continuité, sauvegarde et reprise intégrées.</p></div><div class="citem"><h3>Dell APEX</h3><p>Infrastructure en mode service, stockage et protection des données sur site et hybride.</p></div></div></section><section class="block"><h2>Ce que nous faisons entre les plateformes</h2><div class="cover grid2"><div class="citem"><h3>Reprise d'un nuage à l'autre</h3><p>Rétablir un service chez un autre fournisseur ou sur site quand une région ou un fournisseur tombe.</p></div><div class="citem"><h3>Plans de sortie et risque de concentration</h3><p>Des stratégies de sortie testables, comme l'exigent DORA et les régulateurs financiers.</p></div><div class="citem"><h3>Migrations sans interruption</h3><p>Changer de plateforme de virtualisation ou de nuage avec un plan de retour arrière éprouvé.</p></div><div class="citem"><h3>Gouvernance hybride de l'IA</h3><p>Un même cadre de contrôle pour les modèles hébergés dans le nuage et sur site.</p></div></div><p><a class="textlink" href="what-we-do/expertise/cloud-resilience.html">Résilience infonuagique et des infrastructures <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p></section><section class="block"><h2>Devenir partenaire</h2><p class="intro">Nous travaillons avec les acteurs qui servent les mêmes clients que nous.</p><div class="pillars"><div class="pcard"><span class="pk">01</span><h3>Éditeurs et fournisseurs infonuagiques</h3><p>Nous aidons vos clients à concevoir, tester et prouver la résilience de ce qu'ils déploient sur votre plateforme.</p></div><div class="pcard"><span class="pk">02</span><h3>Intégrateurs et fournisseurs de services gérés</h3><p>Nous apportons une expertise en continuité, reprise, sécurité et gouvernance de l'IA, en codélivrance ou en sous-traitance.</p></div><div class="pcard"><span class="pk">03</span><h3>Cabinets de conseil et d'avocats</h3><p>Vous couvrez le juridique ou la stratégie ; nous couvrons l'opérationnel et le technique, pour une réponse complète à vos clients.</p></div></div></section><section class="block split"><div><h2>Modes de collaboration</h2></div><div class="cover"><div class="citem"><h3>Recommandation</h3><p>Nous nous recommandons mutuellement lorsque le besoin dépasse notre périmètre.</p></div><div class="citem"><h3>Codélivrance</h3><p>Une équipe commune sur un mandat, chacun sur son expertise.</p></div><div class="citem"><h3>Sous-traitance</h3><p>Nous intervenons sous votre marque, selon vos méthodes.</p></div></div></section><section class="block"><div class="band ai"><div><h2>Parlons partenariat</h2><p>Présentez-nous votre organisation et vos clients : nous verrons ensemble comment nous compléter.</p></div><a class="btn primary" href="contact.html">Nous écrire</a></div><p class="note">Les plateformes citées le sont pour décrire notre expertise ; leur mention n&#39;implique pas un partenariat officiel avec leurs éditeurs. Toutes les marques appartiennent à leurs propriétaires respectifs.</p></section>
-<section class="block" id="contact" style="border-top:0;padding-top:24px">
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
       <div class="contact">
         <div class="contact-top">
           <h2>Parlons de votre prochaine panne, avant qu'elle n'arrive.</h2>
@@ -92,19 +104,19 @@
       <p>Résilience d'affaires, sécurité et reprise après sinistre.</p>
       <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
     </div>
-    <div><h3>Expertise</h3><ul><li><a href="what-we-do/expertise/business-continuity.html">Continuité des activités</a></li><li><a href="what-we-do/expertise/disaster-recovery.html">Reprise après sinistre</a></li><li><a href="what-we-do/expertise/cybersecurity.html">Cybersécurité</a></li><li><a href="what-we-do/expertise/cloud-resilience.html">Résilience infonuagique et des infrastructures</a></li></ul></div>
-    <div><h3>Services</h3><ul><li><a href="what-we-do/services/assessments.html">Évaluations</a></li><li><a href="what-we-do/services/planning.html">Planification et documentation</a></li><li><a href="what-we-do/services/exercises.html">Exercices et tests</a></li><li><a href="what-we-do/services/advisory.html">Accompagnement continu</a></li></ul></div>
-    <div><h3>IA</h3><ul><li><a href="ai/strategy-adoption.html">Stratégie et adoption de l'IA</a></li><li><a href="ai/agents.html">Conception d'agents IA</a></li><li><a href="ai/governance.html">Gouvernance et risques de l'IA</a></li><li><a href="ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="ai/vision-questionnaire.html">Questionnaire de vision IA</a></li></ul></div>
-    <div><h3>Secteurs</h3><ul><li><a href="what-we-do/industries/financial-services.html">Services financiers</a></li><li><a href="what-we-do/industries/healthcare.html">Santé</a></li><li><a href="what-we-do/industries/technology-saas.html">Technologie et SaaS</a></li><li><a href="what-we-do/industries/manufacturing-transport.html">Industrie, transport et logistique</a></li><li><a href="what-we-do/industries/energy-utilities.html">Énergie et services publics</a></li><li><a href="what-we-do/industries/retail.html">Commerce de détail</a></li><li><a href="what-we-do/industries/professional-services.html">Services professionnels</a></li><li><a href="what-we-do/industries/public-sector.html">Secteur public et OBNL</a></li></ul></div>
-    <div><h3>Ressources</h3><ul><li><a href="case-studies/index.html">Études de cas</a></li><li><a href="resources/cost-of-downtime.html">Coût des interruptions</a></li><li><a href="partners.html">Écosystème et partenariats</a></li><li><a href="what-we-do/methodology.html">Méthodologie</a></li><li><a href="what-we-do/regulations.html">Réglementation</a></li><li><a href="self-assessment.html">Auto-évaluation</a></li><li><a href="contact.html">Nous joindre</a></li></ul></div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="what-we-do/expertise/business-continuity.html">Continuité des activités</a></li><li><a href="what-we-do/expertise/disaster-recovery.html">Reprise après sinistre</a></li><li><a href="what-we-do/expertise/cybersecurity.html">Cybersécurité</a></li><li><a href="what-we-do/expertise/cloud-resilience.html">Résilience infonuagique et des infrastructures</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="what-we-do/services/assessments.html">Évaluations</a></li><li><a href="what-we-do/services/planning.html">Planification et documentation</a></li><li><a href="what-we-do/services/exercises.html">Exercices et tests</a></li><li><a href="what-we-do/services/advisory.html">Accompagnement continu</a></li></ul></div>
+    <div><h2 class="fh">IA</h2><ul><li><a href="ai/strategy-adoption.html">Stratégie et adoption de l'IA</a></li><li><a href="ai/agents.html">Conception d'agents IA</a></li><li><a href="ai/governance.html">Gouvernance et risques de l'IA</a></li><li><a href="ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="ai/vision-questionnaire.html">Questionnaire de vision IA</a></li></ul></div>
+    <div><h2 class="fh">Secteurs</h2><ul><li><a href="what-we-do/industries/financial-services.html">Services financiers</a></li><li><a href="what-we-do/industries/healthcare.html">Santé</a></li><li><a href="what-we-do/industries/technology-saas.html">Technologie et SaaS</a></li><li><a href="what-we-do/industries/manufacturing-transport.html">Industrie, transport et logistique</a></li><li><a href="what-we-do/industries/energy-utilities.html">Énergie et services publics</a></li><li><a href="what-we-do/industries/retail.html">Commerce de détail</a></li><li><a href="what-we-do/industries/professional-services.html">Services professionnels</a></li><li><a href="what-we-do/industries/public-sector.html">Secteur public et OBNL</a></li></ul></div>
+    <div><h2 class="fh">Ressources</h2><ul><li><a href="resources/index.html">Ressources</a></li><li><a href="self-assessment.html">Auto-évaluation</a></li><li><a href="resources/downtime-calculator.html">Calculateur du coût d'une interruption</a></li><li><a href="resources/cost-of-downtime.html">Coût des interruptions</a></li><li><a href="resources/glossary.html">Glossaire</a></li><li><a href="insights/index.html">Insights</a></li><li><a href="case-studies/index.html">Études de cas</a></li><li><a href="partners.html">Écosystème et partenariats</a></li><li><a href="contact.html">Nous joindre</a></li></ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="privacy.html">Politique de confidentialité</a><a href="legal.html">Mentions légales</a></span>
+    <span class="flegal"><a href="privacy.html">Politique de confidentialité</a><a href="legal.html">Mentions légales</a><a href="accessibility.html">Accessibilité</a><a href="security.html">Sécurité du site</a><a href="governance.html">Gouvernance et corrections</a></span>
     <span>Europe · Royaume-Uni · Canada · États-Unis</span>
   </div>
 </footer>
-<script src="../assets/site.js?v=e4cb3054"></script>
+<script src="../assets/site.js?v=a72c29ff"></script>
 
 </body>
 </html>

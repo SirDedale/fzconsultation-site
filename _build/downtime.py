@@ -25,8 +25,8 @@ BY_INDUSTRY = [
   "src": 3},
  {"industry": ("Manufacture — moyenne du secteur", "Manufacturing — sector average"),
   "range": ("≈ 260 000 $ US/heure", "≈ $260,000 US/hour"),
-  "note": ("Moyenne toutes industries manufacturières confondues, selon Aberdeen Research.", "Average across all manufacturing sectors, per Aberdeen Research."),
-  "src": 4},
+  "note": ("Estimation agrégée pour le secteur manufacturier, publiée par Pingdom.", "Aggregated estimate for the manufacturing sector, published by Pingdom."),
+  "src": 2},
  {"industry": ("Commerce de détail", "Retail"),
   "range": ("≈ 1,1 M$ US/heure (estimation)", "≈ $1.1M US/hour (estimate)"),
   "note": ("Estimation agrégée ; l'impact réel dépend fortement de la période (voir Amazon Prime Day ci-dessous).", "Aggregated estimate; the real impact depends heavily on timing (see Amazon Prime Day below)."),
@@ -40,8 +40,8 @@ BY_INDUSTRY = [
 INCIDENTS = [
  {"name": ("Amazon — Prime Day 2018", "Amazon — Prime Day 2018"),
   "sector": ("Commerce de détail", "Retail"),
-  "fact": ("Une panne de 63 à 75 minutes pendant l'événement de vente le plus chargé de l'année.", "A 63- to 75-minute outage during the year's busiest sales event."),
-  "cost": ("72 M$ à 99 M$ US de ventes perdues, soit environ 1,2 M$ US par minute.", "$72M–$99M US in lost sales, about $1.2M US per minute."),
+  "fact": ("Une panne d'environ 75 minutes pendant l'événement de vente le plus chargé de l'année.", "An outage of roughly 75 minutes during the year's busiest sales event."),
+  "cost": ("Estimations d'analystes : de 90 M$ à plus de 99 M$ US de ventes perdues, soit environ 1,2 M$ US par minute.", "Analyst estimates: from $90M to over $99M US in lost sales, about $1.2M US per minute."),
   "src": 5, "case": None},
  {"name": ("TSB — migration ratée", "TSB — botched migration"),
   "sector": ("Finance", "Finance"),
@@ -70,19 +70,18 @@ INCIDENTS = [
   "src": None, "case": "case-studies/crowdstrike-delta-2024.html"},
  {"name": ("Southwest Airlines — effondrement opérationnel", "Southwest Airlines — operational meltdown"),
   "sector": ("Transport aérien", "Aviation"),
-  "fact": ("17 000 vols annulés sur environ 10 jours après une tempête hivernale, faute de logiciel de replanification capable de suivre.", "17,000 flights cancelled over about 10 days after a winter storm, because scheduling software couldn't keep up."),
-  "cost": ("Plus de 1,1 G$ US de remboursements et de coûts, plus une amende de 140 M$ US.", "More than $1.1B US in refunds and costs, plus a $140M US fine."),
-  "src": 6, "case": None},
+  "fact": ("16 900 vols annulés et plus de deux millions de passagers touchés pendant les Fêtes 2022, après une tempête hivernale.", "16,900 flights cancelled and over two million passengers stranded over the 2022 holidays, after a winter storm."),
+  "cost": ("Plus de 600 M$ US de remboursements et de frais, et une pénalité de 140 M$ US du DOT (dont 35 M$ versés en argent) : plus de 750 M$ US au total selon le DOT.", "Over $600M US in refunds and reimbursements, and a $140M US DOT penalty ($35M of it in cash): over $750M US in total, per the DOT."),
+  "src": 4, "case": None},
 ]
 
 SOURCES = [
- ("ITIC — 2024 Hourly Cost of Downtime Survey", "https://itic-corp.com/category/itic-reports-surveys/"),
+ ("ITIC — 2024 Hourly Cost of Downtime Report", "https://itic-corp.com/itic-2024-hourly-cost-of-downtime-report/"),
  ("Atlassian — Cost of downtime (citing Gartner, 2014)", "https://www.atlassian.com/incident-management/kpis/cost-of-downtime"),
  ("Pingdom — Average Cost of Downtime per Industry", "https://www.pingdom.com/outages/average-cost-of-downtime-per-industry/"),
  ("Acronis — How unplanned OT downtime is draining industrial profits (citing Siemens, True Cost of Downtime 2024)", "https://www.acronis.com/en/blog/posts/how-unplanned-ot-downtime-is-silently-draining-industrial-profits/"),
- ("Verdantis — Unplanned Downtime Cost & Recovery (citing Aberdeen Research)", "https://www.verdantis.com/cost-of-downtime/"),
+ ("U.S. Department of Transportation — DOT penalizes Southwest Airlines $140 million for 2022 holiday meltdown", "https://www.transportation.gov/briefing-room/dot-penalizes-southwest-airlines-140-million-2022-holiday-meltdown"),
  ("TechCrunch — What Amazon lost (and made) on Amazon Prime Day", "https://techcrunch.com/2018/07/18/amazon-prime-day-outage-cost/"),
- ("CNN — Southwest hit by record $140 million fine for holiday service meltdown", "https://www.cnn.com/2023/12/18/business/southwest-fine-canceled-flights"),
 ]
 
 METHOD_NOTE = ("Ces chiffres proviennent d'enquêtes et d'analyses publiques et varient selon la méthode de calcul retenue (revenu perdu, productivité, pénalités, image). Ils donnent un ordre de grandeur, pas une valeur applicable telle quelle à votre organisation : le meilleur moyen de connaître votre propre coût horaire est une analyse d'impact sur vos activités.",

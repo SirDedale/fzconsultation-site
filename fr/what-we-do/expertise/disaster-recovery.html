@@ -2,9 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Reprise après sinistre | FZ Consultation</title>
 <meta name="description" content="Restaurer systèmes et données dans les délais que l&#x27;entreprise peut se permettre.">
+
 <link rel="canonical" href="https://fzconsultation.xyz/fr/what-we-do/expertise/disaster-recovery.html">
 <link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/what-we-do/expertise/disaster-recovery.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/what-we-do/expertise/disaster-recovery.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
 <meta property="og:type" content="website">
@@ -18,8 +20,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../../../assets/mark.webp" type="image/webp">
 <link rel="preload" href="../../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../../assets/site.css?v=e4cb3054">
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../../insights/feed.xml">
+<script src="../../../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../../../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://fzconsultation.xyz/fr/"}, {"@type": "ListItem", "position": 2, "name": "Ce que nous faisons", "item": "https://fzconsultation.xyz/fr/what-we-do/"}, {"@type": "ListItem", "position": 3, "name": "Expertise", "item": "https://fzconsultation.xyz/fr/what-we-do/expertise/"}, {"@type": "ListItem", "position": 4, "name": "Reprise après sinistre", "item": "https://fzconsultation.xyz/fr/what-we-do/expertise/disaster-recovery.html"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Nos sauvegardes ne suffisent-elles pas ?", "acceptedAnswer": {"@type": "Answer", "text": "Les sauvegardes sont nécessaires mais pas suffisantes. Il faut aussi savoir dans quel ordre restaurer, combien de temps cela prend réellement, et vérifier que les copies n'ont pas été compromises."}}, {"@type": "Question", "name": "Être dans le nuage, est-ce une reprise après sinistre ?", "acceptedAnswer": {"@type": "Answer", "text": "Pas automatiquement. Le fournisseur protège son infrastructure, mais vos données, configurations et accès restent votre responsabilité."}}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
 </head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -46,24 +50,32 @@
       </div>
       <a href="../../ai/index.html">IA</a>
       <a href="../../case-studies/index.html">Études de cas</a>
-      <a href="../../self-assessment.html">Auto-évaluation</a>
+      <a href="../../resources/index.html">Ressources</a>
       <a href="../../contact.html" class="nav-cta">Nous joindre</a>
+      <div class="nav-tools">
+        <a href="../../search.html">Rechercher dans le site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Passer au thème clair" data-label-dark="Passer au thème sombre">Changer de thème</button>
+      </div>
     </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../../search.html" aria-label="Rechercher"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Passer au thème clair" data-label-dark="Passer au thème sombre" aria-label="Changer de thème"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
     <nav class="lang" aria-label="Langue / Language">
       <a href="../../what-we-do/expertise/disaster-recovery.html" hreflang="fr" data-lang="fr" aria-current="true">FR</a>
       <a href="../../../en/what-we-do/expertise/disaster-recovery.html" hreflang="en" data-lang="en">EN</a>
     </nav>
   </div>
 </header>
-<main id="main">
+<main id="main" data-pagefind-body>
   <div class="wrap">
 <section class="phero">
-      <nav class="crumbs" aria-label="Fil d&#39;Ariane"><ol><li><a href="../../index.html">Accueil</a></li><li><a href="../../what-we-do/index.html">Ce que nous faisons</a></li><li><a href="../../what-we-do/expertise/index.html">Expertise</a></li><li aria-current="page">Reprise après sinistre</li></ol></nav>
+      <nav class="crumbs" data-pagefind-ignore aria-label="Fil d&#39;Ariane"><ol><li><a href="../../index.html">Accueil</a></li><li><a href="../../what-we-do/index.html">Ce que nous faisons</a></li><li><a href="../../what-we-do/expertise/index.html">Expertise</a></li><li aria-current="page">Reprise après sinistre</li></ol></nav>
       <p class="eyebrow">Expertise</p>
       <h1>Reprise après sinistre</h1>
       <p class="lede">Une reprise qui fonctionne le jour où vous en avez besoin, pas seulement sur papier.</p>
     </section><section class="block split"><div><h2>Ce que nous couvrons</h2><p class="intro">Nous fixons avec vous des cibles RTO et RPO réalistes, puis nous concevons, documentons et vérifions la façon de les atteindre, que vos systèmes soient sur site, dans le nuage ou hybrides.</p></div><div class="cover"><div class="citem"><h3>Cibles RTO et RPO</h3><p>Nous fixons des objectifs par service, fondés sur l'impact réel d'une interruption pour votre organisation, et non sur des moyennes de secteur qui ne correspondent à personne en particulier. Ces cibles servent ensuite de fil conducteur à toute la stratégie de reprise.</p></div><div class="citem"><h3>Architecture de reprise</h3><p>Nous révisons ou concevons vos sites secondaires, vos mécanismes de réplication et votre reprise infonuagique. L'objectif est une architecture qui tient ses promesses le jour où elle est sollicitée, pas seulement sur un schéma.</p></div><div class="citem"><h3>Stratégie de sauvegarde</h3><p>Nous concevons une stratégie de sauvegarde avec des copies isolées et immuables, résistantes aux rançongiciels qui ciblent désormais les sauvegardes elles-mêmes. Chaque copie est accompagnée d'une restauration vérifiée, pas seulement d'un journal qui indique qu'elle a réussi.</p></div><div class="citem"><h3>Procédures de reprise</h3><p>Nous documentons des étapes précises, ordonnées selon les dépendances techniques réelles entre vos systèmes. Elles sont écrites pour être suivies par une équipe sous pression, à trois heures du matin, pas pour impressionner un auditeur.</p></div><div class="citem"><h3>Tests de reprise</h3><p>Nous exécutons des restaurations et des basculements réels, chronométrés, pour mesurer l'écart entre vos cibles et ce qui se passe vraiment. Chaque test se termine par une liste de corrections concrètes, pas seulement par un constat.</p></div></div></section><section class="block split"><div><h2>Ce que vous recevez</h2></div><ul class="checks"><li>Cibles RTO et RPO validées par la direction</li><li>Stratégie et architecture de reprise</li><li>Procédures de reprise pas à pas</li><li>Rapport de test et plan de correction</li></ul></section><section class="block"><h2>Questions fréquentes</h2><div class="faq"><details><summary>Nos sauvegardes ne suffisent-elles pas ?</summary><div><p>Les sauvegardes sont nécessaires mais pas suffisantes. Il faut aussi savoir dans quel ordre restaurer, combien de temps cela prend réellement, et vérifier que les copies n'ont pas été compromises.</p></div></details><details><summary>Être dans le nuage, est-ce une reprise après sinistre ?</summary><div><p>Pas automatiquement. Le fournisseur protège son infrastructure, mais vos données, configurations et accès restent votre responsabilité.</p></div></details></div></section><section class="block"><h2>À voir aussi</h2><ul class="rows"><li><a href="../../what-we-do/expertise/cloud-resilience.html"><span class="rt">Résilience infonuagique et des infrastructures</span><span class="rs">Éliminer les points de défaillance uniques dans le nuage, sur site et dans vos applications SaaS.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../../what-we-do/services/exercises.html"><span class="rt">Exercices et tests</span><span class="rs">Mettre vos plans à l'épreuve avant qu'un vrai incident ne le fasse.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></section>
-<section class="block" id="contact" style="border-top:0;padding-top:24px">
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
       <div class="contact">
         <div class="contact-top">
           <h2>Parlons de votre prochaine panne, avant qu'elle n'arrive.</h2>
@@ -92,19 +104,19 @@
       <p>Résilience d'affaires, sécurité et reprise après sinistre.</p>
       <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
     </div>
-    <div><h3>Expertise</h3><ul><li><a href="../../what-we-do/expertise/business-continuity.html">Continuité des activités</a></li><li><a href="../../what-we-do/expertise/disaster-recovery.html">Reprise après sinistre</a></li><li><a href="../../what-we-do/expertise/cybersecurity.html">Cybersécurité</a></li><li><a href="../../what-we-do/expertise/cloud-resilience.html">Résilience infonuagique et des infrastructures</a></li></ul></div>
-    <div><h3>Services</h3><ul><li><a href="../../what-we-do/services/assessments.html">Évaluations</a></li><li><a href="../../what-we-do/services/planning.html">Planification et documentation</a></li><li><a href="../../what-we-do/services/exercises.html">Exercices et tests</a></li><li><a href="../../what-we-do/services/advisory.html">Accompagnement continu</a></li></ul></div>
-    <div><h3>IA</h3><ul><li><a href="../../ai/strategy-adoption.html">Stratégie et adoption de l'IA</a></li><li><a href="../../ai/agents.html">Conception d'agents IA</a></li><li><a href="../../ai/governance.html">Gouvernance et risques de l'IA</a></li><li><a href="../../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../../ai/vision-questionnaire.html">Questionnaire de vision IA</a></li></ul></div>
-    <div><h3>Secteurs</h3><ul><li><a href="../../what-we-do/industries/financial-services.html">Services financiers</a></li><li><a href="../../what-we-do/industries/healthcare.html">Santé</a></li><li><a href="../../what-we-do/industries/technology-saas.html">Technologie et SaaS</a></li><li><a href="../../what-we-do/industries/manufacturing-transport.html">Industrie, transport et logistique</a></li><li><a href="../../what-we-do/industries/energy-utilities.html">Énergie et services publics</a></li><li><a href="../../what-we-do/industries/retail.html">Commerce de détail</a></li><li><a href="../../what-we-do/industries/professional-services.html">Services professionnels</a></li><li><a href="../../what-we-do/industries/public-sector.html">Secteur public et OBNL</a></li></ul></div>
-    <div><h3>Ressources</h3><ul><li><a href="../../case-studies/index.html">Études de cas</a></li><li><a href="../../resources/cost-of-downtime.html">Coût des interruptions</a></li><li><a href="../../partners.html">Écosystème et partenariats</a></li><li><a href="../../what-we-do/methodology.html">Méthodologie</a></li><li><a href="../../what-we-do/regulations.html">Réglementation</a></li><li><a href="../../self-assessment.html">Auto-évaluation</a></li><li><a href="../../contact.html">Nous joindre</a></li></ul></div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="../../what-we-do/expertise/business-continuity.html">Continuité des activités</a></li><li><a href="../../what-we-do/expertise/disaster-recovery.html">Reprise après sinistre</a></li><li><a href="../../what-we-do/expertise/cybersecurity.html">Cybersécurité</a></li><li><a href="../../what-we-do/expertise/cloud-resilience.html">Résilience infonuagique et des infrastructures</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="../../what-we-do/services/assessments.html">Évaluations</a></li><li><a href="../../what-we-do/services/planning.html">Planification et documentation</a></li><li><a href="../../what-we-do/services/exercises.html">Exercices et tests</a></li><li><a href="../../what-we-do/services/advisory.html">Accompagnement continu</a></li></ul></div>
+    <div><h2 class="fh">IA</h2><ul><li><a href="../../ai/strategy-adoption.html">Stratégie et adoption de l'IA</a></li><li><a href="../../ai/agents.html">Conception d'agents IA</a></li><li><a href="../../ai/governance.html">Gouvernance et risques de l'IA</a></li><li><a href="../../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../../ai/vision-questionnaire.html">Questionnaire de vision IA</a></li></ul></div>
+    <div><h2 class="fh">Secteurs</h2><ul><li><a href="../../what-we-do/industries/financial-services.html">Services financiers</a></li><li><a href="../../what-we-do/industries/healthcare.html">Santé</a></li><li><a href="../../what-we-do/industries/technology-saas.html">Technologie et SaaS</a></li><li><a href="../../what-we-do/industries/manufacturing-transport.html">Industrie, transport et logistique</a></li><li><a href="../../what-we-do/industries/energy-utilities.html">Énergie et services publics</a></li><li><a href="../../what-we-do/industries/retail.html">Commerce de détail</a></li><li><a href="../../what-we-do/industries/professional-services.html">Services professionnels</a></li><li><a href="../../what-we-do/industries/public-sector.html">Secteur public et OBNL</a></li></ul></div>
+    <div><h2 class="fh">Ressources</h2><ul><li><a href="../../resources/index.html">Ressources</a></li><li><a href="../../self-assessment.html">Auto-évaluation</a></li><li><a href="../../resources/downtime-calculator.html">Calculateur du coût d'une interruption</a></li><li><a href="../../resources/cost-of-downtime.html">Coût des interruptions</a></li><li><a href="../../resources/glossary.html">Glossaire</a></li><li><a href="../../insights/index.html">Insights</a></li><li><a href="../../case-studies/index.html">Études de cas</a></li><li><a href="../../partners.html">Écosystème et partenariats</a></li><li><a href="../../contact.html">Nous joindre</a></li></ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="../../privacy.html">Politique de confidentialité</a><a href="../../legal.html">Mentions légales</a></span>
+    <span class="flegal"><a href="../../privacy.html">Politique de confidentialité</a><a href="../../legal.html">Mentions légales</a><a href="../../accessibility.html">Accessibilité</a><a href="../../security.html">Sécurité du site</a><a href="../../governance.html">Gouvernance et corrections</a></span>
     <span>Europe · Royaume-Uni · Canada · États-Unis</span>
   </div>
 </footer>
-<script src="../../../assets/site.js?v=e4cb3054"></script>
+<script src="../../../assets/site.js?v=a72c29ff"></script>
 
 </body>
 </html>

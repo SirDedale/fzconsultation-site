@@ -1,0 +1,9 @@
+# Jekyll settings used by GitHub Pages branch deploys.
+# .well-known must be included explicitly, otherwise Jekyll skips dot-folders.
+include:
+  - .well-known
+exclude:
+  - _build
+  - .github
+  - node_modules
+  - README.md

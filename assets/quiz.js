@@ -1,5 +1,5 @@
 (function(){
-  var Q=window.QUIZ,root=window.QUIZ_ROOT||"",el=document.getElementById("quiz");if(!Q||!el)return;
+  var __d=document.getElementById("quiz-data"),Q=null,root="";try{if(__d){Q=JSON.parse(__d.textContent);root=__d.getAttribute("data-root")||""}}catch(e){}var el=document.getElementById("quiz");if(!Q||!el)return;
   var U=Q.ui,n=Q.questions.length,ans=new Array(n),i=-1,industry=null,size=null;
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   function intro(){
@@ -59,8 +59,8 @@
     var weakest=keys.slice().sort(function(a,c){return pct[a]-pct[c]})[0];
     var h='<div class="res-top"><svg class="gauge" viewBox="0 0 150 150" role="img" aria-label="'+U.overall+": "+overall+'%"><circle cx="75" cy="75" r="60" fill="none" stroke="var(--line)" stroke-width="14"/><circle cx="75" cy="75" r="60" fill="none" stroke="'+color(overall)+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+(2*Math.PI*60)+'" stroke-dashoffset="'+(2*Math.PI*60*(1-overall/100))+'" transform="rotate(-90 75 75)"/><text class="t" x="75" y="82" text-anchor="middle">'+overall+'%</text><text class="s" x="75" y="102" text-anchor="middle">'+esc(U.overall)+'</text></svg>';
     h+='<div><p class="band-name">'+esc(U.bands[b])+'</p><p>'+esc(U.bandtxt[b])+'</p></div></div>';
-    h+='<h3>'+esc(U.by)+'</h3><div class="radar-wrap">'+radar(pct,keys,keys.map(function(k){return Q.domains[k].name}))+'</div>';
-    h+='<h3>'+esc(U.narrative_title)+'</h3><blockquote class="vquote">'+esc(Q.narrative[weakest])+'</blockquote>';
+    h+='<h2 class="rh">'+esc(U.by)+'</h2><div class="radar-wrap">'+radar(pct,keys,keys.map(function(k){return Q.domains[k].name}))+'</div>';
+    h+='<h2 class="rh">'+esc(U.narrative_title)+'</h2><blockquote class="vquote">'+esc(Q.narrative[weakest])+'</blockquote>';
     if(industry!==null && size!==null){
       h+='<p class="ctxline">'+esc(U.context_lede)+' '+esc(Q.industries[industry].toLowerCase())+esc(U.context_mid)+' <a href="'+root+'resources/cost-of-downtime.html">'+esc(U.context_link)+' →</a></p>';
     }

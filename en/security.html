@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Site security | FZ Consultation</title>
+<meta name="description" content="The security measures of this site and how to report a vulnerability.">
+
+<link rel="canonical" href="https://fzconsultation.xyz/en/security.html">
+<link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/security.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/security.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FZ Consultation">
+<meta property="og:title" content="Site security | FZ Consultation">
+<meta property="og:description" content="The security measures of this site and how to report a vulnerability.">
+<meta property="og:url" content="https://fzconsultation.xyz/en/security.html">
+<meta property="og:image" content="https://fzconsultation.xyz/assets/og-en.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/mark.webp" type="image/webp">
+<link rel="preload" href="../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="insights/feed.xml">
+<script src="../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Site security", "item": "https://fzconsultation.xyz/en/security.html"}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="index.html" aria-label="FZ Consultation">
+      <img class="mark" src="../assets/mark.webp" alt="" width="40" height="29">
+      <span class="word">Consultation</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+      <span class="bars" aria-hidden="true"></span><span class="mt-label">Menu</span>
+    </button>
+    <nav id="primary-nav" class="primary" aria-label="Main navigation">
+      <div class="has-mega">
+        <button class="mega-toggle" type="button" aria-expanded="false" aria-controls="mega">What we do<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="mega" id="mega">
+          <div class="wrap mega-grid">
+            <div class="mcol"><a class="mhead" href="what-we-do/expertise/index.html">Expertise <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="what-we-do/services/index.html">Services <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="what-we-do/services/assessments.html">Assessments</a></li><li><a href="what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="what-we-do/industries.html">Industries <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="what-we-do/industries/retail.html">Retail</a></li><li><a href="what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+            <div class="mcol"><span class="mhead plain">Approach</span><ul><li><a href="what-we-do/methodology.html">Methodology</a></li><li><a href="what-we-do/regulations.html">Regulations</a></li><li><a href="case-studies/index.html">Case studies</a></li><li><a href="resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="partners.html">Ecosystem and partnerships</a></li><li><a href="self-assessment.html">Self-assessment</a></li></ul><a class="mall" href="what-we-do/index.html">View everything we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+      </div>
+      <a href="ai/index.html">AI</a>
+      <a href="case-studies/index.html">Case studies</a>
+      <a href="resources/index.html">Resources</a>
+      <a href="contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
+    </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
+    <nav class="lang" aria-label="Langue / Language">
+      <a href="../fr/security.html" hreflang="fr" data-lang="fr">FR</a>
+      <a href="security.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
+    </nav>
+  </div>
+</header>
+<main id="main" data-pagefind-body>
+  <div class="wrap">
+<section class="phero">
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">Site security</li></ol></nav>
+      <p class="eyebrow">Security</p>
+      <h1>How we protect this site</h1>
+      <p class="lede">A security firm should lead by example. Here is what we do, what this site collects, and how to report a flaw.</p>
+    </section><section class="block legal"><h2>A deliberately simple site</h2><p>The site is static: no database, no accounts, no content management system to patch. It is served over HTTPS only and sets no cookies. What you do not deploy cannot be attacked.</p><h2>Few third parties, all listed</h2><div class="tscroll" tabindex="0" role="region" aria-label="Third-party services"><table class="wtable"><thead><tr><th scope="col">Service</th><th scope="col">Role</th><th scope="col">When</th></tr></thead><tbody><tr><td>GitHub Pages</td><td>Site hosting</td><td>All pages</td></tr><tr><td>Cloudflare Web Analytics</td><td>Aggregate analytics, no cookies</td><td>All pages</td></tr><tr><td>Formspree</td><td>Contact form delivery</td><td>Only when the form is submitted</td></tr><tr><td>Calendly</td><td>Appointment booking</td><td>Only if you click “Book”</td></tr><tr><td>Namecheap</td><td>Domain name and email</td><td>Outside the site</td></tr></tbody></table></div><p>Details in our <a href="privacy.html">privacy policy</a>.</p><h2>Technical measures</h2><ul><li>A Content Security Policy (CSP) restricts the origins of scripts, connections and resources, and forbids scripts embedded in pages.</li><li>The typeface is hosted on the site itself: no request to a third-party font service.</li><li>DNS Security Extensions (DNSSEC) are enabled on the domain.</li><li>The site publishes a security.txt file (RFC 9116) so researchers know whom to contact.</li><li>Search runs entirely in your browser against a static index: your queries are not transmitted.</li></ul><h2>Report a vulnerability</h2><p>If you believe you found a flaw, email <a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a> describing what you saw and how to reproduce it. We acknowledge reports within five business days and keep you informed about the fix. We regard good-faith research that follows the rules below as authorized and will not take legal action against you.</p><h2>Rules for research</h2><ul><li>Stay within this site (fzconsultation.xyz). The third-party services listed above have their own programs.</li><li>Do not access, change or keep other people's data. Stop as soon as you have demonstrated the issue.</li><li>No denial of service, phishing or social engineering against our staff or clients.</li><li>Give us reasonable time to fix before any public disclosure.</li></ul><h2>Out of scope</h2><p>Automated reports with no demonstrated impact, HTTP headers our host does not let us configure, and findings on third-party services.</p></section>
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
+      <div class="contact">
+        <div class="contact-top">
+          <h2>Let's talk about your next outage before it happens.</h2>
+          <p>A free 30-minute intro call to review your risks and priorities.</p>
+          <div class="cta-actions"><a class="btn signal" href="https://calendly.com/fabien-mariou" target="_blank" rel="noopener">Book a 30-minute call</a><a class="btn outline-light" href="self-assessment.html">Take the self-assessment</a></div>
+        </div>
+        <form class="cform mini" id="contact-form" data-endpoint="https://formspree.io/f/mkjgvpwo" data-email="contact@fzconsultation.xyz" novalidate>
+          <h3>Send us a message</h3>
+          <label>Name <span aria-hidden="true">*</span><input name="name" autocomplete="name" required></label>
+          <label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required></label>
+          <label>Message <span aria-hidden="true">*</span><textarea name="message" rows="3" required></textarea></label>
+          <input type="hidden" name="_subject" value="New message — FZ Consultation website">
+          <label class="hp" aria-hidden="true">Website<input name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          <label class="consent"><input type="checkbox" name="consent" required> <span>I agree that my information will be used to respond to my request, in line with the <a href="privacy.html">privacy policy</a>.</span></label>
+          <button class="btn signal" type="submit">Send</button>
+          <p class="fstatus" role="status" aria-live="polite" data-ok="Thank you, your message has been sent. We will get back to you shortly." data-err="Sending failed. Please email us directly at contact@fzconsultation.xyz." data-missing="Please fill in the required fields and accept the privacy policy." data-mailto="Your email app will open with your message."></p>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap fgrid">
+    <div class="fbrand">
+      <img src="../assets/logo.webp" alt="FZ Consultation" width="160" height="120" class="flogo">
+      <p>Business resilience, security and disaster recovery.</p>
+      <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
+    </div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="what-we-do/services/assessments.html">Assessments</a></li><li><a href="what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+    <div><h2 class="fh">AI</h2><ul><li><a href="ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="ai/agents.html">AI agent design and build</a></li><li><a href="ai/governance.html">AI governance and risk</a></li><li><a href="ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
+    <div><h2 class="fh">Industries</h2><ul><li><a href="what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="what-we-do/industries/retail.html">Retail</a></li><li><a href="what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+    <div><h2 class="fh">Resources</h2><ul><li><a href="resources/index.html">Resources</a></li><li><a href="self-assessment.html">Self-assessment</a></li><li><a href="resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="resources/glossary.html">Glossary</a></li><li><a href="insights/index.html">Insights</a></li><li><a href="case-studies/index.html">Case studies</a></li><li><a href="partners.html">Ecosystem and partnerships</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+  </div>
+  <div class="wrap fbottom">
+    <span>© <span class="year">2026</span> FZ Consultation</span>
+    <span class="flegal"><a href="privacy.html">Privacy policy</a><a href="legal.html">Legal notice</a><a href="accessibility.html">Accessibility</a><a href="security.html">Site security</a><a href="governance.html">Governance and corrections</a></span>
+    <span>Europe · UK · Canada · United States</span>
+  </div>
+</footer>
+<script src="../assets/site.js?v=a72c29ff"></script>
+
+</body>
+</html>

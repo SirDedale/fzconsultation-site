@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI governance, risk and compliance | FZ Consultation</title>
 <meta name="description" content="Policy, inventory, risk classification and regulatory compliance.">
+
 <link rel="canonical" href="https://fzconsultation.xyz/en/ai/governance.html">
 <link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/ai/governance.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/ai/governance.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
 <meta property="og:type" content="website">
@@ -18,8 +20,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../../assets/mark.webp" type="image/webp">
 <link rel="preload" href="../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=e4cb3054">
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../insights/feed.xml">
+<script src="../../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Artificial intelligence", "item": "https://fzconsultation.xyz/en/ai/"}, {"@type": "ListItem", "position": 3, "name": "AI governance and risk", "item": "https://fzconsultation.xyz/en/ai/governance.html"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does the EU AI Act apply to us?", "acceptedAnswer": {"@type": "Answer", "text": "Whether it applies depends on your role (provider or deployer) and your use cases, including outside the EU if your systems are used there. Its obligations phase in over time; we help with inventory and classification, alongside your legal advisers."}}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -46,24 +50,32 @@
       </div>
       <a href="../ai/index.html">AI</a>
       <a href="../case-studies/index.html">Case studies</a>
-      <a href="../self-assessment.html">Self-assessment</a>
+      <a href="../resources/index.html">Resources</a>
       <a href="../contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="../search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
     </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
     <nav class="lang" aria-label="Langue / Language">
       <a href="../../fr/ai/governance.html" hreflang="fr" data-lang="fr">FR</a>
       <a href="../ai/governance.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
     </nav>
   </div>
 </header>
-<main id="main">
+<main id="main" data-pagefind-body>
   <div class="wrap">
 <section class="phero">
-      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../ai/index.html">Artificial intelligence</a></li><li aria-current="page">AI governance and risk</li></ol></nav>
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../ai/index.html">Artificial intelligence</a></li><li aria-current="page">AI governance and risk</li></ol></nav>
       <p class="eyebrow">AI</p>
       <h1>AI governance, risk and compliance</h1>
       <p class="lede">Govern AI without slowing innovation.</p>
     </section><section class="block split"><div><h2>What we cover</h2><p class="intro">AI governance extends what you already do in security and risk management. We set up a proportionate framework: what is allowed, what needs approval and how usage is monitored.</p></div><div class="cover"><div class="citem"><h3>Acceptable use policy</h3><p>We write clear rules for staff, the data they can share with an AI tool, and the list of approved tools. The policy stays short and understandable, so it is actually followed rather than worked around.</p></div><div class="citem"><h3>Inventory and shadow AI</h3><p>We list the AI tools and agents actually in use across your organization, official or not, often adopted by teams before leadership even knows about them. This inventory is the essential starting point for any credible governance.</p></div><div class="citem"><h3>Risk classification</h3><p>We classify your use cases under the EU AI Act and your own risk criteria, to identify which ones need special attention. This classification then guides the level of control and approval required for each new project.</p></div><div class="citem"><h3>Management system</h3><p>We align your governance framework with ISO/IEC 42001 and the NIST AI RMF, two recognized frameworks that structure AI risk management. This alignment also makes future compliance demonstrations to clients or auditors easier.</p></div></div></section><section class="block split"><div><h2>What you get</h2></div><ul class="checks"><li>AI acceptable use policy</li><li>AI system register</li><li>Classification and approval method</li><li>Compliance roadmap</li></ul></section><section class="block"><h2>Frequently asked questions</h2><div class="faq"><details><summary>Does the EU AI Act apply to us?</summary><div><p>Whether it applies depends on your role (provider or deployer) and your use cases, including outside the EU if your systems are used there. Its obligations phase in over time; we help with inventory and classification, alongside your legal advisers.</p></div></details></div></section><section class="block"><h2>Related</h2><ul class="rows"><li><a href="../ai/citadel.html"><span class="rt">Microsoft Foundry Citadel</span><span class="rs">A governance platform for deploying AI agents at scale on Azure.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../ai/strategy-adoption.html"><span class="rt">AI strategy and adoption</span><span class="rs">Align leadership on a vision, choose the right use cases and bring teams along.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></section>
-<section class="block" id="contact" style="border-top:0;padding-top:24px">
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
       <div class="contact">
         <div class="contact-top">
           <h2>Let's talk about your next outage before it happens.</h2>
@@ -92,19 +104,19 @@
       <p>Business resilience, security and disaster recovery.</p>
       <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
     </div>
-    <div><h3>Expertise</h3><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
-    <div><h3>Services</h3><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
-    <div><h3>AI</h3><ul><li><a href="../ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="../ai/agents.html">AI agent design and build</a></li><li><a href="../ai/governance.html">AI governance and risk</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
-    <div><h3>Industries</h3><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
-    <div><h3>Resources</h3><ul><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../what-we-do/methodology.html">Methodology</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+    <div><h2 class="fh">AI</h2><ul><li><a href="../ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="../ai/agents.html">AI agent design and build</a></li><li><a href="../ai/governance.html">AI governance and risk</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
+    <div><h2 class="fh">Industries</h2><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+    <div><h2 class="fh">Resources</h2><ul><li><a href="../resources/index.html">Resources</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../resources/glossary.html">Glossary</a></li><li><a href="../insights/index.html">Insights</a></li><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a></span>
+    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a><a href="../accessibility.html">Accessibility</a><a href="../security.html">Site security</a><a href="../governance.html">Governance and corrections</a></span>
     <span>Europe · UK · Canada · United States</span>
   </div>
 </footer>
-<script src="../../assets/site.js?v=e4cb3054"></script>
+<script src="../../assets/site.js?v=a72c29ff"></script>
 
 </body>
 </html>

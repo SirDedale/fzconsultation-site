@@ -2,7 +2,7 @@
 Builds separate /fr/ and /en/ versions of every page, plus root redirect, 404, sitemap and robots.
 Edit the CONFIG block, then run:  python3 build.py
 """
-import os, re, html, json, shutil
+import os, re, html, json, shutil, sys, hashlib
 from content import *
 from cases import CASES
 from newcontent import *
@@ -10,6 +10,9 @@ from industries import IND
 from ai import *
 from partners import *
 from downtime import *
+from tools import TEMPLATES, GLOSSARY
+from insights import INSIGHTS
+import extras, sys, hashlib
 
 # ================= CONFIG =================
 SITE = "https://fzconsultation.xyz"
@@ -17,7 +20,11 @@ EMAIL = "contact@fzconsultation.xyz"
 BOOKING_URL = "https://calendly.com/fabien-mariou"  # Calendly link; leave "" to hide the booking button
 FORMSPREE_ID = "mkjgvpwo"       # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
 CF_ANALYTICS_TOKEN = "b23a07ee11d3441f89c969fc2c62f224"   # Cloudflare Web Analytics token; leave "" for no analytics
-UPDATED = ("25 septembre 2026", "September 25, 2026")
+UPDATED = ("26 octobre 2026", "October 26, 2026")
+REVIEWED = {  # pages whose sources were re-checked; shown under the page title. ISO dates.
+    "resources/cost-of-downtime.html": "2026-10-26",
+}
+SECURITY_EXPIRES = "2027-09-30T00:00:00Z"   # security.txt must be renewed before this date (RFC 9116)
 # ==========================================
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -27,6 +34,7 @@ LANG = "fr"
 PAGES = []  # (lang-independent path) for sitemap
 
 def I(): return 0 if LANG == "fr" else 1
+def SRCLANG(): return ' lang="en"' if LANG == "fr" else ""   # source titles are in English
 def T(fr, en, tag=None, cls=""):
     txt = fr if LANG == "fr" else en
     if not tag: return txt
@@ -54,13 +62,26 @@ OTHER = {
  "partners.html": ("Écosystème et partenariats", "Ecosystem and partnerships"),
  "resources/cost-of-downtime.html": ("Coût des interruptions", "Cost of downtime"),
  "ai/vision-questionnaire.html": ("Questionnaire de vision IA", "AI vision questionnaire"),
+ "resources/index.html": ("Ressources", "Resources"),
+ "resources/downtime-calculator.html": ("Calculateur du coût d'une interruption", "Downtime cost calculator"),
+ "resources/glossary.html": ("Glossaire", "Glossary"),
+ "insights/index.html": ("Insights", "Insights"),
+ "search.html": ("Recherche", "Search"),
+ "security.html": ("Sécurité du site", "Site security"),
+ "accessibility.html": ("Accessibilité", "Accessibility"),
+ "governance.html": ("Gouvernance et corrections", "Governance and corrections"),
 }
+for _t in TEMPLATES: OTHER[f"resources/{_t['slug']}.html"] = _t["short"]
+for _a in INSIGHTS: OTHER[f"insights/{_a['slug']}.html"] = _a["title"]
+_EXTRA_ITEMS = ([{"path": f"resources/{t['slug']}.html", "short": t["short"], "summary": t["summary"]} for t in TEMPLATES] +
+                [{"path": f"insights/{a['slug']}.html", "short": a["title"], "summary": a["summary"]} for a in INSIGHTS])
+fmt_date = extras.fmt_date
 def name_of(key):
     for p in EXPERTISE + SERVICES + IND + AI_PAGES + [CITADEL] + CASES:
         if p["path"] == key: return p["short"]
     return OTHER[key]
 def item_of(key):
-    for p in EXPERTISE + SERVICES + IND + AI_PAGES + [CITADEL] + CASES:
+    for p in EXPERTISE + SERVICES + IND + AI_PAGES + [CITADEL] + CASES + _EXTRA_ITEMS:
         if p["path"] == key: return p
     return {"path": key, "short": OTHER[key], "summary": ("", "")}
 
@@ -109,9 +130,17 @@ def header(r, current):
       </div>
       {a("ai/index.html", ("IA", "AI"))}
       {a("case-studies/index.html", ("Études de cas", "Case studies"))}
-      {a("self-assessment.html", ("Auto-évaluation", "Self-assessment"))}
+      {a("resources/index.html", ("Ressources", "Resources"))}
       {a("contact.html", ("Nous joindre", "Contact us"), "nav-cta")}
+      <div class="nav-tools">
+        <a href="{r}search.html">{T("Rechercher dans le site", "Search the site")}</a>
+        <button class="theme-toggle txt" type="button" data-label-light="{T("Passer au thème clair", "Switch to light theme")}" data-label-dark="{T("Passer au thème sombre", "Switch to dark theme")}">{T("Changer de thème", "Change theme")}</button>
+      </div>
     </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="{r}search.html" aria-label="{T("Rechercher", "Search")}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="{T("Passer au thème clair", "Switch to light theme")}" data-label-dark="{T("Passer au thème sombre", "Switch to dark theme")}" aria-label="{T("Changer de thème", "Change theme")}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
     <nav class="lang" aria-label="Langue / Language">
       <a href="{fr_href}" hreflang="fr" data-lang="fr"{fr_cur}>FR</a>
       <a href="{en_href}" hreflang="en" data-lang="en"{en_cur}>EN</a>
@@ -122,7 +151,7 @@ def header(r, current):
 def cta_block(r, path=""):
     book = (f'<a class="btn signal" href="{E(BOOKING_URL)}" target="_blank" rel="noopener">{T("Réserver un appel de 30 minutes", "Book a 30-minute call")}</a>' if BOOKING_URL else "")
     selfassess = "" if path == "self-assessment.html" else f'<a class="btn outline-light" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a>'
-    return f'''<section class="block" id="contact" style="border-top:0;padding-top:24px">
+    return f'''<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
       <div class="contact">
         <div class="contact-top">
           <h2>{T("Parlons de votre prochaine panne, avant qu'elle n'arrive.", "Let's talk about your next outage before it happens.")}</h2>
@@ -152,33 +181,67 @@ def footer(r):
       <p>{T("Résilience d'affaires, sécurité et reprise après sinistre.", "Business resilience, security and disaster recovery.")}</p>
       <p><a href="mailto:{EMAIL}">{EMAIL}</a></p>
     </div>
-    <div><h3>{T("Expertise", "Expertise")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in EXPERTISE)}</ul></div>
-    <div><h3>{T("Services", "Services")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
-    <div><h3>{T("IA", "AI")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in AI_PAGES + [CITADEL])}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
-    <div><h3>{T("Secteurs", "Industries")}</h3><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
-    <div><h3>{T("Ressources", "Resources")}</h3><ul>{"".join(li(k, OTHER[k]) for k in ["case-studies/index.html", "resources/cost-of-downtime.html", "partners.html", "what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "contact.html"])}</ul></div>
+    <div><h2 class="fh">{T("Expertise", "Expertise")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in EXPERTISE)}</ul></div>
+    <div><h2 class="fh">{T("Services", "Services")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
+    <div><h2 class="fh">{T("IA", "AI")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in AI_PAGES + [CITADEL])}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
+    <div><h2 class="fh">{T("Secteurs", "Industries")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
+    <div><h2 class="fh">{T("Ressources", "Resources")}</h2><ul>{"".join(li(k, OTHER[k]) for k in ["resources/index.html", "self-assessment.html", "resources/downtime-calculator.html", "resources/cost-of-downtime.html", "resources/glossary.html", "insights/index.html", "case-studies/index.html", "partners.html", "contact.html"])}</ul></div>
   </div>
   <div class="wrap fbottom">
     <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="{r}privacy.html">{P(OTHER["privacy.html"])}</a><a href="{r}legal.html">{P(OTHER["legal.html"])}</a></span>
+    <span class="flegal"><a href="{r}privacy.html">{P(OTHER["privacy.html"])}</a><a href="{r}legal.html">{P(OTHER["legal.html"])}</a><a href="{r}accessibility.html">{P(OTHER["accessibility.html"])}</a><a href="{r}security.html">{P(OTHER["security.html"])}</a><a href="{r}governance.html">{P(OTHER["governance.html"])}</a></span>
     <span>{T("Europe · Royaume-Uni · Canada · États-Unis", "Europe · UK · Canada · United States")}</span>
   </div>
 </footer>'''
 
-def page(path, title, desc, body, extra_head="", extra_js=""):
+CSP = ("default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; "
+       "style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; "
+       "connect-src 'self' https://formspree.io https://cloudflareinsights.com; "
+       "form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'")
+_LD = {"crumbs": None, "faq": None}
+
+def json_ld(obj):
+    return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+def page(path, title, desc, body, extra_head="", extra_js="", ld=None, noindex=False):
     depth = path.count("/") + 1          # +1 for the /fr or /en folder
     r = "../" * (depth - 1)              # link prefix to this language's root
     alt = "".join(f'<link rel="alternate" hreflang="{l}" href="{url_of(l, path)}">' for l in LANGS)
     alt += f'<link rel="alternate" hreflang="x-default" href="{SITE}/">'
     analytics = (f'<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{{"token": "{E(CF_ANALYTICS_TOKEN)}"}}\'></script>' if CF_ANALYTICS_TOKEN else "")
     ttl, dsc = P(title), P(desc)
+    # structured data
+    blocks = list(ld or [])
+    if _LD["crumbs"]:
+        trail = _LD["crumbs"]
+        items = [{"@type": "ListItem", "position": 1, "name": T("Accueil", "Home"), "item": url_of(LANG, "index.html")}]
+        for n, (key, pair) in enumerate(trail, 2):
+            items.append({"@type": "ListItem", "position": n, "name": P(pair), "item": url_of(LANG, key)})
+        blocks.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items})
+    if _LD["faq"]:
+        blocks.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": re.sub(r"<[^>]+>", "", P(q)), "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", P(a))}} for q, a in _LD["faq"]]})
+    if path == "index.html":
+        blocks.append({"@context": "https://schema.org", "@type": "Organization", "name": "FZ Consultation", "url": SITE, "logo": f"{SITE}/assets/logo.webp",
+                       "email": EMAIL, "description": dsc, "areaServed": ["Europe", "United Kingdom", "Canada", "United States"], "knowsLanguage": ["fr", "en"]})
+        blocks.append({"@context": "https://schema.org", "@type": "WebSite", "name": "FZ Consultation", "url": url_of(LANG, "index.html"), "inLanguage": LANG})
+    _LD["crumbs"] = None; _LD["faq"] = None
+    ld_html = "".join(json_ld(x) for x in blocks)
+    reviewed = ""
+    if path in REVIEWED:
+        reviewed = f'<p class="reviewed">{T("Sources révisées le", "Sources reviewed on")} <time datetime="{REVIEWED[path]}">{fmt_date(REVIEWED[path], LANG)}</time></p>'
+        body = body.replace("</section>", "</section>" + reviewed, 1)
+    robots = '<meta name="robots" content="noindex,follow">' if noindex else ""
+    rss = f'<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="{r}insights/feed.xml">'
     doc = f'''<!DOCTYPE html>
 <html lang="{LANG}">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(ttl)}</title>
 <meta name="description" content="{E(dsc)}">
+{robots}
 <link rel="canonical" href="{url_of(LANG, path)}">
 {alt}
 <meta property="og:type" content="website">
@@ -192,15 +255,17 @@ def page(path, title, desc, body, extra_head="", extra_js=""):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{r}../assets/mark.webp" type="image/webp">
 <link rel="preload" href="{r}../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+{rss}
+<script src="{r}../assets/theme.js?v={VER}"></script>
 <link rel="stylesheet" href="{r}../assets/site.css?v={VER}">
-{extra_head}{analytics}
+{extra_head}{ld_html}{analytics}
 </head>
 <body>
 {header(r, path)}
-<main id="main">
+<main id="main"{"" if noindex else " data-pagefind-body"}>
   <div class="wrap">
 {body}
-{cta_block(r, path) if path != "contact.html" else ""}
+{cta_block(r, path) if path not in ("contact.html", "search.html") else ""}
   </div>
 </main>
 {footer(r)}
@@ -212,7 +277,7 @@ def page(path, title, desc, body, extra_head="", extra_js=""):
     full = os.path.join(OUT, LANG, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w").write(doc)
-    if LANG == "fr": PAGES.append(path)
+    if LANG == "fr" and not noindex: PAGES.append(path)
     return r
 
 import math
@@ -271,11 +336,12 @@ def wrap_text(text, width):
     return lines[:3]
 
 def crumbs(r, trail):
+    _LD["crumbs"] = trail
     items = [f'<li><a href="{r}index.html">{T("Accueil", "Home")}</a></li>']
     for key, pair in trail[:-1]:
         items.append(f'<li><a href="{r}{key}">{P(pair)}</a></li>')
     items.append(f'<li aria-current="page">{P(trail[-1][1])}</li>')
-    return f'<nav class="crumbs" aria-label="{T("Fil d&#39;Ariane", "Breadcrumb")}"><ol>{"".join(items)}</ol></nav>'
+    return f'<nav class="crumbs" data-pagefind-ignore aria-label="{T("Fil d&#39;Ariane", "Breadcrumb")}"><ol>{"".join(items)}</ol></nav>'
 
 def rprefix(path): return "../" * path.count("/")
 
@@ -293,13 +359,14 @@ def link_rows(r, items):
         for p in items) + "</ul>"
 
 def faq(items, title=("Questions fréquentes", "Frequently asked questions")):
+    _LD["faq"] = items
     return (f'<section class="block"><h2>{P(title)}</h2><div class="faq">' +
         "".join(f'<details><summary>{P(q)}</summary><div>{P(a, tag="p")}</div></details>' for q, a in items) +
         "</div></section>")
 
 def case_cards(r, items=None):
     return '<div class="cases">' + "".join(
-        f'<a href="{r}{c["path"]}"><span class="pk">{P(c["sector"])}</span><h3>{P(c["short"])}</h3>{P(c["summary"], tag="p")}<span class="more">{T("Lire l&#39;analyse", "Read the analysis")} {ARROW}</span></a>'
+        f'<a href="{r}{c["path"]}" data-sector="{c["sector"][1].lower()}"><span class="pk">{P(c["sector"])}</span><h3>{P(c["short"])}</h3>{P(c["summary"], tag="p")}<span class="more">{T("Lire l&#39;analyse", "Read the analysis")} {ARROW}</span></a>'
         for c in (items or CASES)) + "</div>"
 
 def quiz_band(r):
@@ -354,7 +421,7 @@ def build_lang():
     b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], ("Notre méthodologie", "Our methodology"),
         ("Un cycle simple, répété jusqu'à ce que la reprise devienne une routine plutôt qu'une improvisation.", "A simple cycle, repeated until recovery becomes routine rather than improvisation."))
     b += f'<section class="block">{hub_diagram(("Résilience", "Resilience"), [(t, d) for t, d, outs in METHOD])}</section>'
-    b += '<section class="block"><ol class="phases">'
+    b += f'<section class="block"><h2 class="sr-only">{T("Les étapes du cycle", "The phases of the cycle")}</h2><ol class="phases">'
     for i, (t, d, outs) in enumerate(METHOD, 1):
         b += f'<li><div class="pn">{i:02d}</div><div><h3>{P(t)}</h3>{P(d, tag="p")}<p class="outs"><strong>{T("Livrables", "Outputs")}</strong> ' + " · ".join(P(o) for o in outs) + "</p></div></li>"
     b += "</ol></section>"
@@ -414,13 +481,17 @@ def build_lang():
         for i, (h, d, link) in enumerate(c["lessons"], 1):
             b += f'<li><span class="ln">{i}</span><div><h3>{P(h)}</h3>{P(d, tag="p")}<a class="textlink" href="{r}{link}">{P(name_of(link))} {ARROW}</a></div></li>'
         b += "</ol></section>"
-        b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer">{E(t)}</a></li>' for t, u in c["sources"]) + "</ul></section>"
+        b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{SRCLANG()}>{E(t)}</a></li>' for t, u in c["sources"]) + "</ul></section>"
         b += f'<section class="block"><h2>{T("Autres études de cas", "More case studies")}</h2>{link_rows(r, [x for x in CASES if x is not c][:3])}</section>'
         page(c["path"], (f'{c["short"][0]} | FZ Consultation', f'{c["short"][1]} | FZ Consultation'), c["summary"], b)
     path = "case-studies/index.html"
     b = page_hero("../", [(path, OTHER[path])], OTHER[path], ("Leçons tirées d'incidents publics", "Lessons from public incidents"),
         ("Des incidents réels et documentés en finance, en énergie et dans le commerce de détail, et ce qu'ils enseignent sur la résilience.", "Real, documented incidents in finance, energy and retail, and what they teach about resilience."))
-    b += f'<section class="block">{case_cards("../")}<p class="note">{T("Analyses fondées uniquement sur des informations publiques, avec sources. FZ Consultation n&#39;a participé à aucun de ces incidents et n&#39;a aucun lien avec les organisations mentionnées.", "Analyses based solely on public information, with sources. FZ Consultation was not involved in any of these incidents and has no affiliation with the organizations named.")}</p><p><a class="textlink" href="../resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs")} {ARROW}</a></p></section>'
+    sectors = []
+    for c in CASES:
+        if c["sector"][1].lower() not in [s_[0] for s_ in sectors]: sectors.append((c["sector"][1].lower(), c["sector"]))
+    chips = f'<div class="chips" role="group" aria-label="{T("Filtrer par secteur", "Filter by sector")}"><button type="button" class="chip" data-filter="all" aria-pressed="true">{T("Tous", "All")}</button>' + "".join(f'<button type="button" class="chip" data-filter="{k}" aria-pressed="false">{P(v)}</button>' for k, v in sectors) + f'</div><p class="muted chip-status" role="status" aria-live="polite" data-one="{T("1 étude affichée", "1 study shown")}" data-many="{T("{n} études affichées", "{n} studies shown")}"></p>'
+    b += f'<section class="block"><h2 class="sr-only">{T("Toutes les études de cas", "All case studies")}</h2>{chips}{case_cards("../")}<p class="note">{T("Analyses fondées uniquement sur des informations publiques, avec sources. FZ Consultation n&#39;a participé à aucun de ces incidents et n&#39;a aucun lien avec les organisations mentionnées.", "Analyses based solely on public information, with sources. FZ Consultation was not involved in any of these incidents and has no affiliation with the organizations named.")}</p><p><a class="textlink" href="../resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs")} {ARROW}</a></p></section>'
     b += quiz_band("../")
     page(path, ("Études de cas | FZ Consultation", "Case studies | FZ Consultation"), ("Leçons tirées d'incidents publics.", "Lessons from public incidents."), b)
 
@@ -506,13 +577,15 @@ def build_lang():
       <noscript><p>{T("Cette auto-évaluation nécessite JavaScript.", "This self-assessment requires JavaScript.")}</p></noscript>
       <p class="note">{T("Vos réponses, y compris votre secteur et la taille de votre organisation, sont traitées uniquement dans votre navigateur. Elles ne sont ni envoyées ni enregistrées. Ce résultat est indicatif et ne remplace pas une évaluation complète.", "Your answers, including your industry and organization size, are processed only in your browser. They are never sent or stored. This result is indicative and does not replace a full assessment.")}</p>
     </section>'''
-    js = f'<script>window.QUIZ={json.dumps(qdata, ensure_ascii=False)};window.QUIZ_ROOT="{r}";</script><script src="{r}../assets/quiz.js?v={VER}"></script>'
+    js = f'<script type="application/json" id="quiz-data" data-root="{r}">{extras.jsondata(qdata)}</script><script src="{r}../assets/quiz.js?v={VER}"></script>'
     page(path, ("Auto-évaluation de la résilience | FZ Consultation", "Resilience self-assessment | FZ Consultation"),
          ("Évaluez gratuitement la résilience de votre organisation en huit minutes.", "Assess your organization's resilience in eight minutes, for free."), b, extra_js=js)
 
     build_ai()
     build_partners()
     build_downtime()
+
+    extras.build_extras(sys.modules[__name__])
 
     # privacy
     build_privacy(); build_legal()
@@ -527,6 +600,15 @@ def ai_band(r):
       {T("Vision, agents, gouvernance et plateforme Microsoft Foundry Citadel : nous appliquons à l'IA la même exigence de résilience.", "Vision, agents, governance and the Microsoft Foundry Citadel platform: we apply the same resilience discipline to AI.", tag="p")}</div>
       <a class="btn primary" href="{r}ai/index.html">{T("Découvrir notre offre IA", "Explore our AI services")}</a>
     </div></section>"""
+
+def resources_band(r):
+    latest = sorted(INSIGHTS, key=lambda a: a["date"], reverse=True)[0]
+    return f"""<section class="block"><h2>{T("Ressources gratuites", "Free resources")}</h2>
+      <div class="pillars">
+      <a href="{r}resources/downtime-calculator.html"><span class="pk">01</span><h3>{T("Calculateur du coût d'une interruption", "Downtime cost calculator")}</h3>{T("Estimez en quelques chiffres ce qu'une heure d'arrêt vous coûte.", "Estimate from a few numbers what an hour of downtime costs you.", tag="p")}<span class="more">{T("Calculer", "Calculate")} {ARROW}</span></a>
+      <a href="{r}resources/index.html"><span class="pk">02</span><h3>{T("Modèles à télécharger", "Downloadable templates")}</h3>{T("Liste rançongiciel, feuille RTO/RPO et politique d'utilisation de l'IA.", "Ransomware checklist, RTO/RPO worksheet and AI acceptable-use policy.", tag="p")}<span class="more">{T("Voir les ressources", "Browse resources")} {ARROW}</span></a>
+      <a href="{r}insights/{latest["slug"]}.html"><span class="pk">03</span><h3>{P(latest["title"])}</h3>{P(latest["summary"], tag="p")}<span class="more">{T("Lire l'article", "Read the article")} {ARROW}</span></a>
+      </div></section>"""
 
 def build_ai():
     WWD = ("ai/index.html", OTHER["ai/index.html"])
@@ -549,7 +631,7 @@ def build_ai():
     b += f'<section class="block"><h2>{T("Pourquoi c&#39;est utile", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in c["why"]) + "</div></section>"
     b += f'<section class="block"><h2>{T("Notre accompagnement Citadel", "How we help with Citadel")}</h2><ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(h)}</h3>{P(d, tag="p")}</div></li>' for i, (h, d) in enumerate(c["our"], 1)) + "</ol>"
     b += f'<p style="margin-top:28px"><a class="btn primary" href="{r}ai/vision-questionnaire.html">{T("Commencer par le questionnaire de vision", "Start with the vision questionnaire")}</a></p></section>'
-    b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer">{E(t)}</a></li>' for t, u in c["sources"]) + f'</ul>{P(c["note"], tag="p", cls="note")}</section>'
+    b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{SRCLANG()}>{E(t)}</a></li>' for t, u in c["sources"]) + f'</ul>{P(c["note"], tag="p", cls="note")}</section>'
     page(c["path"], ("Microsoft Foundry Citadel | FZ Consultation", "Microsoft Foundry Citadel | FZ Consultation"), c["summary"], b)
     # vision questionnaire
     path = "ai/vision-questionnaire.html"
@@ -563,7 +645,7 @@ def build_ai():
       <noscript><p>{T("Ce questionnaire nécessite JavaScript.", "This questionnaire requires JavaScript.")}</p></noscript>
       {T("Vos réponses restent dans votre navigateur. Elles ne nous sont transmises que si vous choisissez de nous envoyer la synthèse.", "Your answers stay in your browser. They are only sent to us if you choose to email us the summary.", tag="p", cls="note")}
     </section>"""
-    js = f'<script>window.VISION={json.dumps(data, ensure_ascii=False)};window.VISION_ROOT="{r}";</script><script src="{r}../assets/vision.js?v={VER}"></script>'
+    js = f'<script type="application/json" id="vision-data" data-root="{r}">{extras.jsondata(data)}</script><script src="{r}../assets/vision.js?v={VER}"></script>'
     page(path, ("Questionnaire de vision IA | FZ Consultation", "AI vision questionnaire | FZ Consultation"), ("Formulez votre vision de l'IA et mesurez votre maturité.", "Frame your AI vision and measure your readiness."), b, extra_js=js)
     # hub
     path = "ai/index.html"; r = "../"
@@ -575,10 +657,10 @@ def build_ai():
     </section>
     <section class="block"><h2>{T("Nos services IA", "Our AI services")}</h2>{link_rows(r, AI_PAGES + [CITADEL])}</section>
     <section class="block"><h2>{T("Notre démarche", "Our approach")}</h2><ol class="phases">
-      <li><div class="pn">01</div><div><h3>{T("Aligner", "Align")}</h3>{T("Questionnaire de vision, puis atelier avec la direction pour fixer objectifs, limites et priorités.", "Vision questionnaire, then a leadership workshop to set goals, limits and priorities.", tag="p")}</div></li>
-      <li><div class="pn">02</div><div><h3>{T("Encadrer", "Govern")}</h3>{T("Politique, inventaire, classification des risques et plateforme gouvernée comme Citadel.", "Policy, inventory, risk classification and a governed platform such as Citadel.", tag="p")}</div></li>
-      <li><div class="pn">03</div><div><h3>{T("Construire", "Build")}</h3>{T("Premiers agents conçus, évalués et mis en production avec supervision humaine.", "First agents designed, evaluated and put into production with human oversight.", tag="p")}</div></li>
-      <li><div class="pn">04</div><div><h3>{T("Déployer à l&#39;échelle", "Scale")}</h3>{T("Formation, mesure de la valeur, résilience de la plateforme et extension à d&#39;autres équipes.", "Training, value measurement, platform resilience and roll-out to more teams.", tag="p")}</div></li>
+      <li><div class="pn">01</div><div><h2 class="fh">{T("Aligner", "Align")}</h2>{T("Questionnaire de vision, puis atelier avec la direction pour fixer objectifs, limites et priorités.", "Vision questionnaire, then a leadership workshop to set goals, limits and priorities.", tag="p")}</div></li>
+      <li><div class="pn">02</div><div><h2 class="fh">{T("Encadrer", "Govern")}</h2>{T("Politique, inventaire, classification des risques et plateforme gouvernée comme Citadel.", "Policy, inventory, risk classification and a governed platform such as Citadel.", tag="p")}</div></li>
+      <li><div class="pn">03</div><div><h2 class="fh">{T("Construire", "Build")}</h2>{T("Premiers agents conçus, évalués et mis en production avec supervision humaine.", "First agents designed, evaluated and put into production with human oversight.", tag="p")}</div></li>
+      <li><div class="pn">04</div><div><h2 class="fh">{T("Déployer à l&#39;échelle", "Scale")}</h2>{T("Formation, mesure de la valeur, résilience de la plateforme et extension à d&#39;autres équipes.", "Training, value measurement, platform resilience and roll-out to more teams.", tag="p")}</div></li>
     </ol></section>
     <section class="block split"><div><h2>{T("Pourquoi un cabinet de résilience ?", "Why a resilience firm?")}</h2></div>{T("Les agents IA deviennent des systèmes critiques : ils ont des accès, prennent des décisions et peuvent tomber en panne. Nous les traitons comme tels, avec identités, limites, supervision et plan de reprise dès la conception.", "AI agents are becoming critical systems: they have access, make decisions and can fail. We treat them that way, with identity, limits, monitoring and a recovery plan from the start.", tag="p", cls="big")}</section>"""
     page(path, ("Intelligence artificielle | FZ Consultation", "Artificial intelligence | FZ Consultation"), ("Stratégie IA, agents, gouvernance et Microsoft Foundry Citadel.", "AI strategy, agents, governance and Microsoft Foundry Citadel."), b)
@@ -621,7 +703,7 @@ def build_downtime():
     b += f'<section class="block"><p class="note">{P(METHOD_NOTE)}</p></section>'
     b += f'<section class="block"><h2>Sources</h2><ol class="sources" id="dt-sources">'
     for i, (t, u) in enumerate(SOURCES):
-        b += f'<li id="dt-src-{i}"><a href="{E(u)}" target="_blank" rel="noopener noreferrer">{E(t)}</a></li>'
+        b += f'<li id="dt-src-{i}"><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{SRCLANG()}>{E(t)}</a></li>'
     b += "</ol></section>"
     b += f'<section class="block"><h2>{T("Estimer votre propre coût", "Estimate your own cost")}</h2>{T("Ces repères donnent un ordre de grandeur. Pour connaître le coût réel d&#39;une heure d&#39;interruption dans votre organisation, une analyse d&#39;impact reste la seule méthode fiable.", "These benchmarks give an order of magnitude. To know the real cost of an hour of interruption for your organization, a business impact analysis remains the only reliable method.", tag="p", cls="intro")}<div class="cta-actions" style="margin-top:8px"><a class="btn primary" href="{r}what-we-do/services/assessments.html">{T("Découvrir nos évaluations", "See our assessments")}</a><a class="btn ghost" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a></div></section>'
     page(path, ("Coût des interruptions | FZ Consultation", "Cost of downtime | FZ Consultation"),
@@ -651,7 +733,8 @@ def build_privacy():
       (T("Hébergement", "Hosting"), T("Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer l'adresse IP des visiteurs à des fins de sécurité.", "The site is hosted on GitHub Pages. Like any host, GitHub may log visitors' IP addresses for security purposes.")),
       (T("Auto-évaluation", "Self-assessment"), T("Vos réponses sont traitées uniquement dans votre navigateur et ne nous sont jamais transmises.", "Your answers are processed only in your browser and are never sent to us.")),
       (T("Questionnaire de vision IA", "AI vision questionnaire"), T("Vos réponses restent dans votre navigateur. Elles ne nous parviennent que si vous choisissez de nous envoyer la synthèse par courriel.", "Your answers stay in your browser. They only reach us if you choose to email us the summary.")),
-      (T("Préférence de langue", "Language preference"), T("Votre choix de langue est conservé dans le stockage local de votre navigateur. Nous n'utilisons aucun cookie.", "Your language choice is kept in your browser's local storage. We use no cookies.")),
+      (T("Préférences d'affichage", "Display preferences"), T("Votre choix de langue et de thème (clair, sombre ou automatique) est conservé dans le stockage local de votre navigateur, et n'est jamais transmis. Nous n'utilisons aucun cookie.", "Your language and theme choice (light, dark or automatic) is kept in your browser's local storage and never transmitted. We use no cookies.")),
+      (T("Recherche et calculateur", "Search and calculator"), T("La recherche utilise un index statique et s'exécute dans votre navigateur : vos requêtes ne sont pas transmises. Les chiffres saisis dans le calculateur ne quittent pas votre navigateur.", "Search uses a static index and runs in your browser: your queries are not transmitted. Numbers entered in the calculator never leave your browser.")),
     ]
     S.append((("Renseignements que nous recueillons", "Information we collect"), "<ul>" + "".join(f"<li><strong>{h}.</strong> {d}</li>" for h, d in items) + "</ul>"))
     S.append((("Bases légales", "Legal bases"), T("Nous traitons vos renseignements sur la base de votre consentement ou de notre intérêt légitime à répondre aux demandes qui nous sont adressées et à assurer la sécurité du site.",
@@ -718,7 +801,7 @@ def build_home():
     main = main.replace('</ol>\n    </section>', f'</ol>\n      <p style="margin-top:40px"><a class="textlink" href="what-we-do/methodology.html">{T("Découvrir la méthodologie", "See the methodology")} {ARROW}</a></p>\n    </section>', 1)
     main = main.replace('<p class="note">', f'<p style="margin-top:24px"><a class="textlink" href="what-we-do/regulations.html">{T("Réglementation par région", "Regulations by region")} {ARROW}</a></p>\n      <p class="note">', 1)
     main = main.replace(f'<h2><span>Services</span></h2>', f'<h2><span>{T("Ce que nous faisons", "What we do")}</span></h2>', 1)
-    main = main.replace('<section class="block" id="approche">', ai_band("") + quiz_band("") + '\n    <section class="block" id="approche">', 1)
+    main = main.replace('<section class="block" id="approche">', ai_band("") + quiz_band("") + resources_band("") + '\n    <section class="block" id="approche">', 1)
     page("index.html", ("FZ Consultation — Résilience, sécurité et reprise après sinistre", "FZ Consultation — Business resilience, security and disaster recovery"),
          ("FZ Consultation aide les organisations à se préparer aux pannes, cyberattaques et sinistres, et à reprendre leurs activités dans les délais que l'entreprise peut se permettre.",
           "FZ Consultation helps organizations prepare for outages, cyberattacks and disasters, and recover within the time the business can afford."), main)
@@ -742,6 +825,9 @@ REG = [
 ]
 
 def root_files():
+    import base64
+    redirect_js = "(function(){var l=null;try{l=localStorage.getItem(\"fz-lang\")}catch(e){}if(l!==\"fr\"&&l!==\"en\")l=(navigator.language||\"fr\").toLowerCase().indexOf(\"fr\")===0?\"fr\":\"en\";location.replace(l+\"/\"+location.search+location.hash)})();"
+    sha = "sha256-" + base64.b64encode(hashlib.sha256(redirect_js.encode()).digest()).decode()
     alt = "".join(f'<link rel="alternate" hreflang="{l}" href="{SITE}/{l}/">' for l in LANGS) + f'<link rel="alternate" hreflang="x-default" href="{SITE}/">'
     open(os.path.join(OUT, "index.html"), "w").write(f'''<!DOCTYPE html>
 <html lang="fr">
@@ -753,14 +839,16 @@ def root_files():
 <link rel="canonical" href="{SITE}/">
 {alt}
 <link rel="icon" href="assets/mark.webp" type="image/webp">
-<script>(function(){{var l=null;try{{l=localStorage.getItem("fz-lang")}}catch(e){{}}if(l!=="fr"&&l!=="en")l=(navigator.language||"fr").toLowerCase().indexOf("fr")===0?"fr":"en";location.replace(l+"/"+location.search+location.hash)}})();</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src '{sha}'; style-src 'unsafe-inline'; base-uri 'self'; object-src 'none'">
+<script>{redirect_js}</script>
 <style>body{{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#EEF1F3;color:#16222E}}a{{color:#0052B2;font-weight:700;margin:0 12px}}</style>
 </head>
 <body><p><a href="fr/">Français</a> · <a href="en/">English</a></p></body>
 </html>
 ''')
     open(os.path.join(OUT, "404.html"), "w").write('''<!DOCTYPE html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; base-uri 'self'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page introuvable · Page not found | FZ Consultation</title><meta name="robots" content="noindex">
 <link rel="icon" href="/assets/mark.webp" type="image/webp">
 <style>@font-face{font-family:"SG";src:url(/assets/fonts/schibsted-grotesk.woff2) format("woff2");font-weight:400 900}
@@ -779,11 +867,17 @@ main{max-width:560px}img{height:48px}h1{font-size:2.2rem;margin:24px 0 8px}p{col
             urls.append(f"  <url>\n    <loc>{url_of(l, p)}</loc>{links}\n  </url>")
     open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(urls) + "\n</urlset>\n")
     open(os.path.join(OUT, "CNAME"), "w").write(SITE.split("//")[1] + "\n")
+    os.makedirs(os.path.join(OUT, ".well-known"), exist_ok=True)
+    open(os.path.join(OUT, ".well-known", "security.txt"), "w").write(
+        f"Contact: mailto:{EMAIL}\nExpires: {SECURITY_EXPIRES}\nPreferred-Languages: fr, en\nCanonical: {SITE}/.well-known/security.txt\nPolicy: {SITE}/en/security.html\n")
+    open(os.path.join(OUT, "_config.yml"), "w").write("# Jekyll settings used by GitHub Pages branch deploys.\n# .well-known must be included explicitly, otherwise Jekyll skips dot-folders.\ninclude:\n  - .well-known\nexclude:\n  - _build\n  - .github\n  - node_modules\n  - README.md\n")
 
 if __name__ == "__main__":
     import hashlib
+    import make_docs
+    make_docs.main(os.path.join(OUT, "assets", "downloads"))
     h = hashlib.md5()
-    for f in ("site.css", "site.js", "quiz.js", "vision.js"):
+    for f in ("site.css", "site.js", "quiz.js", "vision.js", "theme.js", "calc.js", "search.js"):
         h.update(open(os.path.join(OUT, "assets", f), "rb").read())
     VER = h.hexdigest()[:8]
     for d in LANGS:

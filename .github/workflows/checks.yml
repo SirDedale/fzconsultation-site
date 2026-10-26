@@ -1,0 +1,46 @@
+name: Site checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 1 * *"      # monthly: catches dead external links and an expiring security.txt
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip, cache-dependency-path: _build/requirements.txt }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Install tools
+        run: |
+          pip install -r _build/requirements.txt
+          python -m playwright install --with-deps chromium
+          npm install --no-save axe-core pagefind
+      - name: Rebuild the site and make sure the committed pages are up to date
+        run: |
+          python3 _build/build.py
+          rm -rf pagefind && npx pagefind --site . --glob "{fr,en}/**/*.html"
+          # Word templates embed timestamps, and the search index has hashed names: ignore both.
+          git diff --stat -- . ':(exclude)assets/downloads' ':(exclude)pagefind'
+          git diff --quiet -- . ':(exclude)assets/downloads' ':(exclude)pagefind' || (echo "::error::Generated pages differ from the committed ones. Run _build/build.py and commit the result." && exit 1)
+      - name: Static checks (links, anchors, metadata, CSP, JSON-LD, security.txt)
+        run: python3 _build/check.py
+      - name: Accessibility, console and CSP audit (light and dark)
+        run: python3 _build/audit.py
+
+  external-links:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python3 _build/linkcheck_external.py

@@ -391,6 +391,136 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/cost-of-downtime.html"/>
   </url>
   <url>
+    <loc>https://fzconsultation.xyz/fr/resources/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/resources/downtime-calculator.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/downtime-calculator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/downtime-calculator.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/downtime-calculator.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/downtime-calculator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/downtime-calculator.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/resources/ransomware-checklist.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ransomware-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ransomware-checklist.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/ransomware-checklist.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ransomware-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ransomware-checklist.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/resources/rto-rpo-worksheet.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/rto-rpo-worksheet.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/rto-rpo-worksheet.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/rto-rpo-worksheet.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/rto-rpo-worksheet.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/rto-rpo-worksheet.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/resources/ai-acceptable-use-policy.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ai-acceptable-use-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ai-acceptable-use-policy.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/ai-acceptable-use-policy.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ai-acceptable-use-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ai-acceptable-use-policy.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/resources/glossary.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/glossary.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/glossary.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/glossary.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/glossary.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/glossary.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/insights/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/insights/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/insights/backups-are-not-recovery.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/backups-are-not-recovery.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/backups-are-not-recovery.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/insights/backups-are-not-recovery.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/backups-are-not-recovery.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/backups-are-not-recovery.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/insights/setting-rto-rpo.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/setting-rto-rpo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/setting-rto-rpo.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/insights/setting-rto-rpo.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/setting-rto-rpo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/setting-rto-rpo.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/insights/ai-agents-need-recovery-plans.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/ai-agents-need-recovery-plans.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/ai-agents-need-recovery-plans.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/insights/ai-agents-need-recovery-plans.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/ai-agents-need-recovery-plans.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/ai-agents-need-recovery-plans.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/security.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/security.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/security.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/security.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/security.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/security.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/accessibility.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/accessibility.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/accessibility.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/accessibility.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/governance.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/governance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/governance.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/governance.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/governance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/governance.html"/>
+  </url>
+  <url>
     <loc>https://fzconsultation.xyz/fr/privacy.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/privacy.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/privacy.html"/>

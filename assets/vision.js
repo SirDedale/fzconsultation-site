@@ -1,5 +1,5 @@
 (function(){
-  var V=window.VISION,root=window.VISION_ROOT||"",el=document.getElementById("vision");if(!V||!el)return;
+  var __d=document.getElementById("vision-data"),V=null,root="";try{if(__d){V=JSON.parse(__d.textContent);root=__d.getAttribute("data-root")||""}}catch(e){}var el=document.getElementById("vision");if(!V||!el)return;
   var U=V.ui,Q=V.questions,n=Q.length,ans={},i=-1,org="";
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   function answered(q){var a=ans[q.id];return q.type==="multi"?(a&&a.length>0):a!==undefined}

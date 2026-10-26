@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resilience glossary | FZ Consultation</title>
+<meta name="description" content="Clear definitions: RTO, RPO, BIA, ransomware, DORA, NIS2, AI agent and more.">
+
+<link rel="canonical" href="https://fzconsultation.xyz/en/resources/glossary.html">
+<link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/glossary.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/glossary.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FZ Consultation">
+<meta property="og:title" content="Resilience glossary | FZ Consultation">
+<meta property="og:description" content="Clear definitions: RTO, RPO, BIA, ransomware, DORA, NIS2, AI agent and more.">
+<meta property="og:url" content="https://fzconsultation.xyz/en/resources/glossary.html">
+<meta property="og:image" content="https://fzconsultation.xyz/assets/og-en.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/mark.webp" type="image/webp">
+<link rel="preload" href="../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../insights/feed.xml">
+<script src="../../assets/theme.js?v=a72c29ff"></script>
+<link rel="stylesheet" href="../../assets/site.css?v=a72c29ff">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Resources", "item": "https://fzconsultation.xyz/en/resources/"}, {"@type": "ListItem", "position": 3, "name": "Glossary", "item": "https://fzconsultation.xyz/en/resources/glossary.html"}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html" aria-label="FZ Consultation">
+      <img class="mark" src="../../assets/mark.webp" alt="" width="40" height="29">
+      <span class="word">Consultation</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+      <span class="bars" aria-hidden="true"></span><span class="mt-label">Menu</span>
+    </button>
+    <nav id="primary-nav" class="primary" aria-label="Main navigation">
+      <div class="has-mega">
+        <button class="mega-toggle" type="button" aria-expanded="false" aria-controls="mega">What we do<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="mega" id="mega">
+          <div class="wrap mega-grid">
+            <div class="mcol"><a class="mhead" href="../what-we-do/expertise/index.html">Expertise <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="../what-we-do/services/index.html">Services <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="../what-we-do/industries.html">Industries <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+            <div class="mcol"><span class="mhead plain">Approach</span><ul><li><a href="../what-we-do/methodology.html">Methodology</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../self-assessment.html">Self-assessment</a></li></ul><a class="mall" href="../what-we-do/index.html">View everything we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+      </div>
+      <a href="../ai/index.html">AI</a>
+      <a href="../case-studies/index.html">Case studies</a>
+      <a href="../resources/index.html">Resources</a>
+      <a href="../contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="../search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
+    </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
+    <nav class="lang" aria-label="Langue / Language">
+      <a href="../../fr/resources/glossary.html" hreflang="fr" data-lang="fr">FR</a>
+      <a href="../resources/glossary.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
+    </nav>
+  </div>
+</header>
+<main id="main" data-pagefind-body>
+  <div class="wrap">
+<section class="phero">
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../resources/index.html">Resources</a></li><li aria-current="page">Glossary</li></ol></nav>
+      <p class="eyebrow">Resources</p>
+      <h1>Resilience glossary</h1>
+      <p class="lede">The terms you meet in continuity, disaster recovery, cybersecurity and AI, explained simply.</p>
+    </section><nav class="az" aria-label="Alphabetical index"><a href="#letter-3">3</a><a href="#letter-A">A</a><a href="#letter-B">B</a><a href="#letter-C">C</a><a href="#letter-D">D</a><a href="#letter-F">F</a><a href="#letter-H">H</a><a href="#letter-I">I</a><a href="#letter-L">L</a><a href="#letter-M">M</a><a href="#letter-N">N</a><a href="#letter-O">O</a><a href="#letter-P">P</a><a href="#letter-R">R</a><a href="#letter-S">S</a><a href="#letter-T">T</a><a href="#letter-Z">Z</a></nav><section class="block"><div class="gl-sec"><h2 id="letter-3">3</h2><dl class="gloss"><div class="gl-item" id="term-3-2-1-rule"><dt>3-2-1 rule</dt><dd>Keep three copies of data, on two types of media, one of them off-site. It is often completed with an immutable or isolated copy.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-A">A</h2><dl class="gloss"><div class="gl-item" id="term-ai-agent"><dt>AI agent</dt><dd>An AI system that pursues a goal by chaining actions (calling tools, writing, deploying) with little or no human approval at each step.</dd></div><div class="gl-item" id="term-ai-governance"><dt>AI governance</dt><dd>The policies, roles, inventories and controls that frame how AI is built and used in the organization.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-B">B</h2><dl class="gloss"><div class="gl-item" id="term-bcp-business-continuity"><dt>BCP / business continuity</dt><dd>The measures and plans that keep essential activities running during and after a disruption.</dd></div><div class="gl-item" id="term-bia-business-impact-analysis"><dt>BIA (Business Impact Analysis)</dt><dd>A process that identifies essential activities, their dependencies and the impact of disruption over time, to set recovery priorities.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-C">C</h2><dl class="gloss"><div class="gl-item" id="term-concentration-risk"><dt>Concentration risk</dt><dd>Excessive dependence on a single supplier, region or technology.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-D">D</h2><dl class="gloss"><div class="gl-item" id="term-dora"><dt>DORA</dt><dd>EU regulation on digital operational resilience for the financial sector, applicable since January 2025.</dd></div><div class="gl-item" id="term-double-extortion"><dt>Double extortion</dt><dd>A tactic where the attacker encrypts data and also threatens to publish it if the ransom is not paid.</dd></div><div class="gl-item" id="term-drp-disaster-recovery"><dt>DRP / disaster recovery</dt><dd>The technical side that restores IT systems and data after an outage or disaster.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-F">F</h2><dl class="gloss"><div class="gl-item" id="term-failover"><dt>Failover</dt><dd>Switching the service to a standby site or system when the primary one fails.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-H">H</h2><dl class="gloss"><div class="gl-item" id="term-hallucination"><dt>Hallucination</dt><dd>An AI model output that sounds plausible but is false or made up.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-I">I</h2><dl class="gloss"><div class="gl-item" id="term-immutable-backup"><dt>Immutable backup</dt><dd>A copy that cannot be altered or deleted for a defined period, even by an administrator, which protects it from ransomware.</dd></div><div class="gl-item" id="term-impact-tolerance"><dt>Impact tolerance</dt><dd>The maximum level of disruption to an important service the organization is willing to accept, central to UK operational resilience rules.</dd></div><div class="gl-item" id="term-important-business-service"><dt>Important business service</dt><dd>A service whose disruption would cause intolerable harm to customers or to market integrity.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-L">L</h2><dl class="gloss"><div class="gl-item" id="term-least-privilege"><dt>Least privilege</dt><dd>Granting each person or system only the access needed for its task.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-M">M</h2><dl class="gloss"><div class="gl-item" id="term-microsoft-foundry-citadel"><dt>Microsoft Foundry Citadel</dt><dd>A reference architecture published by Microsoft for governing an enterprise AI platform: see our dedicated page.</dd></div><div class="gl-item" id="term-mtpd-maximum-tolerable-period-of-disruption"><dt>MTPD (Maximum Tolerable Period of Disruption)</dt><dd>The duration beyond which an activity's interruption threatens the organization's viability. The RTO must be lower.</dd></div><div class="gl-item" id="term-multi-factor-authentication-mfa"><dt>Multi-factor authentication (MFA)</dt><dd>Verifying identity with at least two different kinds of proof, such as a password plus a hardware key or code.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-N">N</h2><dl class="gloss"><div class="gl-item" id="term-nis2"><dt>NIS2</dt><dd>EU directive raising cybersecurity requirements for essential and important entities.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-O">O</h2><dl class="gloss"><div class="gl-item" id="term-operational-resilience"><dt>Operational resilience</dt><dd>The ability to deliver important services despite disruption, and to recover within the tolerances set.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-P">P</h2><dl class="gloss"><div class="gl-item" id="term-passkey"><dt>Passkey</dt><dd>A passwordless sign-in method based on public-key cryptography that resists phishing.</dd></div><div class="gl-item" id="term-prompt-injection"><dt>Prompt injection</dt><dd>An attack that slips instructions into content read by an AI to hijack its behavior.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-R">R</h2><dl class="gloss"><div class="gl-item" id="term-ransomware"><dt>Ransomware</dt><dd>Malware that encrypts data or blocks access to systems to demand a ransom, often combined with data theft.</dd></div><div class="gl-item" id="term-recovery-site"><dt>Recovery site</dt><dd>A backup location (hot, warm or cold depending on readiness) where systems are restarted after a disaster.</dd></div><div class="gl-item" id="term-recovery-test"><dt>Recovery test</dt><dd>A real trial of restoring systems and data to measure the RTO and RPO achieved.</dd></div><div class="gl-item" id="term-rpo-recovery-point-objective"><dt>RPO (Recovery Point Objective)</dt><dd>The maximum age of data you accept to lose, measured in time: a 15-minute RPO means you can lose at most the last 15 minutes.</dd></div><div class="gl-item" id="term-rto-recovery-time-objective"><dt>RTO (Recovery Time Objective)</dt><dd>The target maximum time between the start of an interruption and the service returning to an acceptable level.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-S">S</h2><dl class="gloss"><div class="gl-item" id="term-shadow-ai"><dt>Shadow AI</dt><dd>Staff use of AI tools without the organization's approval or knowledge.</dd></div><div class="gl-item" id="term-software-supply-chain"><dt>Software supply chain</dt><dd>All the components, libraries and vendors a piece of software depends on; one compromised link can affect all its users.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-T">T</h2><dl class="gloss"><div class="gl-item" id="term-tabletop-exercise"><dt>Tabletop exercise</dt><dd>A discussion-based simulation where the team walks through an incident scenario and talks through its decisions without touching systems.</dd></div><div class="gl-item" id="term-third-party-risk"><dt>Third-party risk</dt><dd>The risk that an outage, flaw or failure at a supplier disrupts your own services.</dd></div></dl></div><div class="gl-sec"><h2 id="letter-Z">Z</h2><dl class="gloss"><div class="gl-item" id="term-zero-trust"><dt>Zero Trust</dt><dd>A principle where no user or device is trusted by default: every access is verified, with rights limited to the minimum.</dd></div></dl></div></section><section class="block"><h2>Missing a term?</h2><p><a class="textlink" href="../contact.html">Tell us <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p></section>
+<section class="block" id="contact" style="border-top:0;padding-top:24px" data-pagefind-ignore>
+      <div class="contact">
+        <div class="contact-top">
+          <h2>Let's talk about your next outage before it happens.</h2>
+          <p>A free 30-minute intro call to review your risks and priorities.</p>
+          <div class="cta-actions"><a class="btn signal" href="https://calendly.com/fabien-mariou" target="_blank" rel="noopener">Book a 30-minute call</a><a class="btn outline-light" href="../self-assessment.html">Take the self-assessment</a></div>
+        </div>
+        <form class="cform mini" id="contact-form" data-endpoint="https://formspree.io/f/mkjgvpwo" data-email="contact@fzconsultation.xyz" novalidate>
+          <h3>Send us a message</h3>
+          <label>Name <span aria-hidden="true">*</span><input name="name" autocomplete="name" required></label>
+          <label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required></label>
+          <label>Message <span aria-hidden="true">*</span><textarea name="message" rows="3" required></textarea></label>
+          <input type="hidden" name="_subject" value="New message — FZ Consultation website">
+          <label class="hp" aria-hidden="true">Website<input name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          <label class="consent"><input type="checkbox" name="consent" required> <span>I agree that my information will be used to respond to my request, in line with the <a href="../privacy.html">privacy policy</a>.</span></label>
+          <button class="btn signal" type="submit">Send</button>
+          <p class="fstatus" role="status" aria-live="polite" data-ok="Thank you, your message has been sent. We will get back to you shortly." data-err="Sending failed. Please email us directly at contact@fzconsultation.xyz." data-missing="Please fill in the required fields and accept the privacy policy." data-mailto="Your email app will open with your message."></p>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap fgrid">
+    <div class="fbrand">
+      <img src="../../assets/logo.webp" alt="FZ Consultation" width="160" height="120" class="flogo">
+      <p>Business resilience, security and disaster recovery.</p>
+      <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
+    </div>
+    <div><h2 class="fh">Expertise</h2><ul><li><a href="../what-we-do/expertise/business-continuity.html">Business continuity</a></li><li><a href="../what-we-do/expertise/disaster-recovery.html">Disaster recovery</a></li><li><a href="../what-we-do/expertise/cybersecurity.html">Cybersecurity</a></li><li><a href="../what-we-do/expertise/cloud-resilience.html">Cloud and infrastructure resilience</a></li></ul></div>
+    <div><h2 class="fh">Services</h2><ul><li><a href="../what-we-do/services/assessments.html">Assessments</a></li><li><a href="../what-we-do/services/planning.html">Planning and documentation</a></li><li><a href="../what-we-do/services/exercises.html">Exercises and testing</a></li><li><a href="../what-we-do/services/advisory.html">Ongoing advisory</a></li></ul></div>
+    <div><h2 class="fh">AI</h2><ul><li><a href="../ai/strategy-adoption.html">AI strategy and adoption</a></li><li><a href="../ai/agents.html">AI agent design and build</a></li><li><a href="../ai/governance.html">AI governance and risk</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div>
+    <div><h2 class="fh">Industries</h2><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/technology-saas.html">Technology and SaaS</a></li><li><a href="../what-we-do/industries/manufacturing-transport.html">Manufacturing, transport and logistics</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries/retail.html">Retail</a></li><li><a href="../what-we-do/industries/professional-services.html">Professional services</a></li><li><a href="../what-we-do/industries/public-sector.html">Public sector and non-profits</a></li></ul></div>
+    <div><h2 class="fh">Resources</h2><ul><li><a href="../resources/index.html">Resources</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="../resources/cost-of-downtime.html">Cost of downtime</a></li><li><a href="../resources/glossary.html">Glossary</a></li><li><a href="../insights/index.html">Insights</a></li><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
+  </div>
+  <div class="wrap fbottom">
+    <span>© <span class="year">2026</span> FZ Consultation</span>
+    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a><a href="../accessibility.html">Accessibility</a><a href="../security.html">Site security</a><a href="../governance.html">Governance and corrections</a></span>
+    <span>Europe · UK · Canada · United States</span>
+  </div>
+</footer>
+<script src="../../assets/site.js?v=a72c29ff"></script>
+
+</body>
+</html>
