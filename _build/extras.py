@@ -6,6 +6,7 @@ from email.utils import format_datetime
 from tools import TEMPLATES, CALC, GLOSSARY, TEMPLATE_DISCLAIMER, RANSOM, RTORPO, AIPOL, AISCORE
 from auditor import AUDITOR
 from insights import INSIGHTS
+import diagrams
 import newsite
 from notes import SERIES, SERIES_BLURB
 
@@ -317,7 +318,7 @@ def build_auditor(B):
     b = B.page_hero(r, [AIHUB, (path, A["short"])], A["eyebrow"], A["title"], A["lede"])
     b += f'<section class="block"><div class="cta-actions" style="margin-top:0"><a class="btn primary" href="{r}contact.html?topic=auditor">{T("Parler de votre périmètre", "Discuss your scope")}</a><a class="btn ghost" href="{r}resources/ai-agent-audit-scorecard.html">{T("Télécharger le tableau de bord", "Download the scorecard")}</a></div></section>'
     b += f'<section class="block split"><div><h2>{T("Le constat", "The problem")}</h2></div>{P(A["overview"], tag="p", cls="big")}</section>'
-    b += B.hub_diagram(("Audit", "Audit"), [(n, "") for n, d in A["areas"]])
+    b += "<section class=\"block\">" + diagrams.auditor_diagram(B) + "</section>"
     b += f'<section class="block"><h2>{T("Ce que couvre l&#39;audit", "What the audit covers")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in A["areas"]) + "</div></section>"
     b += f'<section class="block"><h2>{T("Pourquoi c&#39;est important", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in A["why"]) + "</div></section>"
     diag = [(("Inventaire", "Inventory"), ("1 à 2 sem.", "1-2 wks"), ("Autorisé contre observé", "Authorized vs observed")),

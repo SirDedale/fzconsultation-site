@@ -271,7 +271,8 @@ def page(path, title, desc, body, extra_head="", extra_js="", ld=None, noindex=F
     if LANG == "fr" and not noindex: PAGES.append(path)
     return r
 
-import math
+import math, sys
+import diagrams
 def hub_diagram(center, nodes, size=420, pad=110):
     cx = cy = size/2 + pad; R = size*0.34; nr = size*0.115
     vb = size + pad*2
@@ -503,7 +504,7 @@ def build_ai():
     c = CITADEL; r = "../"
     b = page_hero(r, [WWD, (c["path"], c["short"])], ("IA · Plateforme", "AI · Platform"), c["title"], c["lede"])
     b += f'<section class="block split"><div><h2>{T("Qu&#39;est-ce que Citadel ?", "What is Citadel?")}</h2></div>{P(c["what"], tag="p", cls="big")}</section>'
-    b += hub_diagram(("Citadel", "Citadel"), [(("Gouvernance", "Governance"), ""), (("Opérations", "Operations"), ""), (("Identité", "Identity"), ""), (("Sécurité", "Security"), "")])
+    b += diagrams.citadel_diagram(sys.modules[__name__])
     b += f'<section class="block"><h2>{T("Quatre couches de gouvernance", "Four layers of governance")}</h2><ol class="layers">' + "".join(f'<li><span class="lnum">{i}</span><div><h3>{P(h)}</h3>{P(d, tag="p")}</div></li>' for i, (h, d) in enumerate(c["layers"], 1)) + "</ol></section>"
     b += f'<section class="block"><h2>{T("Pourquoi c&#39;est utile", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in c["why"]) + "</div></section>"
     b += f'<section class="block"><h2>{T("Notre accompagnement Citadel", "How we help with Citadel")}</h2><ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(h)}</h3>{P(d, tag="p")}</div></li>' for i, (h, d) in enumerate(c["our"], 1)) + "</ol>"
