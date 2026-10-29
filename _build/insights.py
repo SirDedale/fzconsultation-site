@@ -3,6 +3,23 @@
 
 INSIGHTS = [
  {
+  "slug": "three-questions-for-every-ai-agent",
+  "date": "2026-10-29", "mins": 4,
+  "title": ("Trois questions à poser sur chaque agent IA déployé", "Three questions to ask about every deployed AI agent"),
+  "summary": ("Que fait-il vraiment, vaut-il ce qu'il coûte, et jusqu'où une erreur peut-elle aller ? Comment y répondre avec des preuves.", "What does it really do, is it worth what it costs, and how far can one mistake go? How to answer with evidence."),
+  "related": ["ai/auditor.html", "resources/ai-agent-audit-scorecard.html", "ai/governance.html"],
+  "body": [
+   ("p", ("Une erreur humaine touche un cas. Une erreur d'agent touche tous les cas qu'il a traités avant que quelqu'un regarde : le même défaut, répété au volume de l'agent. C'est la force de l'IA et aussi son exposition. Trois questions permettent de faire le point sur n'importe quel agent en production.", "A human error is one case. An agent error is every case it handled before someone looked: the same defect, repeated at the agent's volume. That is the strength of AI, and also its exposure. Three questions let you take stock of any agent in production.")),
+   ("h", ("1. Que fait-il réellement ?", "1. What does it actually do?")),
+   ("p", ("Comparez ce que l'agent était autorisé à faire avec ce qu'il fait en production, à partir des journaux et des traces d'exécution, pas du document de conception. La dérive de périmètre est la norme : un nouvel outil connecté, une consigne modifiée, un modèle mis à jour. La question utile est de savoir si quelqu'un la surveille.", "Compare what the agent was authorized to do with what it does in production, using logs and execution traces, not the design document. Scope drift is the norm: a newly connected tool, an edited prompt, an updated model. The useful question is whether anyone is watching it.")),
+   ("h", ("2. Vaut-il ce qu'il coûte ?", "2. Is it worth what it costs?")),
+   ("p", ("Additionnez le vrai coût d'exploitation : calcul, supervision humaine et nettoyage des incidents. Comparez-le au coût réellement évité, puis revoyez à la main un échantillon de résultats par rapport à ce qu'un humain aurait produit. L'analyse de rentabilité d'il y a six mois n'est pas un chiffre actuel.", "Add up the real cost to run: compute, human oversight and incident cleanup. Compare it with the cost actually displaced, then review a sample of outputs by hand against what a person would have produced. The business case from six months ago is not a current number.")),
+   ("h", ("3. Jusqu'où une erreur peut-elle aller ?", "3. How far can one mistake go?")),
+   ("p", ("Estimez combien de cas l'agent touche, la gravité de chacun (réversible ou non, courant ou critique), et le temps qu'il faudrait à un humain pour s'en apercevoir. C'est la question RTO/RPO appliquée à un agent : combien peut aller de travers, et à quelle vitesse peut-on l'arrêter ?", "Estimate how many cases the agent touches, how severe each one is (reversible or not, routine or critical), and how long it would take a person to notice. It is the RTO/RPO question applied to an agent: how much can go wrong, and how fast can it be stopped?")),
+   ("h", ("Puis comparez les contrôles au risque", "Then match controls to the risk")),
+   ("p", ("Validations avant action, déploiement progressif, revue par échantillonnage, interrupteur d'arrêt testé, responsable nommé : vérifiez que ces contrôles correspondent à ce que le rayon d'impact exige. Notre tableau de bord d'audit vous aide à consigner les réponses et à les refaire chaque trimestre.", "Approval before action, staged rollout, sampling review, a tested kill switch, a named owner: check that these controls match what the blast radius demands. Our downloadable audit scorecard helps you record the answers and repeat them every quarter.")),
+  ]},
+ {
   "slug": "backups-are-not-recovery",
   "date": "2026-10-26", "mins": 4,
   "title": ("Une sauvegarde n'est pas une reprise", "A backup is not a recovery"),

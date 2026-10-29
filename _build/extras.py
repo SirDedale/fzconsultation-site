@@ -3,8 +3,9 @@ search, security, accessibility, governance. Called from build.py with the build
 import json, os, re, unicodedata, html
 from datetime import datetime
 from email.utils import format_datetime
-from tools import TEMPLATES, CALC, GLOSSARY, TEMPLATE_DISCLAIMER, RANSOM, RTORPO, AIPOL
+from tools import TEMPLATES, CALC, GLOSSARY, TEMPLATE_DISCLAIMER, RANSOM, RTORPO, AIPOL, AISCORE
 from insights import INSIGHTS
+from auditor import AUDITOR
 
 MONTHS = {"fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
           "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
@@ -36,6 +37,7 @@ def art_items():
 def build_extras(B):
     build_resources_hub(B); build_calculator(B); build_templates(B); build_glossary(B)
     build_insights(B); build_search(B); build_security(B); build_accessibility(B); build_governance(B)
+    build_auditor(B)
 
 def hero(B, path, trail_extra, eyebrow, title, lede):
     r = B.rprefix(path)
@@ -57,7 +59,7 @@ def build_resources_hub(B):
       {"path": "ai/vision-questionnaire.html", "short": B.OTHER["ai/vision-questionnaire.html"], "summary": ("Treize questions pour aligner votre direction sur votre vision de l'IA.", "Thirteen questions to align your leadership on your AI vision.")},
     ]
     b += f'<section class="block"><h2>{T("Outils interactifs", "Interactive tools")}</h2>{B.link_rows(r, tools)}</section>'
-    b += f'<section class="block"><h2>{T("Modèles à télécharger", "Downloadable templates")}</h2>{T("Trois documents Word modifiables, en français et en anglais, à adapter à votre organisation.", "Three editable Word documents, in French and English, to adapt to your organization.", tag="p", cls="intro")}{B.link_rows(r, tpl_items())}</section>'
+    b += f'<section class="block"><h2>{T("Modèles à télécharger", "Downloadable templates")}</h2>{T("Quatre documents Word modifiables, en français et en anglais, à adapter à votre organisation.", "Four editable Word documents, in French and English, to adapt to your organization.", tag="p", cls="intro")}{B.link_rows(r, tpl_items())}</section>'
     b += f'<section class="block"><h2>{T("À lire", "Reading")}</h2>{B.link_rows(r, art_items()[:3])}<p style="margin-top:20px"><a class="textlink" href="{r}insights/index.html">{T("Tous les articles", "All articles")} {ARROW}</a> &nbsp; <a class="textlink" href="{r}resources/glossary.html">{P(B.OTHER["resources/glossary.html"])} {ARROW}</a></p></section>'
     b += f'<section class="block"><h2>{T("Apprendre des incidents", "Learning from incidents")}</h2>{B.case_cards(r, B.CASES[:3])}<p style="margin-top:20px"><a class="textlink" href="{r}case-studies/index.html">{T("Toutes les études de cas", "All case studies")} {ARROW}</a></p></section>'
     B.page(path, (f'Ressources | FZ Consultation', 'Resources | FZ Consultation'), ("Outils gratuits, modèles à télécharger, glossaire et articles sur la résilience d'affaires.", "Free tools, downloadable templates, glossary and articles on business resilience."), b)
@@ -110,13 +112,13 @@ def build_templates(B):
             for title, items in t["phases"]:
                 b += f'<section class="block"><h2>{P(title)}</h2><ul class="chk">' + "".join(f'<li><label><input type="checkbox"> <span>{P(it)}</span></label></li>' for it in items) + "</ul></section>"
             b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{B.SRCLANG()}>{E(n)}</a></li>' for n, u in t["sources"]) + f'</ul>{T("Cette liste s&#39;inspire de bonnes pratiques publiques, dont les guides ci-dessus ; elle n&#39;est ni approuvée ni publiée par ces organismes.", "This list draws on public good practice, including the guides above; it is neither endorsed nor published by those agencies.", tag="p", cls="note")}</section>'
-        elif t is RTORPO:
-            b += f'<section class="block"><h2>{T("Définitions", "Definitions")}</h2><dl class="defs">' + "".join(f"<div><dt>{P(k)}</dt><dd>{P(v)}</dd></div>" for k, v in t["defs"]) + "</dl></section>"
+        elif "columns" in t:
+            b += f'<section class="block"><h2>{P(t.get("defs_title", ("Définitions", "Definitions")))}</h2><dl class="defs">' + "".join(f"<div><dt>{P(k)}</dt><dd>{P(v)}</dd></div>" for k, v in t["defs"]) + "</dl></section>"
             head = "".join(f'<th scope="col">{P(c)}</th>' for c in t["columns"])
             ex = "".join(f"<td>{P(c)}</td>" for c in t["example"])
             blank = "<tr>" + "<td></td>" * len(t["columns"]) + "</tr>"
             b += f'''<section class="block"><h2>{T("Le tableau", "The worksheet")}</h2>
-              <div class="tscroll" tabindex="0" role="region" aria-label="{T("Tableau RTO / RPO, défilement horizontal possible", "RTO / RPO worksheet, scrolls horizontally")}">
+              <div class="tscroll" tabindex="0" role="region" aria-label="{T("Tableau, défilement horizontal possible", "Worksheet, scrolls horizontally")}">
               <table class="wtable"><caption>{T("Première ligne : exemple fictif. Le fichier Word contient le tableau vierge.", "First row: fictional example. The Word file contains the blank worksheet.")}</caption>
               <thead><tr>{head}</tr></thead><tbody><tr class="ex">{ex}</tr>{blank*2}</tbody></table></div></section>'''
             b += f'<section class="block"><h2>{T("Conseils", "Tips")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in t["tips"]) + "</div></section>"
@@ -295,3 +297,30 @@ def build_governance(B):
     ]
     b += '<section class="block legal">' + "".join(f"<h2>{P(h)}</h2>{body if body.startswith('<') else '<p>'+body+'</p>'}" for h, body in S) + "</section>"
     B.page(path, ("Gouvernance et corrections | FZ Consultation", "Governance and corrections | FZ Consultation"), ("Sources, révision des contenus et politique de correction de FZ Consultation.", "FZ Consultation's sources, content review and corrections policy."), b)
+
+# ------------------------------------------------------------------ FZ AI Auditor
+def build_auditor(B):
+    T, P = B.T, B.P
+    A = AUDITOR
+    path = A["path"]
+    r = B.rprefix(path)
+    hub = ("ai/index.html", B.OTHER["ai/index.html"])
+    b = B.page_hero(r, [hub, (path, A["short"])], A["eyebrow"], A["title"], A["lede"])
+    b += f'<section class="block"><div class="cta-actions" style="margin-top:0"><a class="btn primary" href="#contact">{T("Parler de votre périmètre", "Discuss your scope")}</a><a class="btn ghost" href="{r}resources/ai-agent-audit-scorecard.html">{T("Télécharger le tableau de bord", "Download the scorecard")}</a></div></section>'
+    b += f'<section class="block split"><div><h2>{T("Le constat", "The problem")}</h2></div>{P(A["overview"], tag="p", cls="big")}</section>'
+    b += B.hub_diagram(("Audit", "Audit"), [(name, "") for name, _ in A["areas"]])
+    b += f'<section class="block"><h2>{T("Ce que couvre l&#39;audit", "What the audit covers")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(heading)}</h3>{P(desc, tag="p")}</div>' for heading, desc in A["areas"]) + "</div></section>"
+    b += f'<section class="block"><h2>{T("Pourquoi c&#39;est important", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(heading)}</h3>{P(desc, tag="p")}</div>' for heading, desc in A["why"]) + "</div></section>"
+    timeline = [(("Inventaire", "Inventory"), ("1 à 2 sem.", "1-2 wks"), ("Autorisé contre observé", "Authorized vs observed")),
+                (("Valeur", "Value"), ("2 à 3 sem.", "2-3 wks"), ("Coût réel contre valeur", "Real cost vs value")),
+                (("Rayon d'impact", "Blast radius"), ("2 à 3 sem.", "2-3 wks"), ("Gravité et détection", "Severity and detection")),
+                (("Tableau de bord", "Scorecard"), ("1 sem.", "1 wk"), ("Priorités selon l'exposition", "Ranked by exposure")),
+                (("Cadence", "Cadence"), ("Trimestriel", "Quarterly"), ("À chaque changement", "On every change"))]
+    b += f'<section class="block"><h2>{T("Notre intervention", "Our engagement")}</h2>{T("Les durées sont indicatives ; elles dépendent du nombre d&#39;agents et de la disponibilité des preuves.", "Durations are indicative; they depend on the number of agents and the availability of evidence.", tag="p", cls="intro")}{B.timeline_diagram(timeline)}'
+    b += '<ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(name)}</h3><p class="outs"><strong>{P(duration)}</strong></p>{P(desc, tag="p")}</div></li>' for i, (name, duration, desc, _short) in enumerate(A["phases"], 1)) + "</ol></section>"
+    b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">' + "".join(f"<li>{P(item)}</li>" for item in A["deliverables"]) + "</ul></section>"
+    b += f'<section class="block split"><div><h2>{T("Référentiels", "Standards we align to")}</h2></div><ul class="regtags">' + "".join(f"<li>{P(item) if isinstance(item, tuple) else item}</li>" for item in A["standards"]) + "</ul></section>"
+    b += f'<section class="block split"><div><h2>{T("Pourquoi FZ Consultation", "Why FZ Consultation")}</h2></div>{T("Nous appliquons la même démarche d&#39;évaluation, de test et de mesure à la continuité des activités, à la reprise après sinistre et à la cybersécurité. Nous auditons les agents IA comme tout système critique et remettons la méthode à votre équipe.", "We apply the same discipline of assessment, testing and measurement to business continuity, disaster recovery and cybersecurity. We audit AI agents like any critical system and hand the method to your team.", tag="p", cls="big")}</section>'
+    b += B.faq(A["faq"])
+    b += f'<section class="block"><h2>{T("À voir aussi", "Related")}</h2>{B.link_rows(r, [B.item_of(key) for key in A["related"]])}</section>'
+    B.page(path, (f'{A["title"][0]} | FZ Consultation', f'{A["title"][1]} | FZ Consultation'), A["summary"], b)

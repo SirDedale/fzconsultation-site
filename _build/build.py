@@ -12,6 +12,7 @@ from partners import *
 from downtime import *
 from tools import TEMPLATES, GLOSSARY
 from insights import INSIGHTS
+from auditor import AUDITOR
 import extras, sys, hashlib
 
 # ================= CONFIG =================
@@ -59,6 +60,7 @@ OTHER = {
  "privacy.html": ("Politique de confidentialité", "Privacy policy"),
  "legal.html": ("Mentions légales", "Legal notice"),
  "ai/index.html": ("Intelligence artificielle", "Artificial intelligence"),
+ "ai/auditor.html": ("FZ AI Auditor", "FZ AI Auditor"),
  "partners.html": ("Écosystème et partenariats", "Ecosystem and partnerships"),
  "resources/cost-of-downtime.html": ("Coût des interruptions", "Cost of downtime"),
  "ai/vision-questionnaire.html": ("Questionnaire de vision IA", "AI vision questionnaire"),
@@ -75,13 +77,14 @@ for _t in TEMPLATES: OTHER[f"resources/{_t['slug']}.html"] = _t["short"]
 for _a in INSIGHTS: OTHER[f"insights/{_a['slug']}.html"] = _a["title"]
 _EXTRA_ITEMS = ([{"path": f"resources/{t['slug']}.html", "short": t["short"], "summary": t["summary"]} for t in TEMPLATES] +
                 [{"path": f"insights/{a['slug']}.html", "short": a["title"], "summary": a["summary"]} for a in INSIGHTS])
+AI_ALL = [AUDITOR] + AI_PAGES + [CITADEL]
 fmt_date = extras.fmt_date
 def name_of(key):
-    for p in EXPERTISE + SERVICES + IND + AI_PAGES + [CITADEL] + CASES:
+    for p in EXPERTISE + SERVICES + IND + AI_ALL + CASES:
         if p["path"] == key: return p["short"]
     return OTHER[key]
 def item_of(key):
-    for p in EXPERTISE + SERVICES + IND + AI_PAGES + [CITADEL] + CASES + _EXTRA_ITEMS:
+    for p in EXPERTISE + SERVICES + IND + AI_ALL + CASES + _EXTRA_ITEMS:
         if p["path"] == key: return p
     return {"path": key, "short": OTHER[key], "summary": ("", "")}
 
@@ -183,7 +186,7 @@ def footer(r):
     </div>
     <div><h2 class="fh">{T("Expertise", "Expertise")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in EXPERTISE)}</ul></div>
     <div><h2 class="fh">{T("Services", "Services")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
-    <div><h2 class="fh">{T("IA", "AI")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in AI_PAGES + [CITADEL])}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
+    <div><h2 class="fh">{T("IA", "AI")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in AI_ALL)}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
     <div><h2 class="fh">{T("Secteurs", "Industries")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
     <div><h2 class="fh">{T("Ressources", "Resources")}</h2><ul>{"".join(li(k, OTHER[k]) for k in ["resources/index.html", "self-assessment.html", "resources/downtime-calculator.html", "resources/cost-of-downtime.html", "resources/glossary.html", "insights/index.html", "case-studies/index.html", "partners.html", "contact.html"])}</ul></div>
   </div>
@@ -529,7 +532,7 @@ def build_lang():
     path = "contact.html"; r = ""
     book = (f'<a class="btn primary" href="{E(BOOKING_URL)}" target="_blank" rel="noopener">{T("Choisir un créneau", "Pick a time")}</a>' if BOOKING_URL
             else f'<p class="muted">{T("Proposez-nous quelques créneaux dans votre message et nous vous confirmerons un horaire.", "Suggest a few time slots in your message and we will confirm one.")}</p>')
-    subjects = [("Premier échange", "Intro call"), ("Évaluation", "Assessment"), ("Reprise après sinistre", "Disaster recovery"), ("Cybersécurité", "Cybersecurity"), ("Exercice ou test", "Exercise or test"), ("Intelligence artificielle", "Artificial intelligence"), ("Partenariat", "Partnership"), ("Autre", "Other")]
+    subjects = [("Premier échange", "Intro call"), ("Évaluation", "Assessment"), ("Reprise après sinistre", "Disaster recovery"), ("Cybersécurité", "Cybersecurity"), ("Exercice ou test", "Exercise or test"), ("Intelligence artificielle", "Artificial intelligence"), ("Audit d'agents IA (FZ AI Auditor)", "AI agent audit (FZ AI Auditor)"), ("Partenariat", "Partnership"), ("Autre", "Other")]
     b = page_hero(r, [(path, OTHER[path])], ("Contact", "Contact"), ("Parlons de votre situation", "Let's talk about your situation"),
         ("Un premier échange de 30 minutes, sans engagement, en français ou en anglais.", "A free 30-minute intro call, in French or English."))
     b += f'''<section class="block contact-grid">
@@ -597,7 +600,7 @@ def ai_band(r):
     return f"""<section class="block"><div class="band ai">
       <div><p class="eyebrow">{T("Intelligence artificielle", "Artificial intelligence")}</p>
       <h2>{T("Adopter l'IA vite, sans perdre le contrôle", "Adopt AI fast, without losing control")}</h2>
-      {T("Vision, agents, gouvernance et plateforme Microsoft Foundry Citadel : nous appliquons à l'IA la même exigence de résilience.", "Vision, agents, governance and the Microsoft Foundry Citadel platform: we apply the same resilience discipline to AI.", tag="p")}</div>
+    {T("Vision, agents, gouvernance, audit et plateforme Microsoft Foundry Citadel : nous appliquons à l'IA la même exigence de résilience.", "Vision, agents, governance, audit and the Microsoft Foundry Citadel platform: we apply the same resilience discipline to AI.", tag="p")}</div>
       <a class="btn primary" href="{r}ai/index.html">{T("Découvrir notre offre IA", "Explore our AI services")}</a>
     </div></section>"""
 
@@ -606,7 +609,7 @@ def resources_band(r):
     return f"""<section class="block"><h2>{T("Ressources gratuites", "Free resources")}</h2>
       <div class="pillars">
       <a href="{r}resources/downtime-calculator.html"><span class="pk">01</span><h3>{T("Calculateur du coût d'une interruption", "Downtime cost calculator")}</h3>{T("Estimez en quelques chiffres ce qu'une heure d'arrêt vous coûte.", "Estimate from a few numbers what an hour of downtime costs you.", tag="p")}<span class="more">{T("Calculer", "Calculate")} {ARROW}</span></a>
-      <a href="{r}resources/index.html"><span class="pk">02</span><h3>{T("Modèles à télécharger", "Downloadable templates")}</h3>{T("Liste rançongiciel, feuille RTO/RPO et politique d'utilisation de l'IA.", "Ransomware checklist, RTO/RPO worksheet and AI acceptable-use policy.", tag="p")}<span class="more">{T("Voir les ressources", "Browse resources")} {ARROW}</span></a>
+    <a href="{r}resources/index.html"><span class="pk">02</span><h3>{T("Modèles à télécharger", "Downloadable templates")}</h3>{T("Liste rançongiciel, feuille RTO/RPO, politique d'utilisation de l'IA et tableau d'audit d'agent IA.", "Ransomware checklist, RTO/RPO worksheet, AI acceptable-use policy and AI agent audit scorecard.", tag="p")}<span class="more">{T("Voir les ressources", "Browse resources")} {ARROW}</span></a>
       <a href="{r}insights/{latest["slug"]}.html"><span class="pk">03</span><h3>{P(latest["title"])}</h3>{P(latest["summary"], tag="p")}<span class="more">{T("Lire l'article", "Read the article")} {ARROW}</span></a>
       </div></section>"""
 
@@ -655,7 +658,7 @@ def build_ai():
       <p class="lede">{T("De la vision à la production : stratégie, agents, gouvernance et plateforme, avec la même exigence de résilience que pour vos systèmes critiques.", "From vision to production: strategy, agents, governance and platform, with the same resilience discipline as your critical systems.")}</p>
       <div class="actions"><a class="btn primary" href="{r}ai/vision-questionnaire.html">{T("Faire le questionnaire de vision", "Take the vision questionnaire")}</a><a class="btn ghost" href="{r}ai/citadel.html">Microsoft Foundry Citadel</a></div>
     </section>
-    <section class="block"><h2>{T("Nos services IA", "Our AI services")}</h2>{link_rows(r, AI_PAGES + [CITADEL])}</section>
+    <section class="block"><h2>{T("Nos services IA", "Our AI services")}</h2>{link_rows(r, AI_ALL)}</section>
     <section class="block"><h2>{T("Notre démarche", "Our approach")}</h2><ol class="phases">
       <li><div class="pn">01</div><div><h2 class="fh">{T("Aligner", "Align")}</h2>{T("Questionnaire de vision, puis atelier avec la direction pour fixer objectifs, limites et priorités.", "Vision questionnaire, then a leadership workshop to set goals, limits and priorities.", tag="p")}</div></li>
       <li><div class="pn">02</div><div><h2 class="fh">{T("Encadrer", "Govern")}</h2>{T("Politique, inventaire, classification des risques et plateforme gouvernée comme Citadel.", "Policy, inventory, risk classification and a governed platform such as Citadel.", tag="p")}</div></li>

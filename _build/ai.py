@@ -35,7 +35,7 @@ AI_PAGES = [
   ],
   "deliverables": [("Fiche de conception de l'agent", "Agent design brief"), ("Agent fonctionnel et documenté", "Working, documented agent"), ("Rapport d'évaluation et de sécurité", "Evaluation and security report"), ("Procédures d'exploitation et de désactivation", "Operating and shutdown procedures")],
   "faq": [(("Un agent peut-il agir seul ?", "Can an agent act on its own?"), ("Oui, dans des limites définies. Nous recommandons de commencer par des agents qui proposent et d'accroître l'autonomie à mesure que la confiance se construit.", "Yes, within defined limits. We recommend starting with agents that propose actions and increasing autonomy as trust builds."))],
-  "related": ["ai/citadel.html", "ai/governance.html"],
+  "related": ["ai/auditor.html", "ai/citadel.html", "ai/governance.html"],
  },
  {
   "path": "ai/governance.html",
@@ -55,7 +55,7 @@ AI_PAGES = [
   "faq": [(("Le règlement européen sur l'IA nous concerne-t-il ?", "Does the EU AI Act apply to us?"),
            ("S'il vous concerne dépend de votre rôle (fournisseur ou utilisateur) et de vos usages, y compris hors de l'UE si vos systèmes y sont utilisés. Ses obligations s'appliquent progressivement ; nous vous aidons à faire l'inventaire et la classification, en lien avec vos conseillers juridiques.",
             "Whether it applies depends on your role (provider or deployer) and your use cases, including outside the EU if your systems are used there. Its obligations phase in over time; we help with inventory and classification, alongside your legal advisers."))],
-  "related": ["ai/citadel.html", "ai/strategy-adoption.html"],
+  "related": ["ai/auditor.html", "ai/citadel.html", "ai/strategy-adoption.html"],
  },
 ]
 

@@ -441,6 +441,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ai-acceptable-use-policy.html"/>
   </url>
   <url>
+    <loc>https://fzconsultation.xyz/fr/resources/ai-agent-audit-scorecard.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ai-agent-audit-scorecard.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ai-agent-audit-scorecard.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/resources/ai-agent-audit-scorecard.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/ai-agent-audit-scorecard.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/ai-agent-audit-scorecard.html"/>
+  </url>
+  <url>
     <loc>https://fzconsultation.xyz/fr/resources/glossary.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/resources/glossary.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/resources/glossary.html"/>
@@ -459,6 +469,16 @@
     <loc>https://fzconsultation.xyz/en/insights/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/insights/three-questions-for-every-ai-agent.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/three-questions-for-every-ai-agent.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/three-questions-for-every-ai-agent.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/insights/three-questions-for-every-ai-agent.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/three-questions-for-every-ai-agent.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/three-questions-for-every-ai-agent.html"/>
   </url>
   <url>
     <loc>https://fzconsultation.xyz/fr/insights/backups-are-not-recovery.html</loc>
@@ -519,6 +539,16 @@
     <loc>https://fzconsultation.xyz/en/governance.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/governance.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/governance.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/fr/ai/auditor.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/ai/auditor.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/ai/auditor.html"/>
+  </url>
+  <url>
+    <loc>https://fzconsultation.xyz/en/ai/auditor.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/ai/auditor.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/ai/auditor.html"/>
   </url>
   <url>
     <loc>https://fzconsultation.xyz/fr/privacy.html</loc>

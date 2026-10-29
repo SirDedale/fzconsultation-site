@@ -115,7 +115,41 @@ AIPOL = {
  "related": ["ai/governance.html", "ai/citadel.html"],
 }
 
-TEMPLATES = [RANSOM, RTORPO, AIPOL]
+AISCORE = {
+ "slug": "ai-agent-audit-scorecard",
+ "title": ("Tableau de bord d'audit d'un agent IA", "AI agent audit scorecard"),
+ "short": ("Tableau de bord d'audit d'agent IA", "AI agent audit scorecard"),
+ "summary": ("Un tableau pour suivre, agent par agent, la fidélité au périmètre, la valeur réalisée et le rayon d'impact, et le refaire chaque trimestre.", "A table to track, agent by agent, scope fidelity, value realized and blast radius, and to re-run every quarter."),
+ "lede": ("La version allégée de la méthode de FZ AI Auditor, pour que votre équipe fasse un premier état des lieux et le répète.", "A lightweight version of the FZ AI Auditor method, so your team can take a first inventory and repeat it."),
+ "how": ("Remplissez une ligne par agent ou automatisation déployé. Appuyez chaque colonne sur des preuves (journaux, traces, factures, échantillons revus) plutôt que sur le document de conception. Les cotes ci-dessous sont un exemple : adaptez les seuils à votre tolérance au risque. Refaites le tableau chaque trimestre et à chaque changement de modèle, consigne ou permission.", "Fill in one row per deployed agent or automation. Back every column with evidence (logs, traces, invoices, reviewed samples) rather than the design document. The ratings below are an example: adapt the thresholds to your risk tolerance. Re-run the table every quarter and whenever a model, prompt or permission changes."),
+ "defs_title": ("Grille de cotation du rayon d'impact (exemple)", "Blast-radius rating grid (example)"),
+ "defs": [
+  (("Faible", "Low"), ("Erreurs réversibles, peu de cas touchés, détection le jour même.", "Reversible errors, few cases touched, detection the same day.")),
+  (("Modéré", "Moderate"), ("Erreurs réversibles mais nombreuses, ou détection en quelques jours. Correction coûteuse sans être critique.", "Reversible but numerous errors, or detection within days. Costly to correct but not critical.")),
+  (("Élevé", "High"), ("Erreurs partiellement irréversibles, ou touchant clients, argent ou obligations réglementaires, avec détection lente.", "Partly irreversible errors, or errors touching customers, money or regulatory obligations, with slow detection.")),
+  (("Critique", "Critical"), ("Erreurs irréversibles ou touchant la sécurité, des montants importants ou la conformité, à volume élevé, avec détection incertaine. Exige validation humaine, déploiement progressif et interrupteur d'arrêt testé.", "Irreversible errors, or errors affecting safety, large sums or compliance, at high volume, with uncertain detection. Requires human approval, staged rollout and a tested kill switch.")),
+ ],
+ "columns": [
+  ("Agent / automatisation", "Agent / automation"), ("Responsable", "Owner"), ("Périmètre : autorisé contre observé", "Scope: authorized vs observed"),
+  ("Dérive (aucune / mineure / importante)", "Drift (none / minor / material)"), ("Coût mensuel", "Monthly cost"), ("Valeur évitée mensuelle", "Monthly value displaced"),
+  ("Exactitude vs référence humaine", "Accuracy vs human baseline"), ("Gravité du pire cas · réversible ?", "Worst-case severity · reversible?"), ("Délai de détection", "Time to detect"),
+  ("Cote de rayon d'impact", "Blast-radius rating"), ("Écart de confinement", "Containment gap"), ("Prochaine revue", "Next review"),
+ ],
+ "example": [
+  ("Agent de tri des courriels clients", "Customer email triage agent"), ("Responsable du soutien", "Support lead"), ("Autorisé : classer et suggérer. Observé : envoie aussi des réponses automatiques", "Authorized: classify and suggest. Observed: also sends auto-replies"),
+  ("Importante", "Material"), ("4 000 $", "$4,000"), ("9 000 $", "$9,000"), ("92 % (n = 200) contre 96 % humain", "92% (n = 200) vs 96% human"),
+  ("Moyenne · en partie irréversible", "Medium · partly irreversible"), ("3 jours", "3 days"), ("Élevée", "High"), ("Pas de validation avant envoi ni d'interrupteur testé", "No approval before sending or tested kill switch"), ("Dans 3 mois ou au prochain changement", "In 3 months or at next change"),
+ ],
+ "tips": [
+  (("Commencez par l'inventaire", "Start with the inventory"), ("Incluez les agents adoptés par les équipes sans passer par la TI.", "Include agents teams adopted without going through IT.")),
+  (("Mesurez la valeur", "Measure value"), ("Remplacez les estimations par les coûts réels et un échantillon revu à la main.", "Replace estimates with real costs and a hand-reviewed sample.")),
+  (("Cotez le pire cas", "Rate the worst case"), ("Jugez le rayon d'impact sur ce qui peut mal tourner au volume réel, pas sur la moyenne.", "Rate blast radius by what can go wrong at real volume, not by the average.")),
+  (("Comparez les contrôles à la cote", "Match controls to the rating"), ("Notez l'écart entre les contrôles existants et ceux qu'exige la cote.", "Record the gap between existing controls and those the rating requires.")),
+ ],
+ "related": ["ai/auditor.html", "ai/governance.html"],
+}
+
+TEMPLATES = [RANSOM, RTORPO, AIPOL, AISCORE]
 
 # ---------------- Calculator labels ----------------
 CALC = {

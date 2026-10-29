@@ -7,12 +7,12 @@ The site's HTML pages are generated. Don't edit the files in `fr/` or `en/` by h
 - `industries.py` — industry pages and example engagements
 - `cases.py` — case studies (public sources only)
 - `downtime.py` — cost-of-downtime benchmarks, incidents and sources
-- `tools.py` — templates (ransomware checklist, RTO/RPO worksheet, AI policy), calculator labels, glossary
+- `tools.py` — templates (including the AI agent audit scorecard), calculator labels, glossary
 - `insights.py` — Insights articles (add one entry, rebuild: the RSS feeds update by themselves)
-- `partners.py`, `ai.py`, `newcontent.py` — partners, AI section, self-assessment questions
+- `partners.py`, `ai.py`, `auditor.py`, `newcontent.py` — partners, AI services and Auditor, self-assessment questions
 - `extras.py` — resources hub, calculator, templates, glossary, insights, search, security, accessibility, governance pages
 - `build.py` — layout, contact, legal pages, CONFIG block (booking link, Formspree ID, analytics token, `UPDATED`, `REVIEWED`, `SECURITY_EXPIRES`)
-- `make_docs.py` — generates the six Word templates in `assets/downloads/`
+- `make_docs.py` — generates the eight Word templates in `assets/downloads/`
 
 ## Rebuild (Python 3.10+, `pip install -r _build/requirements.txt`)
 

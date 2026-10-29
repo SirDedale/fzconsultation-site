@@ -151,7 +151,7 @@ def main():
             if days < 0: err("security.txt", f"EXPIRED {-days} days ago: renew SECURITY_EXPIRES in build.py")
             elif days < 45: warn("security.txt", f"expires in {days} days: renew SECURITY_EXPIRES in build.py")
     # downloads
-    for slug in ("ransomware-checklist", "rto-rpo-worksheet", "ai-acceptable-use-policy"):
+    for slug in ("ransomware-checklist", "rto-rpo-worksheet", "ai-acceptable-use-policy", "ai-agent-audit-scorecard"):
         for l in ("fr", "en"):
             if not os.path.exists(os.path.join(ROOT, "assets", "downloads", f"{slug}-{l}.docx")): err("assets/downloads", f"missing {slug}-{l}.docx")
     # search index present?
