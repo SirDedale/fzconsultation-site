@@ -10,10 +10,13 @@ from industries import IND
 from ai import *
 from partners import *
 from downtime import *
+from auditor import AUDITOR
 from tools import TEMPLATES, GLOSSARY
 from insights import INSIGHTS
-from auditor import AUDITOR
 import extras, sys, hashlib
+import newsite
+from newsite_content import REMAP, ANCHOR_NAMES
+from tools import TEMPLATE_DISCLAIMER
 
 # ================= CONFIG =================
 SITE = "https://fzconsultation.xyz"
@@ -21,9 +24,9 @@ EMAIL = "contact@fzconsultation.xyz"
 BOOKING_URL = "https://calendly.com/fabien-mariou"  # Calendly link; leave "" to hide the booking button
 FORMSPREE_ID = "mkjgvpwo"       # e.g. "abcdwxyz" from formspree.io; leave "" and the form opens the visitor's email app instead
 CF_ANALYTICS_TOKEN = "b23a07ee11d3441f89c969fc2c62f224"   # Cloudflare Web Analytics token; leave "" for no analytics
-UPDATED = ("26 octobre 2026", "October 26, 2026")
+UPDATED = ("29 octobre 2026", "October 29, 2026")
 REVIEWED = {  # pages whose sources were re-checked; shown under the page title. ISO dates.
-    "resources/cost-of-downtime.html": "2026-10-26",
+    "resources/downtime-calculator.html": "2026-10-26",
 }
 SECURITY_EXPIRES = "2027-09-30T00:00:00Z"   # security.txt must be renewed before this date (RFC 9116)
 # ==========================================
@@ -60,7 +63,6 @@ OTHER = {
  "privacy.html": ("Politique de confidentialité", "Privacy policy"),
  "legal.html": ("Mentions légales", "Legal notice"),
  "ai/index.html": ("Intelligence artificielle", "Artificial intelligence"),
- "ai/auditor.html": ("FZ AI Auditor", "FZ AI Auditor"),
  "partners.html": ("Écosystème et partenariats", "Ecosystem and partnerships"),
  "resources/cost-of-downtime.html": ("Coût des interruptions", "Cost of downtime"),
  "ai/vision-questionnaire.html": ("Questionnaire de vision IA", "AI vision questionnaire"),
@@ -77,13 +79,19 @@ for _t in TEMPLATES: OTHER[f"resources/{_t['slug']}.html"] = _t["short"]
 for _a in INSIGHTS: OTHER[f"insights/{_a['slug']}.html"] = _a["title"]
 _EXTRA_ITEMS = ([{"path": f"resources/{t['slug']}.html", "short": t["short"], "summary": t["summary"]} for t in TEMPLATES] +
                 [{"path": f"insights/{a['slug']}.html", "short": a["title"], "summary": a["summary"]} for a in INSIGHTS])
-AI_ALL = [AUDITOR] + AI_PAGES + [CITADEL]
 fmt_date = extras.fmt_date
+AI_ALL = [AUDITOR] + AI_PAGES + [CITADEL]
 def name_of(key):
+    new = REMAP.get(key)
+    if new in ANCHOR_NAMES: return ANCHOR_NAMES[new]
     for p in EXPERTISE + SERVICES + IND + AI_ALL + CASES:
         if p["path"] == key: return p["short"]
     return OTHER[key]
 def item_of(key):
+    new = REMAP.get(key)
+    extra = next((p for p in _EXTRA_ITEMS if p["path"] == key), None)
+    if new in ANCHOR_NAMES:
+        return {"path": key, "short": ANCHOR_NAMES[new], "summary": extra["summary"] if extra else ("", "")}
     for p in EXPERTISE + SERVICES + IND + AI_ALL + CASES + _EXTRA_ITEMS:
         if p["path"] == key: return p
     return {"path": key, "short": OTHER[key], "summary": ("", "")}
@@ -103,7 +111,7 @@ def header(r, current):
         f'<div class="mcol"><a class="mhead" href="{r}{title_key}">{P(OTHER[title_key])} {ARROW}</a><ul>' +
         "".join(f'<li>{a(p["path"], p["short"])}</li>' for p in items) + "</ul></div>")
     approach = ('<div class="mcol"><span class="mhead plain">' + T("Approche", "Approach") + '</span><ul>' +
-        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "case-studies/index.html", "resources/cost-of-downtime.html", "partners.html", "self-assessment.html"]) +
+        "".join(f'<li>{a(k, OTHER[k])}</li>' for k in ["what-we-do/methodology.html", "what-we-do/regulations.html", "self-assessment.html", "resources/downtime-calculator.html"]) +
         f'</ul><a class="mall" href="{r}what-we-do/index.html">{T("Voir tout ce que nous faisons", "View everything we do")} {ARROW}</a></div>')
     fr_cur = ' aria-current="true"' if LANG == "fr" else ""
     en_cur = ' aria-current="true"' if LANG == "en" else ""
@@ -124,9 +132,8 @@ def header(r, current):
         <button class="mega-toggle" type="button" aria-expanded="false" aria-controls="mega">{T("Ce que nous faisons", "What we do")}{CHEV}</button>
         <div class="mega" id="mega">
           <div class="wrap mega-grid">
-            {col("what-we-do/expertise/index.html", EXPERTISE)}
-            {col("what-we-do/services/index.html", SERVICES)}
-            {col("what-we-do/industries.html", IND)}
+            {col("what-we-do/index.html", newsite.nav_wwd(sys.modules[__name__]))}
+            {col("what-we-do/industries.html", newsite.nav_ind(sys.modules[__name__]))}
             {approach}
           </div>
         </div>
@@ -176,26 +183,7 @@ def cta_block(r, path=""):
     </section>'''
 
 def footer(r):
-    li = lambda key, pair: f'<li><a href="{r}{key}">{P(pair)}</a></li>'
-    return f'''<footer class="site">
-  <div class="wrap fgrid">
-    <div class="fbrand">
-      <img src="{r}../assets/logo.webp" alt="FZ Consultation" width="160" height="120" class="flogo">
-      <p>{T("Résilience d'affaires, sécurité et reprise après sinistre.", "Business resilience, security and disaster recovery.")}</p>
-      <p><a href="mailto:{EMAIL}">{EMAIL}</a></p>
-    </div>
-    <div><h2 class="fh">{T("Expertise", "Expertise")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in EXPERTISE)}</ul></div>
-    <div><h2 class="fh">{T("Services", "Services")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in SERVICES)}</ul></div>
-    <div><h2 class="fh">{T("IA", "AI")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in AI_ALL)}{li("ai/vision-questionnaire.html", OTHER["ai/vision-questionnaire.html"])}</ul></div>
-    <div><h2 class="fh">{T("Secteurs", "Industries")}</h2><ul>{"".join(li(p["path"], p["short"]) for p in IND)}</ul></div>
-    <div><h2 class="fh">{T("Ressources", "Resources")}</h2><ul>{"".join(li(k, OTHER[k]) for k in ["resources/index.html", "self-assessment.html", "resources/downtime-calculator.html", "resources/cost-of-downtime.html", "resources/glossary.html", "insights/index.html", "case-studies/index.html", "partners.html", "contact.html"])}</ul></div>
-  </div>
-  <div class="wrap fbottom">
-    <span>© <span class="year">2026</span> FZ Consultation</span>
-    <span class="flegal"><a href="{r}privacy.html">{P(OTHER["privacy.html"])}</a><a href="{r}legal.html">{P(OTHER["legal.html"])}</a><a href="{r}accessibility.html">{P(OTHER["accessibility.html"])}</a><a href="{r}security.html">{P(OTHER["security.html"])}</a><a href="{r}governance.html">{P(OTHER["governance.html"])}</a></span>
-    <span>{T("Europe · Royaume-Uni · Canada · États-Unis", "Europe · UK · Canada · United States")}</span>
-  </div>
-</footer>'''
+    return newsite.footer_html(sys.modules[__name__], r)
 
 CSP = ("default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; "
        "style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; "
@@ -268,7 +256,7 @@ def page(path, title, desc, body, extra_head="", extra_js="", ld=None, noindex=F
 <main id="main"{"" if noindex else " data-pagefind-body"}>
   <div class="wrap">
 {body}
-{cta_block(r, path) if path not in ("contact.html", "search.html") else ""}
+{newsite.ctx_cta(sys.modules[__name__], r, path)}
   </div>
 </main>
 {footer(r)}
@@ -384,41 +372,6 @@ def quiz_band(r):
 def build_lang():
     WWD = ("what-we-do/index.html", OTHER["what-we-do/index.html"])
 
-    # detail pages
-    def detail(p, section_key):
-        r = rprefix(p["path"])
-        trail = [WWD, (section_key, OTHER[section_key]), (p["path"], p["short"])]
-        b = page_hero(r, trail, OTHER[section_key], p["title"], p["lede"])
-        b += f'<section class="block split"><div><h2>{T("Ce que nous couvrons", "What we cover")}</h2>{P(p["intro"], tag="p", cls="intro")}</div><div class="cover">'
-        if p["path"] == "what-we-do/services/assessments.html":
-            phases = [
-                (("Entretiens et collecte", "Interviews and discovery"), ("1 à 2 semaines", "1 to 2 weeks"), ("Direction, TI, opérations, fournisseurs", "Leadership, IT, operations, suppliers")),
-                (("Analyse", "Analysis"), ("1 semaine", "1 week"), ("Comparaison aux référentiels et à vos cibles", "Comparison to frameworks and your targets")),
-                (("Restitution", "Readout"), ("Une demi-journée", "Half a day"), ("Constats et feuille de route pour la direction", "Findings and roadmap for leadership")),
-            ]
-            b += f'<section class="block">{timeline_diagram(phases)}</section>'
-        b += "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in p["cover"]) + "</div></section>"
-        b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">'
-        b += "".join(f'<li>{P(d)}</li>' for d in p["deliverables"]) + "</ul></section>"
-        b += faq(p["faq"])
-        rel = [next((x for x in EXPERTISE + SERVICES if x["path"] == k), None) or {"path": k, "short": OTHER[k], "summary": ("", "")} for k in p["related"]]
-        b += f'<section class="block"><h2>{T("À voir aussi", "Related")}</h2>{link_rows(r, rel)}</section>'
-        page(p["path"], (f'{p["title"][0]} | FZ Consultation', f'{p["title"][1]} | FZ Consultation'), p["summary"], b)
-    for p in EXPERTISE: detail(p, "what-we-do/expertise/index.html")
-    for p in SERVICES: detail(p, "what-we-do/services/index.html")
-
-    def hub(path, title, lede, items, intro):
-        r = rprefix(path)
-        b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], title, lede)
-        b += f'<section class="block">{P(intro, tag="p", cls="intro")}{link_rows(r, items)}</section>'
-        page(path, (f'{title[0]} | FZ Consultation', f'{title[1]} | FZ Consultation'), lede, b)
-    hub("what-we-do/expertise/index.html", ("Nos domaines d'expertise", "Our areas of expertise"),
-        ("De la continuité des activités à la cybersécurité, tout ce qui permet à votre organisation de tenir le coup.", "From business continuity to cybersecurity, everything that keeps your organization standing."),
-        EXPERTISE, ("Quatre domaines complémentaires. La plupart des mandats en combinent plusieurs, car une panne touche rarement un seul domaine.", "Four complementary areas. Most engagements combine several, because an outage rarely stays in one area."))
-    hub("what-we-do/services/index.html", ("Nos services", "Our services"),
-        ("Des mandats ciblés ou un accompagnement continu, selon votre maturité et vos échéances.", "Focused engagements or ongoing support, depending on your maturity and deadlines."),
-        SERVICES, ("Chaque service peut être pris seul ou enchaîné avec les autres, en suivant notre méthodologie.", "Each service can be taken on its own or combined with the others, following our methodology."))
-
     # methodology
     path = "what-we-do/methodology.html"; r = "../"
     b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], ("Notre méthodologie", "Our methodology"),
@@ -431,27 +384,7 @@ def build_lang():
     b += f'<section class="block"><h2>{T("Nos principes", "Our principles")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in PRINCIPLES) + "</div></section>"
     page(path, ("Méthodologie | FZ Consultation", "Methodology | FZ Consultation"), ("Comprendre, planifier, tester, améliorer.", "Understand, plan, test, improve."), b)
 
-    # industries hub + detail pages
-    path = "what-we-do/industries.html"
-    b = page_hero(r, [WWD, (path, OTHER[path])], OTHER[WWD[0]], ("Secteurs d'activité", "Industries"),
-        ("Chaque secteur a ses propres risques, contraintes et attentes réglementaires.", "Every sector has its own risks, constraints and regulatory expectations."))
-    b += f'<section class="block">{link_rows(r, IND)}</section>'
-    b += f'<section class="block"><h2>{T("Leçons tirées d&#39;incidents publics", "Lessons from public incidents")}</h2>{case_cards(r)}<p style="margin-top:20px"><a class="textlink" href="{r}resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption par secteur", "What an hour of downtime costs by industry")} {ARROW}</a></p></section>'
-    page(path, ("Secteurs | FZ Consultation", "Industries | FZ Consultation"), ("Secteurs que nous accompagnons.", "Industries we support."), b)
-    for ind in IND:
-        r = rprefix(ind["path"])
-        b = page_hero(r, [WWD, (path, OTHER[path]), (ind["path"], ind["short"])], ("Secteur", "Industry"), ind["short"], ind["lede"])
-        b += f'<section class="block split"><div><h2>{T("Le contexte", "The context")}</h2>{P(ind["context"], tag="p", cls="intro")}</div><div class="cover">'
-        b += "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in ind["risks"]) + "</div></section>"
-        b += f'<section class="block split"><div><h2>{T("Référentiels clés", "Key frameworks")}</h2></div><ul class="regtags">' + "".join(f"<li>{P(x) if isinstance(x, tuple) else x}</li>" for x in ind["regs"]) + f'</ul></section>'
-        b += f'<section class="block"><h2>{T("Exemples de mandats", "Example engagements")}</h2>{T("Ces scénarios illustrent le type de travail que nous réalisons dans ce secteur. Ils ne décrivent pas des clients réels.", "These scenarios illustrate the kind of work we do in this sector. They do not describe real clients.", tag="p", cls="intro")}<div class="engs">'
-        for e in ind["engagements"]:
-            b += f'<article class="eng"><h3>{P(e["t"])}</h3><dl><div><dt>{T("Situation", "Situation")}</dt><dd>{P(e["ctx"])}</dd></div><div><dt>{T("Ce que nous faisons", "What we do")}</dt><dd>{P(e["work"])}</dd></div><div><dt>{T("Résultat attendu", "Expected outcome")}</dt><dd>{P(e["out"])}</dd></div></dl></article>'
-        b += "</div></section>"
-        if ind["cases"]:
-            b += f'<section class="block"><h2>{T("Études de cas liées", "Related case studies")}</h2>{link_rows(r, [item_of(k) for k in ind["cases"]])}</section>'
-        b += f'<section class="block"><h2>{T("Autres secteurs", "Other industries")}</h2>{link_rows(r, [x for x in IND if x is not ind][:3])}</section>'
-        page(ind["path"], (f'{ind["short"][0]} | FZ Consultation', f'{ind["short"][1]} | FZ Consultation'), ind["summary"], b)
+    newsite.build_sectors(sys.modules[__name__])
     r = "../"
 
     # regulations
@@ -467,72 +400,15 @@ def build_lang():
     b += f'<p class="note">{T("FZ Consultation fournit des conseils opérationnels et techniques, et non des avis juridiques. Les exigences évoluent : vérifiez toujours leur portée exacte pour votre organisation.", "FZ Consultation provides operational and technical advice, not legal advice. Requirements change: always confirm their exact scope for your organization.")}</p></section>'
     page(path, ("Réglementation | FZ Consultation", "Regulations | FZ Consultation"), ("Référentiels et exigences par région.", "Frameworks and requirements by region."), b)
 
-    # case studies
-    DISC = ("Analyse fondée uniquement sur des informations publiques. FZ Consultation n'a pas participé à cet incident et n'a aucun lien avec les organisations mentionnées.",
-            "Analysis based solely on public information. FZ Consultation was not involved in this incident and has no affiliation with the organizations named.")
-    for c in CASES:
-        r = "../"
-        b = page_hero(r, [("case-studies/index.html", OTHER["case-studies/index.html"]), (c["path"], c["sector"])],
-                      (T("Étude de cas · ", "Case study · ") + c["sector"][0], T("Étude de cas · ", "Case study · ") + c["sector"][1]), c["short"], c["summary"])
-        b += '<section class="facts"><dl>' + "".join(f"<div><dt>{P(k)}</dt><dd>{P(v)}</dd></div>" for k, v in c["facts"]) + "</dl>"
-        b += f'<p class="disclaimer">{P(DISC)}</p></section>'
-        b += f'<section class="block split"><div><h2>{T("Ce qui s&#39;est passé", "What happened")}</h2></div><ol class="timeline-list">'
-        b += "".join(f'<li><span class="when">{P(w)}</span>{P(d, tag="p")}</li>' for w, d in c["timeline"]) + "</ol></section>"
-        b += f'<section class="block split"><div><h2>{T("Ce qui a mal tourné", "What went wrong")}</h2>{T("D&#39;après les sources publiques citées plus bas.", "According to the public sources listed below.", tag="p", cls="intro")}</div><div class="cover">'
-        b += "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in c["wrong"]) + "</div></section>"
-        b += f'<section class="block"><h2>{T("Les leçons pour votre organisation", "Lessons for your organization")}</h2><ol class="lessons">'
-        for i, (h, d, link) in enumerate(c["lessons"], 1):
-            b += f'<li><span class="ln">{i}</span><div><h3>{P(h)}</h3>{P(d, tag="p")}<a class="textlink" href="{r}{link}">{P(name_of(link))} {ARROW}</a></div></li>'
-        b += "</ol></section>"
-        b += f'<section class="block"><h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{SRCLANG()}>{E(t)}</a></li>' for t, u in c["sources"]) + "</ul></section>"
-        b += f'<section class="block"><h2>{T("Autres études de cas", "More case studies")}</h2>{link_rows(r, [x for x in CASES if x is not c][:3])}</section>'
-        page(c["path"], (f'{c["short"][0]} | FZ Consultation', f'{c["short"][1]} | FZ Consultation'), c["summary"], b)
-    path = "case-studies/index.html"
-    b = page_hero("../", [(path, OTHER[path])], OTHER[path], ("Leçons tirées d'incidents publics", "Lessons from public incidents"),
-        ("Des incidents réels et documentés en finance, en énergie et dans le commerce de détail, et ce qu'ils enseignent sur la résilience.", "Real, documented incidents in finance, energy and retail, and what they teach about resilience."))
-    sectors = []
-    for c in CASES:
-        if c["sector"][1].lower() not in [s_[0] for s_ in sectors]: sectors.append((c["sector"][1].lower(), c["sector"]))
-    chips = f'<div class="chips" role="group" aria-label="{T("Filtrer par secteur", "Filter by sector")}"><button type="button" class="chip" data-filter="all" aria-pressed="true">{T("Tous", "All")}</button>' + "".join(f'<button type="button" class="chip" data-filter="{k}" aria-pressed="false">{P(v)}</button>' for k, v in sectors) + f'</div><p class="muted chip-status" role="status" aria-live="polite" data-one="{T("1 étude affichée", "1 study shown")}" data-many="{T("{n} études affichées", "{n} studies shown")}"></p>'
-    b += f'<section class="block"><h2 class="sr-only">{T("Toutes les études de cas", "All case studies")}</h2>{chips}{case_cards("../")}<p class="note">{T("Analyses fondées uniquement sur des informations publiques, avec sources. FZ Consultation n&#39;a participé à aucun de ces incidents et n&#39;a aucun lien avec les organisations mentionnées.", "Analyses based solely on public information, with sources. FZ Consultation was not involved in any of these incidents and has no affiliation with the organizations named.")}</p><p><a class="textlink" href="../resources/cost-of-downtime.html">{T("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs")} {ARROW}</a></p></section>'
-    b += quiz_band("../")
-    page(path, ("Études de cas | FZ Consultation", "Case studies | FZ Consultation"), ("Leçons tirées d'incidents publics.", "Lessons from public incidents."), b)
+    newsite.build_cases(sys.modules[__name__])
 
-    # what we do hub
-    path = "what-we-do/index.html"; r = "../"
-    b = f'''<section class="phero">
-      {crumbs(r, [(path, OTHER[path])])}
-      <p class="eyebrow">{T("Ce que nous faisons", "What we do")}</p>
-      <h1>{T("Résilience d'affaires, de la stratégie à la preuve", "Business resilience, from strategy to proof")}</h1>
-      <p class="lede">{T("Nous aidons les organisations à identifier ce qui compte, à se préparer aux interruptions et à démontrer qu'elles peuvent s'en remettre.", "We help organizations identify what matters, prepare for disruption and prove they can recover from it.")}</p>
-    </section>
-    <section class="block"><h2>{T("Des capacités pour chaque étape", "Capabilities for every stage")}</h2>
-    <div class="pillars">
-      <a href="{r}what-we-do/expertise/index.html"><span class="pk">01</span><h3>{T("Notre expertise", "Our expertise")}</h3>{T("Continuité, reprise après sinistre, cybersécurité et résilience infonuagique.", "Continuity, disaster recovery, cybersecurity and cloud resilience.", tag="p")}<span class="more">{T("Explorer l'expertise", "Explore expertise")} {ARROW}</span></a>
-      <a href="{r}what-we-do/methodology.html"><span class="pk">02</span><h3>{T("Notre méthodologie", "Our methodology")}</h3>{T("Comprendre, planifier, tester, améliorer : un cycle qui produit des résultats mesurables.", "Understand, plan, test, improve: a cycle that produces measurable results.", tag="p")}<span class="more">{T("Découvrir la méthodologie", "See the methodology")} {ARROW}</span></a>
-      <a href="{r}what-we-do/services/index.html"><span class="pk">03</span><h3>{T("Nos services", "Our services")}</h3>{T("Évaluations, planification, exercices et accompagnement continu.", "Assessments, planning, exercises and ongoing advisory.", tag="p")}<span class="more">{T("Voir les services", "See services")} {ARROW}</span></a>
-    </div></section>
-    <section class="block split"><div><h2>{T("Indépendants, par principe", "Independent by design")}</h2></div><div>{T("Nous ne revendons ni logiciels ni matériel. Chaque recommandation part de vos besoins, pas du catalogue d'un fournisseur. Vous gardez la liberté de choisir vos outils et de changer d'avis.", "We resell no software or hardware. Every recommendation starts from your needs, not a vendor's catalogue. You stay free to choose your tools and to change your mind.", tag="p", cls="big")}</div></section>
-    <section class="block"><h2>{T("Secteurs que nous accompagnons", "Industries we support")}</h2>
-      <ul class="tags">{"".join(f'<li><a href="{r}{p["path"]}">{P(p["short"])}</a></li>' for p in IND)}</ul>
-      <p><a class="textlink" href="{r}what-we-do/industries.html">{T("Voir tous les secteurs", "View all industries")} {ARROW}</a></p>
-    </section>
-    <section class="block"><h2>{T("Quatre marchés, deux langues", "Four markets, two languages")}</h2>
-      {T("Europe, Royaume-Uni, Canada et États-Unis. Nous alignons nos travaux sur DORA, NIS2, les règles FCA/PRA, les lignes directrices du BSIF, NIST et SOC 2.", "Europe, the UK, Canada and the United States. We align our work with DORA, NIS2, FCA/PRA rules, OSFI guidelines, NIST and SOC 2.", tag="p", cls="intro")}
-      <p><a class="textlink" href="{r}what-we-do/regulations.html">{T("Réglementation par région", "Regulations by region")} {ARROW}</a></p>
-    </section>
-    {ai_band(r)}
-    <section class="block"><h2>{T("Leçons tirées d'incidents publics", "Lessons from public incidents")}</h2>{case_cards(r)}</section>
-    {quiz_band(r)}
-    {faq(HUB_FAQ, ("Vous avez des questions ? Nous avons des réponses.", "Still have questions? We have answers."))}'''
-    page(path, ("Ce que nous faisons | FZ Consultation", "What we do | FZ Consultation"),
-         ("Expertise, méthodologie et services en résilience d'affaires, sécurité et reprise après sinistre.", "Expertise, methodology and services in business resilience, security and disaster recovery."), b)
+    newsite.build_wwd(sys.modules[__name__])
 
     # contact
     path = "contact.html"; r = ""
     book = (f'<a class="btn primary" href="{E(BOOKING_URL)}" target="_blank" rel="noopener">{T("Choisir un créneau", "Pick a time")}</a>' if BOOKING_URL
             else f'<p class="muted">{T("Proposez-nous quelques créneaux dans votre message et nous vous confirmerons un horaire.", "Suggest a few time slots in your message and we will confirm one.")}</p>')
-    subjects = [("Premier échange", "Intro call"), ("Évaluation", "Assessment"), ("Reprise après sinistre", "Disaster recovery"), ("Cybersécurité", "Cybersecurity"), ("Exercice ou test", "Exercise or test"), ("Intelligence artificielle", "Artificial intelligence"), ("Audit d'agents IA (FZ AI Auditor)", "AI agent audit (FZ AI Auditor)"), ("Partenariat", "Partnership"), ("Autre", "Other")]
+    subjects = [("intro", ("Premier échange", "Intro call")), ("assessment", ("Évaluation", "Assessment")), ("dr", ("Reprise après sinistre", "Disaster recovery")), ("cyber", ("Cybersécurité", "Cybersecurity")), ("exercise", ("Exercice ou test", "Exercise or test")), ("ai", ("Intelligence artificielle", "Artificial intelligence")), ("auditor", ("Audit d'agents IA (FZ AI Auditor)", "AI agent audit (FZ AI Auditor)")), ("partnership", ("Partenariat", "Partnership")), ("other", ("Autre", "Other"))]
     b = page_hero(r, [(path, OTHER[path])], ("Contact", "Contact"), ("Parlons de votre situation", "Let's talk about your situation"),
         ("Un premier échange de 30 minutes, sans engagement, en français ou en anglais.", "A free 30-minute intro call, in French or English."))
     b += f'''<section class="block contact-grid">
@@ -550,7 +426,7 @@ def build_lang():
         </div>
         <div class="row2">
           <label>{T("Organisation", "Organization")}<input name="organization" autocomplete="organization"></label>
-          <label>{T("Sujet", "Topic")}<select name="topic">{"".join(f"<option>{P(s)}</option>" for s in subjects)}</select></label>
+          <label>{T("Sujet", "Topic")}<select name="topic">{"".join(f'<option data-key="{k}">{P(v)}</option>' for k, v in subjects)}</select></label>
         </div>
         <label>{T("Message", "Message")} <span aria-hidden="true">*</span><textarea name="message" rows="6" required></textarea></label>
         <input type="hidden" name="_subject" value="{T("Nouveau message — site FZ Consultation", "New message — FZ Consultation website")}">
@@ -585,8 +461,8 @@ def build_lang():
          ("Évaluez gratuitement la résilience de votre organisation en huit minutes.", "Assess your organization's resilience in eight minutes, for free."), b, extra_js=js)
 
     build_ai()
+    newsite.build_ai_hub(sys.modules[__name__])
     build_partners()
-    build_downtime()
 
     extras.build_extras(sys.modules[__name__])
 
@@ -594,13 +470,13 @@ def build_lang():
     build_privacy(); build_legal()
 
     # home
-    build_home()
+    newsite.build_home(sys.modules[__name__])
 
 def ai_band(r):
     return f"""<section class="block"><div class="band ai">
       <div><p class="eyebrow">{T("Intelligence artificielle", "Artificial intelligence")}</p>
       <h2>{T("Adopter l'IA vite, sans perdre le contrôle", "Adopt AI fast, without losing control")}</h2>
-    {T("Vision, agents, gouvernance, audit et plateforme Microsoft Foundry Citadel : nous appliquons à l'IA la même exigence de résilience.", "Vision, agents, governance, audit and the Microsoft Foundry Citadel platform: we apply the same resilience discipline to AI.", tag="p")}</div>
+      {T("Vision, agents, gouvernance, audit et plateforme Microsoft Foundry Citadel : nous appliquons à l'IA la même exigence de résilience.", "Vision, agents, governance, audit and the Microsoft Foundry Citadel platform: we apply the same resilience discipline to AI.", tag="p")}</div>
       <a class="btn primary" href="{r}ai/index.html">{T("Découvrir notre offre IA", "Explore our AI services")}</a>
     </div></section>"""
 
@@ -609,22 +485,20 @@ def resources_band(r):
     return f"""<section class="block"><h2>{T("Ressources gratuites", "Free resources")}</h2>
       <div class="pillars">
       <a href="{r}resources/downtime-calculator.html"><span class="pk">01</span><h3>{T("Calculateur du coût d'une interruption", "Downtime cost calculator")}</h3>{T("Estimez en quelques chiffres ce qu'une heure d'arrêt vous coûte.", "Estimate from a few numbers what an hour of downtime costs you.", tag="p")}<span class="more">{T("Calculer", "Calculate")} {ARROW}</span></a>
-    <a href="{r}resources/index.html"><span class="pk">02</span><h3>{T("Modèles à télécharger", "Downloadable templates")}</h3>{T("Liste rançongiciel, feuille RTO/RPO, politique d'utilisation de l'IA et tableau d'audit d'agent IA.", "Ransomware checklist, RTO/RPO worksheet, AI acceptable-use policy and AI agent audit scorecard.", tag="p")}<span class="more">{T("Voir les ressources", "Browse resources")} {ARROW}</span></a>
+      <a href="{r}resources/index.html"><span class="pk">02</span><h3>{T("Modèles à télécharger", "Downloadable templates")}</h3>{T("Liste rançongiciel, feuille RTO/RPO et politique d'utilisation de l'IA.", "Ransomware checklist, RTO/RPO worksheet and AI acceptable-use policy.", tag="p")}<span class="more">{T("Voir les ressources", "Browse resources")} {ARROW}</span></a>
       <a href="{r}insights/{latest["slug"]}.html"><span class="pk">03</span><h3>{P(latest["title"])}</h3>{P(latest["summary"], tag="p")}<span class="more">{T("Lire l'article", "Read the article")} {ARROW}</span></a>
       </div></section>"""
 
+def auditor_band(r):
+    return f"""<section class="block"><div class="band auditor">
+      <div><p class="eyebrow">{T("Nouveau · FZ AI Auditor", "New · FZ AI Auditor")}</p>
+      <h2>{T("Vos agents IA font-ils ce qu'ils devraient, et valent-ils ce qu'ils coûtent ?", "Are your AI agents doing what they should, and are they worth what they cost?")}</h2>
+      {T("Un audit avec preuves du périmètre, de la valeur réalisée et du rayon d'impact des agents déployés.", "An evidence-based audit of the scope, value realized and blast radius of your deployed agents.", tag="p")}</div>
+      <a class="btn primary" href="{r}ai/auditor.html">{T("Découvrir FZ AI Auditor", "Explore FZ AI Auditor")}</a>
+    </div></section>"""
+
 def build_ai():
     WWD = ("ai/index.html", OTHER["ai/index.html"])
-    # detail pages
-    for p in AI_PAGES:
-        r = rprefix(p["path"])
-        b = page_hero(r, [WWD, (p["path"], p["short"])], ("IA", "AI"), p["title"], p["lede"])
-        b += f'<section class="block split"><div><h2>{T("Ce que nous couvrons", "What we cover")}</h2>{P(p["intro"], tag="p", cls="intro")}</div><div class="cover">'
-        b += "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in p["cover"]) + "</div></section>"
-        b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">' + "".join(f'<li>{P(d)}</li>' for d in p["deliverables"]) + "</ul></section>"
-        b += faq(p["faq"])
-        b += f'<section class="block"><h2>{T("À voir aussi", "Related")}</h2>{link_rows(r, [item_of(k) for k in p["related"]])}</section>'
-        page(p["path"], (f'{p["title"][0]} | FZ Consultation', f'{p["title"][1]} | FZ Consultation'), p["summary"], b)
     # citadel
     c = CITADEL; r = "../"
     b = page_hero(r, [WWD, (c["path"], c["short"])], ("IA · Plateforme", "AI · Platform"), c["title"], c["lede"])
@@ -650,23 +524,6 @@ def build_ai():
     </section>"""
     js = f'<script type="application/json" id="vision-data" data-root="{r}">{extras.jsondata(data)}</script><script src="{r}../assets/vision.js?v={VER}"></script>'
     page(path, ("Questionnaire de vision IA | FZ Consultation", "AI vision questionnaire | FZ Consultation"), ("Formulez votre vision de l'IA et mesurez votre maturité.", "Frame your AI vision and measure your readiness."), b, extra_js=js)
-    # hub
-    path = "ai/index.html"; r = "../"
-    b = f"""<section class="phero">{crumbs(r, [(path, OTHER[path])])}
-      <p class="eyebrow">{T("Intelligence artificielle", "Artificial intelligence")}</p>
-      <h1>{T("Adopter l&#39;IA vite, sans perdre le contrôle", "Adopt AI fast, without losing control")}</h1>
-      <p class="lede">{T("De la vision à la production : stratégie, agents, gouvernance et plateforme, avec la même exigence de résilience que pour vos systèmes critiques.", "From vision to production: strategy, agents, governance and platform, with the same resilience discipline as your critical systems.")}</p>
-      <div class="actions"><a class="btn primary" href="{r}ai/vision-questionnaire.html">{T("Faire le questionnaire de vision", "Take the vision questionnaire")}</a><a class="btn ghost" href="{r}ai/citadel.html">Microsoft Foundry Citadel</a></div>
-    </section>
-    <section class="block"><h2>{T("Nos services IA", "Our AI services")}</h2>{link_rows(r, AI_ALL)}</section>
-    <section class="block"><h2>{T("Notre démarche", "Our approach")}</h2><ol class="phases">
-      <li><div class="pn">01</div><div><h2 class="fh">{T("Aligner", "Align")}</h2>{T("Questionnaire de vision, puis atelier avec la direction pour fixer objectifs, limites et priorités.", "Vision questionnaire, then a leadership workshop to set goals, limits and priorities.", tag="p")}</div></li>
-      <li><div class="pn">02</div><div><h2 class="fh">{T("Encadrer", "Govern")}</h2>{T("Politique, inventaire, classification des risques et plateforme gouvernée comme Citadel.", "Policy, inventory, risk classification and a governed platform such as Citadel.", tag="p")}</div></li>
-      <li><div class="pn">03</div><div><h2 class="fh">{T("Construire", "Build")}</h2>{T("Premiers agents conçus, évalués et mis en production avec supervision humaine.", "First agents designed, evaluated and put into production with human oversight.", tag="p")}</div></li>
-      <li><div class="pn">04</div><div><h2 class="fh">{T("Déployer à l&#39;échelle", "Scale")}</h2>{T("Formation, mesure de la valeur, résilience de la plateforme et extension à d&#39;autres équipes.", "Training, value measurement, platform resilience and roll-out to more teams.", tag="p")}</div></li>
-    </ol></section>
-    <section class="block split"><div><h2>{T("Pourquoi un cabinet de résilience ?", "Why a resilience firm?")}</h2></div>{T("Les agents IA deviennent des systèmes critiques : ils ont des accès, prennent des décisions et peuvent tomber en panne. Nous les traitons comme tels, avec identités, limites, supervision et plan de reprise dès la conception.", "AI agents are becoming critical systems: they have access, make decisions and can fail. We treat them that way, with identity, limits, monitoring and a recovery plan from the start.", tag="p", cls="big")}</section>"""
-    page(path, ("Intelligence artificielle | FZ Consultation", "Artificial intelligence | FZ Consultation"), ("Stratégie IA, agents, gouvernance et Microsoft Foundry Citadel.", "AI strategy, agents, governance and Microsoft Foundry Citadel."), b)
 
 def build_partners():
     path = "partners.html"; r = ""
@@ -683,11 +540,8 @@ def build_partners():
     b += f'{T("Les plateformes citées le sont pour décrire notre expertise ; leur mention n&#39;implique pas un partenariat officiel avec leurs éditeurs. Toutes les marques appartiennent à leurs propriétaires respectifs.", "Platforms are named to describe our expertise; naming them does not imply an official partnership with their vendors. All trademarks belong to their respective owners.", tag="p", cls="note")}</section>'
     page(path, ("Écosystème et partenariats | FZ Consultation", "Ecosystem and partnerships | FZ Consultation"), ("Résilience sur tous les nuages publics et privés, et partenariats avec intégrateurs, éditeurs et cabinets.", "Resilience across every public and private cloud, and partnerships with integrators, vendors and firms."), b)
 
-def build_downtime():
-    path = "resources/cost-of-downtime.html"; r = rprefix(path)
-    b = page_hero(r, [(path, OTHER[path])], ("Ressources", "Resources"), ("Ce que coûte une heure d&#39;interruption", "What an hour of downtime costs"),
-        ("Des ordres de grandeur publics, par secteur, et des incidents réels pour donner une idée concrète de l&#39;enjeu.", "Public benchmarks, by industry, and real incidents to give a concrete sense of what's at stake."))
-    b += f'<section class="block"><h2>{T("Repères généraux", "General benchmarks")}</h2><div class="dt-bench">'
+def downtime_sections(r):
+    b = f'<section class="block" id="benchmarks"><h2>{T("Repères de coût publics", "Public cost benchmarks")}</h2>{T("Des ordres de grandeur publics, par secteur, et des incidents réels pour donner une idée concrète de l&#39;enjeu.", "Public benchmarks, by industry, and real incidents to give a concrete sense of what&#39;s at stake.", tag="p", cls="intro")}<div class="dt-bench">'
     for h, d, src in BENCH_GENERAL:
         b += f'<div class="dt-b"><strong>{P(h)}</strong> {P(d)} <sup><a href="#dt-src-{src}">[{src+1}]</a></sup></div>'
     b += "</div></section>"
@@ -708,9 +562,7 @@ def build_downtime():
     for i, (t, u) in enumerate(SOURCES):
         b += f'<li id="dt-src-{i}"><a href="{E(u)}" target="_blank" rel="noopener noreferrer"{SRCLANG()}>{E(t)}</a></li>'
     b += "</ol></section>"
-    b += f'<section class="block"><h2>{T("Estimer votre propre coût", "Estimate your own cost")}</h2>{T("Ces repères donnent un ordre de grandeur. Pour connaître le coût réel d&#39;une heure d&#39;interruption dans votre organisation, une analyse d&#39;impact reste la seule méthode fiable.", "These benchmarks give an order of magnitude. To know the real cost of an hour of interruption for your organization, a business impact analysis remains the only reliable method.", tag="p", cls="intro")}<div class="cta-actions" style="margin-top:8px"><a class="btn primary" href="{r}what-we-do/services/assessments.html">{T("Découvrir nos évaluations", "See our assessments")}</a><a class="btn ghost" href="{r}self-assessment.html">{T("Faire l&#39;auto-évaluation", "Take the self-assessment")}</a></div></section>'
-    page(path, ("Coût des interruptions | FZ Consultation", "Cost of downtime | FZ Consultation"),
-         ("Ordres de grandeur publics du coût d'une heure d'interruption, par secteur, avec sources et incidents réels.", "Public benchmarks for the cost of an hour of downtime, by industry, with sources and real incidents."), b)
+    return b
 
 def TODO(fr, en): return f'<mark class="todo">[{T("À compléter", "To complete")} : {T(fr, en)}]</mark>' if LANG == "fr" else f'<mark class="todo">[To complete: {en}]</mark>'
 
@@ -783,47 +635,25 @@ def strip_other(fragment):
         prev = fragment; fragment = pat.sub("", fragment)
     return re.sub(r'\slang="' + LANG + '"', "", fragment)
 
-def build_home():
-    main = open(os.path.join(HERE, "home_main.html")).read()
-    main = re.sub(r'<div class="portrait"><img src="data:[^"]+"', '<div class="portrait"><img src="../assets/logo.webp"', main)
-    main = re.sub(r'\s*<section class="block" id="contact".*?</section>', "", main, flags=re.S)
-    main = main.replace('<div class="wrap">', "", 1).rstrip()
-    if main.endswith("</div>"): main = main[:-6]
-    main = strip_other(main)
-    links = {("Évaluation de la résilience", "Resilience assessment"): "what-we-do/services/assessments.html",
-             ("Plan de reprise après sinistre", "Disaster recovery planning"): "what-we-do/expertise/disaster-recovery.html",
-             ("Tests et exercices", "Testing and exercises"): "what-we-do/services/exercises.html",
-             ("Bonnes pratiques de sécurité", "Security best practices"): "what-we-do/expertise/cybersecurity.html"}
-    for pair, key in links.items():
-        t = P(pair)
-        pat = re.compile(r'(<h3><span>' + re.escape(t) + r'</span></h3>.*?</ul>)', re.S)
-        main = pat.sub(lambda m: m.group(1) + f'\n          <a class="textlink" href="{key}">{T("En savoir plus", "Learn more")} {ARROW}</a>', main, count=1)
-    main = main.replace('href="#contact"', 'href="contact.html"')
-    main = main.replace('<a class="btn ghost" href="#services">', '<a class="btn ghost" href="what-we-do/index.html">')
-    main = main.replace(f'<span>{T("Voir les services", "See services")}</span>', f'<span>{T("Ce que nous faisons", "What we do")}</span>')
-    main = main.replace('</ol>\n    </section>', f'</ol>\n      <p style="margin-top:40px"><a class="textlink" href="what-we-do/methodology.html">{T("Découvrir la méthodologie", "See the methodology")} {ARROW}</a></p>\n    </section>', 1)
-    main = main.replace('<p class="note">', f'<p style="margin-top:24px"><a class="textlink" href="what-we-do/regulations.html">{T("Réglementation par région", "Regulations by region")} {ARROW}</a></p>\n      <p class="note">', 1)
-    main = main.replace(f'<h2><span>Services</span></h2>', f'<h2><span>{T("Ce que nous faisons", "What we do")}</span></h2>', 1)
-    main = main.replace('<section class="block" id="approche">', ai_band("") + quiz_band("") + resources_band("") + '\n    <section class="block" id="approche">', 1)
-    page("index.html", ("FZ Consultation — Résilience, sécurité et reprise après sinistre", "FZ Consultation — Business resilience, security and disaster recovery"),
-         ("FZ Consultation aide les organisations à se préparer aux pannes, cyberattaques et sinistres, et à reprendre leurs activités dans les délais que l'entreprise peut se permettre.",
-          "FZ Consultation helps organizations prepare for outages, cyberattacks and disasters, and recover within the time the business can afford."), main)
-
 REG = [
  (("Union européenne", "European Union"), [
    ("DORA", ("Règlement sur la résilience opérationnelle numérique du secteur financier, en application depuis janvier 2025 : gestion des risques TIC, tests, incidents et prestataires tiers.", "Digital Operational Resilience Act for the financial sector, applicable since January 2025: ICT risk management, testing, incidents and third-party providers.")),
    ("NIS2", ("Directive sur la cybersécurité des entités essentielles et importantes, transposée dans le droit de chaque État membre.", "Directive on cybersecurity for essential and important entities, transposed into each member state's law.")),
-   ("ISO 22301 · ISO/IEC 27001", ("Normes internationales de continuité des activités et de sécurité de l'information.", "International standards for business continuity and information security."))]),
+   ("ISO 22301 · ISO/IEC 27001 · ISO/IEC 42001", ("Normes internationales de continuité des activités, de sécurité de l'information et de management des systèmes d'IA.", "International standards for business continuity, information security and AI management systems.")),
+   (("Règlement sur l'IA (modifié par le « Digital Omnibus »)", "AI Act (as amended by the Digital Omnibus)"), ("Règlement (UE) 2024/1689, modifié par le règlement (UE) 2026/1744 : obligations des systèmes à haut risque de l'annexe III à partir du 2 décembre 2027 (au lieu du 2 août 2026), de l'annexe I à partir du 2 août 2028, et des systèmes destinés aux autorités publiques au plus tard le 2 août 2030. Transparence de l'article 50(2) et nouvelles interdictions de l'article 5 : 2 décembre 2026. Voir le détail sur la page IA.", "Regulation (EU) 2024/1689, amended by Regulation (EU) 2026/1744: obligations for Annex III high-risk systems from 2 December 2027 (instead of 2 August 2026), for Annex I from 2 August 2028, and for systems intended for public authorities by 2 August 2030. Article 50(2) transparency and the new Article 5 prohibitions: 2 December 2026. Details on the AI page."))]),
  (("Royaume-Uni", "United Kingdom"), [
    ("FCA / PRA", ("Règles de résilience opérationnelle : services d'affaires importants, seuils de tolérance d'impact et scénarios de test.", "Operational resilience rules: important business services, impact tolerances and scenario testing.")),
    ("Cyber Essentials", ("Programme gouvernemental de mesures de sécurité de base, souvent exigé dans les marchés publics.", "Government-backed scheme for baseline security controls, often required in public contracts."))]),
  (("Canada", "Canada"), [
    ("BSIF / OSFI B-13", ("Ligne directrice sur la gestion des risques liés aux technologies et au cyberrisque.", "Guideline on technology and cyber risk management.")),
    ("BSIF / OSFI E-21", ("Ligne directrice sur la résilience opérationnelle et la gestion du risque opérationnel.", "Guideline on operational resilience and operational risk management.")),
+   ("BSIF / OSFI E-23", ("Ligne directrice sur la gestion du risque de modèle, y compris les modèles d'IA et d'apprentissage automatique ; en vigueur le 1er mai 2027.", "Guideline on model risk management, including AI and machine-learning models; effective May 1, 2027.")),
    (("Loi 25 (Québec)", "Law 25 (Quebec)"), ("Protection des renseignements personnels, y compris la gestion et la déclaration des incidents de confidentialité.", "Personal information protection, including handling and reporting of privacy incidents."))]),
  (("États-Unis", "United States"), [
    ("NIST CSF 2.0", ("Cadre de cybersécurité de référence : gouverner, identifier, protéger, détecter, répondre, rétablir.", "Reference cybersecurity framework: govern, identify, protect, detect, respond, recover.")),
    ("NIST SP 800-34", ("Guide de planification de la contingence des systèmes d'information.", "Contingency planning guide for information systems.")),
+   ("SR 11-7", ("Orientation de la Réserve fédérale et de l'OCC sur la gestion du risque de modèle dans les institutions financières.", "Federal Reserve and OCC guidance on model risk management at financial institutions.")),
+   ("NIST AI RMF 1.0", ("Cadre de gestion des risques de l'IA : gouverner, cartographier, mesurer et gérer.", "AI risk management framework: govern, map, measure and manage.")),
    ("SOC 2", ("Rapport d'assurance sur les contrôles, souvent demandé par les clients des entreprises SaaS.", "Assurance report on controls, often requested by customers of SaaS companies."))]),
 ]
 
@@ -885,7 +715,10 @@ if __name__ == "__main__":
     VER = h.hexdigest()[:8]
     for d in LANGS:
         shutil.rmtree(os.path.join(OUT, d), ignore_errors=True)
+    newsite.prepare_cases(sys.modules[__name__])
     for LANG in LANGS:
         build_lang()
+    newsite.write_stubs(sys.modules[__name__])
+    print('links rewritten in', newsite.rewrite_links(sys.modules[__name__]), 'files')
     root_files()
     print("built", len(PAGES), "pages x", len(LANGS), "languages ->", os.path.abspath(OUT))

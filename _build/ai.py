@@ -53,8 +53,8 @@ AI_PAGES = [
   ],
   "deliverables": [("Politique d'utilisation de l'IA", "AI acceptable use policy"), ("Registre des systèmes d'IA", "AI system register"), ("Méthode de classification et d'approbation", "Classification and approval method"), ("Feuille de route de conformité", "Compliance roadmap")],
   "faq": [(("Le règlement européen sur l'IA nous concerne-t-il ?", "Does the EU AI Act apply to us?"),
-           ("S'il vous concerne dépend de votre rôle (fournisseur ou utilisateur) et de vos usages, y compris hors de l'UE si vos systèmes y sont utilisés. Ses obligations s'appliquent progressivement ; nous vous aidons à faire l'inventaire et la classification, en lien avec vos conseillers juridiques.",
-            "Whether it applies depends on your role (provider or deployer) and your use cases, including outside the EU if your systems are used there. Its obligations phase in over time; we help with inventory and classification, alongside your legal advisers."))],
+           ("S'il vous concerne dépend de votre rôle (fournisseur ou utilisateur) et de vos usages, y compris hors de l'UE si vos systèmes y sont utilisés. Ses obligations s'appliquent progressivement, et le calendrier a changé : depuis le « Digital Omnibus » (règlement (UE) 2026/1744), les obligations des systèmes à haut risque de l'annexe III s'appliquent à partir du 2 décembre 2027 et celles de l'annexe I à partir du 2 août 2028, au lieu du 2 août 2026. Nous vous aidons à faire l'inventaire et la classification, en lien avec vos conseillers juridiques.",
+            "Whether it applies depends on your role (provider or deployer) and your use cases, including outside the EU if your systems are used there. Its obligations phase in over time, and the calendar has changed: since the Digital Omnibus (Regulation (EU) 2026/1744), high-risk obligations for Annex III systems apply from 2 December 2027 and for Annex I systems from 2 August 2028, instead of 2 August 2026. We help with inventory and classification, alongside your legal advisers."))],
   "related": ["ai/auditor.html", "ai/citadel.html", "ai/strategy-adoption.html"],
  },
 ]

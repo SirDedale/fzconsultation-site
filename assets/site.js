@@ -45,3 +45,11 @@
     chips.forEach(function(c){c.addEventListener("click",function(){apply(c.getAttribute("data-filter"))})});
   }
 })();
+(function(){
+  var f=document.getElementById("contact-form");
+  if(!f||!f.elements.topic)return;
+  var q;try{q=new URLSearchParams(location.search)}catch(e){return}
+  var t=q.get("topic"),m=q.get("message");
+  if(t){f.elements.topic.querySelectorAll("option").forEach(function(o){if(o.getAttribute("data-key")===t)o.selected=true})}
+  if(m&&f.elements.message&&!f.elements.message.value)f.elements.message.value=m.slice(0,800);
+})();

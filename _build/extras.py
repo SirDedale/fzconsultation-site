@@ -4,8 +4,10 @@ import json, os, re, unicodedata, html
 from datetime import datetime
 from email.utils import format_datetime
 from tools import TEMPLATES, CALC, GLOSSARY, TEMPLATE_DISCLAIMER, RANSOM, RTORPO, AIPOL, AISCORE
-from insights import INSIGHTS
 from auditor import AUDITOR
+from insights import INSIGHTS
+import newsite
+from notes import SERIES, SERIES_BLURB
 
 MONTHS = {"fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
           "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
@@ -35,9 +37,8 @@ def art_items():
     return [{"path": art_path(a), "short": a["title"], "summary": a["summary"]} for a in INSIGHTS]
 
 def build_extras(B):
-    build_resources_hub(B); build_calculator(B); build_templates(B); build_glossary(B)
-    build_insights(B); build_search(B); build_security(B); build_accessibility(B); build_governance(B)
-    build_auditor(B)
+    newsite.build_resources_hub(B); build_calculator(B); build_templates(B); build_glossary(B)
+    build_auditor(B); build_insights(B); build_search(B); build_security(B); build_accessibility(B); build_governance(B)
 
 def hero(B, path, trail_extra, eyebrow, title, lede):
     r = B.rprefix(path)
@@ -59,7 +60,7 @@ def build_resources_hub(B):
       {"path": "ai/vision-questionnaire.html", "short": B.OTHER["ai/vision-questionnaire.html"], "summary": ("Treize questions pour aligner votre direction sur votre vision de l'IA.", "Thirteen questions to align your leadership on your AI vision.")},
     ]
     b += f'<section class="block"><h2>{T("Outils interactifs", "Interactive tools")}</h2>{B.link_rows(r, tools)}</section>'
-    b += f'<section class="block"><h2>{T("Modèles à télécharger", "Downloadable templates")}</h2>{T("Quatre documents Word modifiables, en français et en anglais, à adapter à votre organisation.", "Four editable Word documents, in French and English, to adapt to your organization.", tag="p", cls="intro")}{B.link_rows(r, tpl_items())}</section>'
+    b += f'<section class="block"><h2>{T("Modèles à télécharger", "Downloadable templates")}</h2>{T("Trois documents Word modifiables, en français et en anglais, à adapter à votre organisation.", "Three editable Word documents, in French and English, to adapt to your organization.", tag="p", cls="intro")}{B.link_rows(r, tpl_items())}</section>'
     b += f'<section class="block"><h2>{T("À lire", "Reading")}</h2>{B.link_rows(r, art_items()[:3])}<p style="margin-top:20px"><a class="textlink" href="{r}insights/index.html">{T("Tous les articles", "All articles")} {ARROW}</a> &nbsp; <a class="textlink" href="{r}resources/glossary.html">{P(B.OTHER["resources/glossary.html"])} {ARROW}</a></p></section>'
     b += f'<section class="block"><h2>{T("Apprendre des incidents", "Learning from incidents")}</h2>{B.case_cards(r, B.CASES[:3])}<p style="margin-top:20px"><a class="textlink" href="{r}case-studies/index.html">{T("Toutes les études de cas", "All case studies")} {ARROW}</a></p></section>'
     B.page(path, (f'Ressources | FZ Consultation', 'Resources | FZ Consultation'), ("Outils gratuits, modèles à télécharger, glossaire et articles sur la résilience d'affaires.", "Free tools, downloadable templates, glossary and articles on business resilience."), b)
@@ -78,7 +79,8 @@ def build_calculator(B):
         hp = f'<span class="hint" id="h-{key}">{h}</span>' if h else ""
         fields += f'<label for="f-{key}">{P(label)}{hp}<input id="f-{key}" name="{key}" type="number" inputmode="decimal" min="0" step="any" value="{default}"{hid}></label>'
     cur = f'<label for="f-cur">{ui["currency"]}<select id="f-cur" name="cur"><option value="CAD">CAD $</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option></select></label>'
-    data = {"ui": ui, "lang": B.LANG, "defaultCur": "CAD" if B.LANG == "fr" else "USD"}
+    data = {"ui": ui, "lang": B.LANG, "defaultCur": "CAD" if B.LANG == "fr" else "USD", "contact": f"{r}contact.html",
+            "send": T("Envoyer cette estimation", "Send us this estimate"), "send_intro": T("Estimation du coût d'une interruption", "Downtime cost estimate")}
     b += f'''<section class="block calc-wrap">
       <form id="calc-form" class="cform calc" novalidate>
         <h2>{T("Vos hypothèses", "Your assumptions")}</h2>
@@ -93,7 +95,7 @@ def build_calculator(B):
       <script type="application/json" id="calc-data">{jsondata(data)}</script>
     </section>
     <section class="block"><p class="note">{T("Estimation indicative, fondée uniquement sur ce que vous saisissez : elle ne tient pas compte de l'atteinte à la réputation, de la perte de clients à long terme ni des conséquences réglementaires. Vos chiffres ne quittent pas votre navigateur. Pour une valeur fiable, une analyse d'impact sur les activités reste la bonne méthode.", "Indicative estimate based only on what you enter: it does not account for reputational damage, long-term customer loss or regulatory consequences. Your numbers never leave your browser. For a reliable value, a business impact analysis remains the right method.")}</p>
-    <p><a class="textlink" href="{r}resources/cost-of-downtime.html">{T("Comparer avec les repères publics par secteur", "Compare with public benchmarks by industry")} {B.ARROW}</a></p></section>'''
+    <p><a class="textlink" href="#benchmarks">{T("Comparer avec les repères publics par secteur", "Compare with public benchmarks by industry")} {B.ARROW}</a></p></section>{B.downtime_sections(r)}'''
     js = f'<script src="{r}../assets/calc.js?v={B.VER}"></script>'
     B.page(path, ("Calculateur du coût d'une interruption | FZ Consultation", "Downtime cost calculator | FZ Consultation"),
            ("Estimez gratuitement le coût d'une interruption d'activité à partir de vos propres chiffres.", "Estimate the cost of a business interruption from your own numbers, for free."), b, extra_js=js)
@@ -102,6 +104,7 @@ def build_calculator(B):
 def build_templates(B):
     T, P, E, ARROW = B.T, B.P, B.E, B.ARROW
     for t in TEMPLATES:
+        if t is not RANSOM: continue      # the other templates live on the Resources page
         path = tpl_path(t); r = B.rprefix(path)
         i = B.I()
         b = B.page_hero(r, [RES, (path, t["short"])], ("Modèle à télécharger", "Downloadable template"), t["title"], t["lede"])
@@ -118,7 +121,7 @@ def build_templates(B):
             ex = "".join(f"<td>{P(c)}</td>" for c in t["example"])
             blank = "<tr>" + "<td></td>" * len(t["columns"]) + "</tr>"
             b += f'''<section class="block"><h2>{T("Le tableau", "The worksheet")}</h2>
-              <div class="tscroll" tabindex="0" role="region" aria-label="{T("Tableau, défilement horizontal possible", "Worksheet, scrolls horizontally")}">
+              <div class="tscroll" tabindex="0" role="region" aria-label="{T("Tableau RTO / RPO, défilement horizontal possible", "RTO / RPO worksheet, scrolls horizontally")}">
               <table class="wtable"><caption>{T("Première ligne : exemple fictif. Le fichier Word contient le tableau vierge.", "First row: fictional example. The Word file contains the blank worksheet.")}</caption>
               <thead><tr>{head}</tr></thead><tbody><tr class="ex">{ex}</tr>{blank*2}</tbody></table></div></section>'''
             b += f'<section class="block"><h2>{T("Conseils", "Tips")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in t["tips"]) + "</div></section>"
@@ -159,6 +162,9 @@ def render_blocks(B, blocks):
         if kind == "h": out += f"<h2>{B.P(c)}</h2>"
         elif kind == "p": out += f"<p>{B.P(c)}</p>"
         elif kind == "ul": out += "<ul>" + "".join(f"<li>{B.P(x)}</li>" for x in c) + "</ul>"
+        elif kind == "facts": out += '<dl class="note-facts">' + "".join(f"<div><dt>{B.P(k)}</dt><dd>{B.P(v)}</dd></div>" for k, v in c) + "</dl>"
+        elif kind == "check": out += '<ol class="mchecks">' + "".join(f"<li><span>{B.P(x)}</span></li>" for x in c) + "</ol>"
+        elif kind == "src": out += f'<h2>Sources</h2><ul class="sources">' + "".join(f'<li><a href="{B.E(u)}" target="_blank" rel="noopener noreferrer"{B.SRCLANG()}>{B.E(t)}</a></li>' for t, u in c) + "</ul>"
     return out
 
 def build_insights(B):
@@ -168,20 +174,25 @@ def build_insights(B):
     path = "insights/index.html"; r = B.rprefix(path)
     b = B.page_hero(r, [RES, (path, B.OTHER[path])], ("Insights", "Insights"), ("Articles et points de vue", "Articles and perspectives"),
         ("Des textes courts et pratiques sur la reprise, la sécurité et l'IA, sans jargon inutile.", "Short, practical pieces on recovery, security and AI, without needless jargon."))
+    notes = [a for a in arts if a.get("series")]
+    if notes:
+        n0 = notes[0]
+        b += f'<section class="block"><div class="series"><div><p class="eyebrow">{P(SERIES)} · {T("chaque mois", "every month")}</p><h2>{P(n0["title"])}</h2><p>{P(SERIES_BLURB)}</p></div><a class="btn primary" href="{r}{art_path(n0)}">{T("Lire la dernière note", "Read the latest note")}</a></div></section>'
     b += '<section class="block"><ul class="rows">' + "".join(
-        f'<li><a href="{r}{art_path(a)}"><span class="rt">{P(a["title"])}<span class="meta">{fmt_date(a["date"], lang)} · {a["mins"]} min</span></span><span class="rs">{P(a["summary"])}</span>{ARROW}</a></li>' for a in arts) + "</ul>"
+        f'<li><a href="{r}{art_path(a)}"><span class="rt">{P(a["title"])}<span class="meta">{(P(SERIES) + " · ") if a.get("series") else ""}{fmt_date(a["date"], lang)} · {a["mins"]} min</span></span><span class="rs">{P(a["summary"])}</span>{ARROW}</a></li>' for a in arts) + "</ul>"
     b += f'<p style="margin-top:24px"><a class="textlink" href="{r}insights/feed.xml">{T("S&#39;abonner par flux RSS", "Subscribe via RSS")} {ARROW}</a></p></section>'
     B.page(path, ("Insights | FZ Consultation", "Insights | FZ Consultation"), ("Articles pratiques sur la résilience, la reprise après sinistre, la sécurité et l'IA.", "Practical articles on resilience, disaster recovery, security and AI."), b)
     for a in arts:
         path = art_path(a); r = B.rprefix(path)
+        full = ((SERIES[0] + " — " + a["title"][0], SERIES[1] + " — " + a["title"][1]) if a.get("series") else a["title"])
         b = B.page_hero(r, [RES, ("insights/index.html", B.OTHER["insights/index.html"]), (path, a["title"])],
-                        (f'Insights · {fmt_date(a["date"], "fr")} · {a["mins"]} min', f'Insights · {fmt_date(a["date"], "en")} · {a["mins"]} min'), a["title"], a["summary"])
+                        ((SERIES[0] if a.get("series") else "Insights") + f' · {fmt_date(a["date"], "fr")} · {a["mins"]} min', (SERIES[1] if a.get("series") else "Insights") + f' · {fmt_date(a["date"], "en")} · {a["mins"]} min'), full, a["summary"])
         b += f'<section class="block prose"><div class="prose-in">{render_blocks(B, a["body"])}</div></section>'
         b += f'<section class="block"><h2>{T("Pour aller plus loin", "Go further")}</h2>{B.link_rows(r, [B.item_of(k) for k in a["related"]])}</section>'
-        ld = {"@context": "https://schema.org", "@type": "Article", "headline": P(a["title"]), "description": P(a["summary"]), "datePublished": a["date"], "dateModified": a["date"],
+        ld = {"@context": "https://schema.org", "@type": "Article", "headline": P(full), "description": P(a["summary"]), "datePublished": a["date"], "dateModified": a["date"],
               "inLanguage": lang, "author": {"@type": "Organization", "name": "FZ Consultation", "url": B.SITE}, "publisher": {"@type": "Organization", "name": "FZ Consultation", "url": B.SITE},
               "mainEntityOfPage": B.url_of(lang, path)}
-        B.page(path, (f'{a["title"][0]} | FZ Consultation', f'{a["title"][1]} | FZ Consultation'), a["summary"], b, ld=[ld])
+        B.page(path, (f'{full[0]} | FZ Consultation', f'{full[1]} | FZ Consultation'), a["summary"], b, ld=[ld])
     # RSS
     items = ""
     for a in arts:
@@ -292,35 +303,33 @@ def build_governance(B):
      (("Sources et preuves", "Sources and evidence"), T("Les études de cas et les chiffres de coût d'interruption reposent uniquement sur des sources publiques, citées en bas de chaque page. Nous distinguons les faits rapportés des estimations, et nous indiquons lorsqu'un chiffre est une estimation d'analyste ou d'enquête. Les chiffres varient selon la méthode : ce sont des ordres de grandeur.", "Case studies and downtime-cost figures rely solely on public sources, cited at the bottom of each page. We distinguish reported facts from estimates, and we say when a figure is an analyst or survey estimate. Figures vary with method: they are orders of magnitude.")),
      (("Révision des contenus", "Content review"), T("Nous visons une révision de chaque page au moins une fois par an, et plus tôt lorsqu'une réglementation ou un fait cité change. Lorsqu'une page a fait l'objet d'une révision de ses sources, la date de révision est affichée sous son titre.", "We aim to review each page at least once a year, and sooner when a regulation or a cited fact changes. When a page has had its sources reviewed, the review date is shown under its title.")),
      (("Politique de correction", "Corrections policy"), T(f'Si vous relevez une erreur, écrivez à <a href="mailto:{EMAIL}">{EMAIL}</a>. Nous vérifions auprès de la source, corrigeons rapidement, et consignons toute correction substantielle dans le journal ci-dessous.', f'If you spot an error, email <a href="mailto:{EMAIL}">{EMAIL}</a>. We check against the source, fix it promptly, and record any substantive correction in the log below.')),
-     (("Journal des corrections", "Corrections log"), "<ul><li><strong>" + fmt_date("2026-10-26", B.LANG) + ".</strong> " + T("Page « Coût des interruptions » : chiffres d'Amazon Prime Day 2018, de Southwest Airlines et du secteur manufacturier revérifiés auprès des sources et corrigés ; sources remplacées par des sources primaires.", "“Cost of downtime” page: figures for Amazon Prime Day 2018, Southwest Airlines and the manufacturing sector re-checked against sources and corrected; sources replaced with primary ones.") + "</li></ul>"),
+     (("Journal des corrections", "Corrections log"), "<ul><li><strong>" + fmt_date("2026-10-29", B.LANG) + ".</strong> " + T("Règlement européen sur l'IA : les pages Réglementation, IA et FZ AI Auditor décrivaient un calendrier progressif sans dates et ne tenaient pas compte du « Digital Omnibus » (règlement (UE) 2026/1744). Elles indiquent maintenant le 2 décembre 2027 (annexe III), le 2 août 2028 (annexe I), le 2 août 2030 (autorités publiques) et le 2 décembre 2026 (article 50(2) et nouvelles interdictions), d'après le résumé d'Orrick du 29 juillet 2026.", "EU AI Act: the Regulations, AI and FZ AI Auditor pages described a phased calendar without dates and did not reflect the Digital Omnibus (Regulation (EU) 2026/1744). They now state 2 December 2027 (Annex III), 2 August 2028 (Annex I), 2 August 2030 (public authorities) and 2 December 2026 (Article 50(2) and the new prohibitions), based on Orrick's 29 July 2026 summary.") + "</li><li><strong>" + fmt_date("2026-10-29", B.LANG) + ".</strong> " + T("Refonte du site : les pages Expertise et Services sont regroupées dans « Ce que nous faisons », cinq pages sectorielles et les pages IA, modèles et coût des interruptions sont fusionnées dans d'autres pages. Les anciennes adresses redirigent vers le nouvel emplacement. Les exemples de mandats fictifs ont été retirés des pages sectorielles.", "Site restructure: the Expertise and Services pages are merged into “What we do”, five sector pages and the AI, template and cost-of-downtime pages are merged into other pages. Old addresses redirect to the new location. The fictional example engagements were removed from the sector pages.") + "</li><li><strong>" + fmt_date("2026-10-26", B.LANG) + ".</strong> " + T("Page « Coût des interruptions » : chiffres d'Amazon Prime Day 2018, de Southwest Airlines et du secteur manufacturier revérifiés auprès des sources et corrigés ; sources remplacées par des sources primaires.", "“Cost of downtime” page: figures for Amazon Prime Day 2018, Southwest Airlines and the manufacturing sector re-checked against sources and corrected; sources replaced with primary ones.") + "</li></ul>"),
      (("Protection des renseignements", "Privacy practices"), T(f'Nous tenons un registre interne des traitements de renseignements personnels et supprimons les échanges avec les prospects au plus tard trois ans après le dernier contact. Voir la <a href="{r}privacy.html">politique de confidentialité</a>.', f'We keep an internal register of personal-information processing and delete exchanges with prospects no later than three years after the last contact. See the <a href="{r}privacy.html">privacy policy</a>.')),
     ]
     b += '<section class="block legal">' + "".join(f"<h2>{P(h)}</h2>{body if body.startswith('<') else '<p>'+body+'</p>'}" for h, body in S) + "</section>"
     B.page(path, ("Gouvernance et corrections | FZ Consultation", "Governance and corrections | FZ Consultation"), ("Sources, révision des contenus et politique de correction de FZ Consultation.", "FZ Consultation's sources, content review and corrections policy."), b)
 
-# ------------------------------------------------------------------ FZ AI Auditor
+# ------------------------------------------------------------------ FZ AI Auditor (product page)
 def build_auditor(B):
-    T, P = B.T, B.P
-    A = AUDITOR
-    path = A["path"]
-    r = B.rprefix(path)
-    hub = ("ai/index.html", B.OTHER["ai/index.html"])
-    b = B.page_hero(r, [hub, (path, A["short"])], A["eyebrow"], A["title"], A["lede"])
-    b += f'<section class="block"><div class="cta-actions" style="margin-top:0"><a class="btn primary" href="#contact">{T("Parler de votre périmètre", "Discuss your scope")}</a><a class="btn ghost" href="{r}resources/ai-agent-audit-scorecard.html">{T("Télécharger le tableau de bord", "Download the scorecard")}</a></div></section>'
+    T, P, E, ARROW = B.T, B.P, B.E, B.ARROW
+    A = AUDITOR; path = A["path"]; r = B.rprefix(path)
+    AIHUB = ("ai/index.html", B.OTHER["ai/index.html"])
+    b = B.page_hero(r, [AIHUB, (path, A["short"])], A["eyebrow"], A["title"], A["lede"])
+    b += f'<section class="block"><div class="cta-actions" style="margin-top:0"><a class="btn primary" href="{r}contact.html?topic=auditor">{T("Parler de votre périmètre", "Discuss your scope")}</a><a class="btn ghost" href="{r}resources/ai-agent-audit-scorecard.html">{T("Télécharger le tableau de bord", "Download the scorecard")}</a></div></section>'
     b += f'<section class="block split"><div><h2>{T("Le constat", "The problem")}</h2></div>{P(A["overview"], tag="p", cls="big")}</section>'
-    b += B.hub_diagram(("Audit", "Audit"), [(name, "") for name, _ in A["areas"]])
-    b += f'<section class="block"><h2>{T("Ce que couvre l&#39;audit", "What the audit covers")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(heading)}</h3>{P(desc, tag="p")}</div>' for heading, desc in A["areas"]) + "</div></section>"
-    b += f'<section class="block"><h2>{T("Pourquoi c&#39;est important", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(heading)}</h3>{P(desc, tag="p")}</div>' for heading, desc in A["why"]) + "</div></section>"
-    timeline = [(("Inventaire", "Inventory"), ("1 à 2 sem.", "1-2 wks"), ("Autorisé contre observé", "Authorized vs observed")),
-                (("Valeur", "Value"), ("2 à 3 sem.", "2-3 wks"), ("Coût réel contre valeur", "Real cost vs value")),
-                (("Rayon d'impact", "Blast radius"), ("2 à 3 sem.", "2-3 wks"), ("Gravité et détection", "Severity and detection")),
-                (("Tableau de bord", "Scorecard"), ("1 sem.", "1 wk"), ("Priorités selon l'exposition", "Ranked by exposure")),
-                (("Cadence", "Cadence"), ("Trimestriel", "Quarterly"), ("À chaque changement", "On every change"))]
-    b += f'<section class="block"><h2>{T("Notre intervention", "Our engagement")}</h2>{T("Les durées sont indicatives ; elles dépendent du nombre d&#39;agents et de la disponibilité des preuves.", "Durations are indicative; they depend on the number of agents and the availability of evidence.", tag="p", cls="intro")}{B.timeline_diagram(timeline)}'
-    b += '<ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(name)}</h3><p class="outs"><strong>{P(duration)}</strong></p>{P(desc, tag="p")}</div></li>' for i, (name, duration, desc, _short) in enumerate(A["phases"], 1)) + "</ol></section>"
-    b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">' + "".join(f"<li>{P(item)}</li>" for item in A["deliverables"]) + "</ul></section>"
-    b += f'<section class="block split"><div><h2>{T("Référentiels", "Standards we align to")}</h2></div><ul class="regtags">' + "".join(f"<li>{P(item) if isinstance(item, tuple) else item}</li>" for item in A["standards"]) + "</ul></section>"
-    b += f'<section class="block split"><div><h2>{T("Pourquoi FZ Consultation", "Why FZ Consultation")}</h2></div>{T("Nous appliquons la même démarche d&#39;évaluation, de test et de mesure à la continuité des activités, à la reprise après sinistre et à la cybersécurité. Nous auditons les agents IA comme tout système critique et remettons la méthode à votre équipe.", "We apply the same discipline of assessment, testing and measurement to business continuity, disaster recovery and cybersecurity. We audit AI agents like any critical system and hand the method to your team.", tag="p", cls="big")}</section>'
+    b += B.hub_diagram(("Audit", "Audit"), [(n, "") for n, d in A["areas"]])
+    b += f'<section class="block"><h2>{T("Ce que couvre l&#39;audit", "What the audit covers")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in A["areas"]) + "</div></section>"
+    b += f'<section class="block"><h2>{T("Pourquoi c&#39;est important", "Why it matters")}</h2><div class="cover grid2">' + "".join(f'<div class="citem"><h3>{P(h)}</h3>{P(d, tag="p")}</div>' for h, d in A["why"]) + "</div></section>"
+    diag = [(("Inventaire", "Inventory"), ("1 à 2 sem.", "1-2 wks"), ("Autorisé contre observé", "Authorized vs observed")),
+            (("Valeur", "Value"), ("2 à 3 sem.", "2-3 wks"), ("Coût réel contre valeur", "Real cost vs value")),
+            (("Rayon d'impact", "Blast radius"), ("2 à 3 sem.", "2-3 wks"), ("Gravité et détection", "Severity and detection")),
+            (("Tableau de bord", "Scorecard"), ("1 sem.", "1 wk"), ("Priorités selon l'exposition", "Ranked by exposure")),
+            (("Cadence", "Cadence"), ("Trimestriel", "Quarterly"), ("À chaque changement", "On every change"))]
+    b += f'<section class="block"><h2>{T("Notre intervention", "Our engagement")}</h2>{T("Les durées sont indicatives ; elles dépendent du nombre d&#39;agents dans le périmètre et de la disponibilité des preuves.", "Durations are indicative; they depend on the number of agents in scope and on the availability of evidence.", tag="p", cls="intro")}{B.timeline_diagram(diag)}'
+    b += '<ol class="phases">' + "".join(f'<li><div class="pn">{i:02d}</div><div><h3>{P(n)}</h3><p class="outs"><strong>{P(dur)}</strong></p>{P(d, tag="p")}</div></li>' for i, (n, dur, d, _s) in enumerate(A["phases"], 1)) + "</ol></section>"
+    b += f'<section class="block split"><div><h2>{T("Ce que vous recevez", "What you get")}</h2></div><ul class="checks">' + "".join(f"<li>{P(d)}</li>" for d in A["deliverables"]) + "</ul></section>"
+    b += f'<section class="block split"><div><h2>{T("Référentiels", "Standards we align to")}</h2></div><ul class="regtags">' + "".join(f"<li>{P(x) if isinstance(x, tuple) else x}</li>" for x in A["standards"]) + f'</ul></section>'
+    b += f'<section class="block split"><div><h2>{T("Pourquoi FZ Consultation", "Why FZ Consultation")}</h2></div>{T("Nous appliquons la même démarche (évaluer, tester, mesurer plutôt que croire la conception sur parole) à la continuité des activités, à la reprise après sinistre et à la cybersécurité, pour des services financiers, la santé, l&#39;énergie et le secteur public, depuis 2012. Les agents IA deviennent des systèmes critiques : ils ont des accès, prennent des décisions et tombent en panne. Nous les auditons comme tout ce qui peut mettre l&#39;entreprise à l&#39;arrêt, et nous remettons le tableau de bord et la méthode à votre équipe plutôt que de créer une dépendance envers nous.", "We apply the same discipline (assess, test, measure, rather than take the design on faith) to business continuity, disaster recovery and cybersecurity for financial services, healthcare, energy and the public sector, since 2012. AI agents are becoming critical systems: they have access, they make decisions, and they fail. We audit them the way we audit anything else that can take the business down, and we hand the scorecard and the method to your own team rather than building a dependency on us.", tag="p", cls="big")}</section>'
     b += B.faq(A["faq"])
-    b += f'<section class="block"><h2>{T("À voir aussi", "Related")}</h2>{B.link_rows(r, [B.item_of(key) for key in A["related"]])}</section>'
+    b += f'<section class="block"><h2>{T("À voir aussi", "Related")}</h2>{B.link_rows(r, [B.item_of(k) for k in A["related"]])}</section>'
     B.page(path, (f'{A["title"][0]} | FZ Consultation', f'{A["title"][1]} | FZ Consultation'), A["summary"], b)

@@ -87,23 +87,23 @@ def checklist(lang):
         d.add_paragraph(f"{name} — {url}", style="List Bullet")
     return d
 
-def worksheet(lang, template=RTORPO, widths=None):
+def worksheet(lang, T=RTORPO, widths=None):
     i = 0 if lang == "fr" else 1
     d = base(landscape=True, lang=lang)
-    intro(d, template["title"][i], template["lede"][i], lang)
-    d.add_paragraph(template["how"][i])
-    defs_title = template.get("defs_title", ("Définitions", "Definitions"))[i]
-    d.add_heading(defs_title, level=1)
-    for term, desc in template["defs"]:
+    intro(d, T["title"][i], T["lede"][i], lang)
+    d.add_paragraph(T["how"][i])
+    dt = T.get("defs_title", ("Définitions", "Definitions"))
+    d.add_heading(dt[i], level=1)
+    for term, desc in T["defs"]:
         p = d.add_paragraph(); r = p.add_run(term[i] + " — "); r.bold = True; p.add_run(desc[i])
     d.add_heading("Tableau" if lang == "fr" else "Worksheet", level=1)
-    cols = template["columns"]
+    cols = T["columns"]
     t = d.add_table(rows=1, cols=len(cols)); t.style = "Table Grid"
     for c, col in zip(t.rows[0].cells, cols):
         c.text = col[i]; shade(c, "E6EEF8")
         for r in c.paragraphs[0].runs: r.bold = True; r.font.size = Pt(8.5)
     ex = t.add_row().cells
-    for c, v in zip(ex, template["example"]):
+    for c, v in zip(ex, T["example"]):
         c.text = v[i]
         for r in c.paragraphs[0].runs: r.font.size = Pt(8.5); r.italic = True; r.font.color.rgb = MUTED
     for _ in range(12): t.add_row()
@@ -111,7 +111,7 @@ def worksheet(lang, template=RTORPO, widths=None):
     cap = d.add_paragraph(("La première ligne est un exemple fictif." if lang == "fr" else "The first row is a fictional example."))
     cap.runs[0].font.size = Pt(8.5); cap.runs[0].italic = True
     d.add_heading("Conseils" if lang == "fr" else "Tips", level=1)
-    for h, tx in template["tips"]:
+    for h, tx in T["tips"]:
         p = d.add_paragraph(style="List Bullet"); r = p.add_run(h[i] + ". "); r.bold = True; p.add_run(tx[i])
     return d
 

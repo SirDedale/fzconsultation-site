@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AWS us-east-1: one empty DNS record, a day of cascading failures | FZ Consultation</title>
+<meta name="description" content="Worldwide, October 2025. A race condition in DynamoDB&#x27;s DNS automation leaves a region without an address, and many services fall with it.">
+
+<link rel="canonical" href="https://fzconsultation.xyz/en/case-studies/aws-us-east-1-2025.html">
+<link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/case-studies/aws-us-east-1-2025.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/case-studies/aws-us-east-1-2025.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FZ Consultation">
+<meta property="og:title" content="AWS us-east-1: one empty DNS record, a day of cascading failures | FZ Consultation">
+<meta property="og:description" content="Worldwide, October 2025. A race condition in DynamoDB&#x27;s DNS automation leaves a region without an address, and many services fall with it.">
+<meta property="og:url" content="https://fzconsultation.xyz/en/case-studies/aws-us-east-1-2025.html">
+<meta property="og:image" content="https://fzconsultation.xyz/assets/og-en.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/mark.webp" type="image/webp">
+<link rel="preload" href="../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../insights/feed.xml">
+<script src="../../assets/theme.js?v=1391954f"></script>
+<link rel="stylesheet" href="../../assets/site.css?v=1391954f">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Case studies", "item": "https://fzconsultation.xyz/en/case-studies/"}, {"@type": "ListItem", "position": 3, "name": "Cloud", "item": "https://fzconsultation.xyz/en/case-studies/aws-us-east-1-2025.html"}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html" aria-label="FZ Consultation">
+      <img class="mark" src="../../assets/mark.webp" alt="" width="40" height="29">
+      <span class="word">Consultation</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+      <span class="bars" aria-hidden="true"></span><span class="mt-label">Menu</span>
+    </button>
+    <nav id="primary-nav" class="primary" aria-label="Main navigation">
+      <div class="has-mega">
+        <button class="mega-toggle" type="button" aria-expanded="false" aria-controls="mega">What we do<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="mega" id="mega">
+          <div class="wrap mega-grid">
+            <div class="mcol"><a class="mhead" href="../what-we-do/index.html">What we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/index.html#know">Know</a></li><li><a href="../what-we-do/index.html#prepare">Prepare</a></li><li><a href="../what-we-do/index.html#prove">Prove</a></li><li><a href="../what-we-do/index.html#stay-ready">Stay ready</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="../what-we-do/industries.html">Industries <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries.html">All sectors</a></li></ul></div>
+            <div class="mcol"><span class="mhead plain">Approach</span><ul><li><a href="../what-we-do/methodology.html">Methodology</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li></ul><a class="mall" href="../what-we-do/index.html">View everything we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+      </div>
+      <a href="../ai/index.html">AI</a>
+      <a href="../case-studies/index.html">Case studies</a>
+      <a href="../resources/index.html">Resources</a>
+      <a href="../contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="../search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
+    </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
+    <nav class="lang" aria-label="Langue / Language">
+      <a href="../../fr/case-studies/aws-us-east-1-2025.html" hreflang="fr" data-lang="fr">FR</a>
+      <a href="../case-studies/aws-us-east-1-2025.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
+    </nav>
+  </div>
+</header>
+<main id="main" data-pagefind-body>
+  <div class="wrap">
+<section class="phero">
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../case-studies/index.html">Case studies</a></li><li aria-current="page">Cloud</li></ol></nav>
+      <p class="eyebrow">Case study · Cloud</p>
+      <h1>AWS us-east-1: one empty DNS record, a day of cascading failures</h1>
+      <p class="lede">Worldwide, October 2025. A race condition in DynamoDB's DNS automation leaves a region without an address, and many services fall with it.</p>
+    </section><section class="block" style="border-top:0;padding-top:0"><p class="takeaway"><span>In one sentence</span>One empty DNS record in one region: fourteen and a half hours of disruption. The culprit was not a server, it was automation.</p></section><section class="facts"><dl><div><dt>Sector</dt><dd>Cloud infrastructure, all sectors</dd></div><div><dt>Region</dt><dd>us-east-1 (N. Virginia)</dd></div><div><dt>Date</dt><dd>19–20 October 2025</dd></div><div><dt>Event window</dt><dd>About 14.5 hours, from 11:48 PM to 2:20 PM PDT</dd></div><div><dt>Cause according to AWS</dt><dd>A latent race condition in DynamoDB's DNS management</dd></div></dl><p class="disclaimer">Analysis based solely on public information. FZ Consultation was not involved in this incident and has no affiliation with the organizations named.</p></section><section class="block split"><div><h2>What happened</h2></div><ol class="timeline-list"><li><span class="when">19 Oct, 11:48 PM PDT</span><p>DynamoDB API calls start failing in us-east-1: customers and AWS services cannot open new connections.</p></li><li><span class="when">20 Oct, 12:38 AM</span><p>AWS identifies DynamoDB's DNS state as the source.</p></li><li><span class="when">2:25 – 2:40 AM</span><p>All DNS information is restored; cached records expire and customers reconnect. DynamoDB is back after about 2 hours 52 minutes.</p></li><li><span class="when">2:25 – 10:36 AM</span><p>EC2 instance launches keep failing for hours after DynamoDB has recovered.</p></li><li><span class="when">5:30 AM – 2:09 PM</span><p>Network Load Balancers return connection errors because of health-check failures.</p></li><li><span class="when">20 Oct, 2:20 PM</span><p>End of the event according to AWS. Some Redshift clusters stay impaired until 21 October.</p></li></ol></section><section class="block split"><div><h2>What went wrong</h2><p class="intro">According to the public sources listed below.</p></div><div class="cover"><div class="citem"><h3>Automation that undid itself</h3><p>According to AWS, two DNS Enactors collided: a delayed one applied an old plan after a newer one, and the cleanup then deleted the old plan and removed every address of the regional endpoint. The system was left inconsistent and needed manual intervention.</p></div><div class="citem"><h3>The fix was only half of the recovery</h3><p>Once DNS was restored at 2:25 AM, EC2 launches kept failing until 10:36 AM and NLB errors lasted until 2:09 PM. Recovering an upstream service does not recover its dependents.</p></div><div class="citem"><h3>The tools to respond were inside the blast radius</h3><p>IAM user sign-in to the AWS console failed for over an hour and a half, and access to Support Center cases was blocked for almost three hours.</p></div></div></section><section class="block"><h2>Lessons for your organization</h2><ol class="lessons"><li><span class="ln">1</span><div><h3>Find your hidden regional dependency</h3><p>Many “global” services quietly depend on one region. Map them before the outage.</p><a class="textlink" href="../what-we-do/index.html#know">Know: measure what stopping would cost <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></li><li><span class="ln">2</span><div><h3>Test the provider's failure, not just yours</h3><p>Simulate losing a region and time the real recovery, cascading dependencies included.</p><a class="textlink" href="../what-we-do/index.html#prove">Prove: rehearse before the real day <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></li><li><span class="ln">3</span><div><h3>Keep an out-of-band channel</h3><p>Plan how to reach teams, customers and your provider when your usual tools are unreachable.</p><a class="textlink" href="../resources/ransomware-checklist.html">Ransomware checklist <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></li></ol></section><section class="block"><div class="monday"><h2>Check on Monday morning</h2>
+          <p class="intro">Three questions to put to your own organization this week. If you cannot answer one of them in five minutes, that is your first task.</p>
+          <ol class="mchecks"><li><span>Which of your services depend on a single cloud region, including for identity, queues or configuration?</span></li><li><span>If your provider's console and support were unreachable, how would you reach your teams and customers?</span></li><li><span>Have you ever simulated losing a region, not just a server, and timed the real recovery?</span></li></ol>
+          <a class="btn primary" href="../resources/downtime-calculator.html">Put a number on a day of cloud outage</a></div></section><section class="block"><h2>Sources</h2><ul class="sources"><li><a href="https://aws.amazon.com/message/101925" target="_blank" rel="noopener noreferrer">AWS: Summary of the Amazon DynamoDB Service Disruption in the Northern Virginia (US-EAST-1) Region</a></li></ul></section><section class="block"><h2>More case studies</h2><ul class="rows"><li><a href="../case-studies/jaguar-land-rover-2025.html"><span class="rt">Jaguar Land Rover: weeks of idle factories and a state-backed loan</span><span class="rs">UK, 2025. A cyberattack stops production for weeks and reaches over 5,000 organisations across the supply chain.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../case-studies/collins-aerospace-2025.html"><span class="rt">Collins Aerospace: one check-in system, four airports on paper</span><span class="rs">Europe, September 2025. Ransomware hits a shared check-in system and forces Heathrow, Brussels, Berlin and Dublin onto manual processes.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../case-studies/marks-and-spencer-2025.html"><span class="rt">Marks & Spencer: weeks without online sales</span><span class="rs">UK, 2025. A cyberattack halts online orders and forces stores onto manual processes.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></section>
+<section class="block" id="next" style="border-top:0;padding-top:24px" data-pagefind-ignore>
+      <aside class="ctx" aria-labelledby="ctx-h"><div><h2 id="ctx-h">Run Monday's check on your own numbers</h2><p>The three checks above take under an hour. If one of them fails, let's talk.</p></div><div class="cta-actions"><a class="btn primary" href="../resources/downtime-calculator.html">Put a number on a day of cloud outage</a><a class="btn ghost" href="https://calendly.com/fabien-mariou" target="_blank" rel="noopener">Book 30 minutes</a></div></aside>
+    </section>
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap fgrid">
+    <div class="fbrand">
+      <img src="../../assets/logo.webp" alt="FZ Consultation" width="160" height="120" class="flogo">
+      <p>Business resilience, security and disaster recovery.</p>
+      <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
+    </div>
+    <div><h2 class="fh">What we do</h2><ul><li><a href="../what-we-do/index.html#know">Know</a></li><li><a href="../what-we-do/index.html#prepare">Prepare</a></li><li><a href="../what-we-do/index.html#prove">Prove</a></li><li><a href="../what-we-do/index.html#stay-ready">Stay ready</a></li><li><a href="../what-we-do/methodology.html">Methodology</a></li></ul></div><div><h2 class="fh">Sectors</h2><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries.html">All sectors</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li></ul></div><div><h2 class="fh">AI</h2><ul><li><a href="../ai/index.html">Overview</a></li><li><a href="../ai/auditor.html">FZ AI Auditor</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div><div><h2 class="fh">Learn</h2><ul><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../insights/index.html">Insights</a></li><li><a href="../resources/index.html">Resources</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="../resources/glossary.html">Glossary</a></li><li><a href="../self-assessment.html">Self-assessment</a></li></ul></div><div><h2 class="fh">FZ Consultation</h2><ul><li><a href="../contact.html">Contact</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../search.html">Search</a></li></ul></div>
+  </div>
+  <div class="wrap fbottom">
+    <span>© <span class="year">2026</span> FZ Consultation</span>
+    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a><a href="../accessibility.html">Accessibility</a><a href="../security.html">Site security</a><a href="../governance.html">Governance and corrections</a></span>
+    <span>Europe · UK · Canada · United States</span>
+  </div>
+</footer>
+<script src="../../assets/site.js?v=1391954f"></script>
+
+</body>
+</html>

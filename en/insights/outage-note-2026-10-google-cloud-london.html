@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What this outage teaches — October 2026: one Google Cloud zone in London, about eight hours | FZ Consultation</title>
+<meta name="description" content="A power event in one Google Cloud zone took services down for hours. What we know, what we do not know yet, and what to check on Monday.">
+
+<link rel="canonical" href="https://fzconsultation.xyz/en/insights/outage-note-2026-10-google-cloud-london.html">
+<link rel="alternate" hreflang="fr" href="https://fzconsultation.xyz/fr/insights/outage-note-2026-10-google-cloud-london.html"><link rel="alternate" hreflang="en" href="https://fzconsultation.xyz/en/insights/outage-note-2026-10-google-cloud-london.html"><link rel="alternate" hreflang="x-default" href="https://fzconsultation.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FZ Consultation">
+<meta property="og:title" content="What this outage teaches — October 2026: one Google Cloud zone in London, about eight hours | FZ Consultation">
+<meta property="og:description" content="A power event in one Google Cloud zone took services down for hours. What we know, what we do not know yet, and what to check on Monday.">
+<meta property="og:url" content="https://fzconsultation.xyz/en/insights/outage-note-2026-10-google-cloud-london.html">
+<meta property="og:image" content="https://fzconsultation.xyz/assets/og-en.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/mark.webp" type="image/webp">
+<link rel="preload" href="../../assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" type="application/rss+xml" title="FZ Consultation — Insights" href="../insights/feed.xml">
+<script src="../../assets/theme.js?v=1391954f"></script>
+<link rel="stylesheet" href="../../assets/site.css?v=1391954f">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "What this outage teaches — October 2026: one Google Cloud zone in London, about eight hours", "description": "A power event in one Google Cloud zone took services down for hours. What we know, what we do not know yet, and what to check on Monday.", "datePublished": "2026-10-29", "dateModified": "2026-10-29", "inLanguage": "en", "author": {"@type": "Organization", "name": "FZ Consultation", "url": "https://fzconsultation.xyz"}, "publisher": {"@type": "Organization", "name": "FZ Consultation", "url": "https://fzconsultation.xyz"}, "mainEntityOfPage": "https://fzconsultation.xyz/en/insights/outage-note-2026-10-google-cloud-london.html"}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://fzconsultation.xyz/en/"}, {"@type": "ListItem", "position": 2, "name": "Resources", "item": "https://fzconsultation.xyz/en/resources/"}, {"@type": "ListItem", "position": 3, "name": "Insights", "item": "https://fzconsultation.xyz/en/insights/"}, {"@type": "ListItem", "position": 4, "name": "October 2026: one Google Cloud zone in London, about eight hours", "item": "https://fzconsultation.xyz/en/insights/outage-note-2026-10-google-cloud-london.html"}]}</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "b23a07ee11d3441f89c969fc2c62f224"}'></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html" aria-label="FZ Consultation">
+      <img class="mark" src="../../assets/mark.webp" alt="" width="40" height="29">
+      <span class="word">Consultation</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+      <span class="bars" aria-hidden="true"></span><span class="mt-label">Menu</span>
+    </button>
+    <nav id="primary-nav" class="primary" aria-label="Main navigation">
+      <div class="has-mega">
+        <button class="mega-toggle" type="button" aria-expanded="false" aria-controls="mega">What we do<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="mega" id="mega">
+          <div class="wrap mega-grid">
+            <div class="mcol"><a class="mhead" href="../what-we-do/index.html">What we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/index.html#know">Know</a></li><li><a href="../what-we-do/index.html#prepare">Prepare</a></li><li><a href="../what-we-do/index.html#prove">Prove</a></li><li><a href="../what-we-do/index.html#stay-ready">Stay ready</a></li></ul></div>
+            <div class="mcol"><a class="mhead" href="../what-we-do/industries.html">Industries <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries.html">All sectors</a></li></ul></div>
+            <div class="mcol"><span class="mhead plain">Approach</span><ul><li><a href="../what-we-do/methodology.html">Methodology</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li><li><a href="../self-assessment.html">Self-assessment</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li></ul><a class="mall" href="../what-we-do/index.html">View everything we do <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+      </div>
+      <a href="../ai/index.html">AI</a>
+      <a href="../case-studies/index.html">Case studies</a>
+      <a href="../resources/index.html">Resources</a>
+      <a href="../contact.html" class="nav-cta">Contact us</a>
+      <div class="nav-tools">
+        <a href="../search.html">Search the site</a>
+        <button class="theme-toggle txt" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme">Change theme</button>
+      </div>
+    </nav>
+    <div class="hdr-tools">
+      <a class="icon-btn" href="../search.html" aria-label="Search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button class="icon-btn theme-toggle" type="button" data-label-light="Switch to light theme" data-label-dark="Switch to dark theme" aria-label="Change theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+    </div>
+    <nav class="lang" aria-label="Langue / Language">
+      <a href="../../fr/insights/outage-note-2026-10-google-cloud-london.html" hreflang="fr" data-lang="fr">FR</a>
+      <a href="../insights/outage-note-2026-10-google-cloud-london.html" hreflang="en" data-lang="en" aria-current="true">EN</a>
+    </nav>
+  </div>
+</header>
+<main id="main" data-pagefind-body>
+  <div class="wrap">
+<section class="phero">
+      <nav class="crumbs" data-pagefind-ignore aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><a href="../resources/index.html">Resources</a></li><li><a href="../insights/index.html">Insights</a></li><li aria-current="page">October 2026: one Google Cloud zone in London, about eight hours</li></ol></nav>
+      <p class="eyebrow">What this outage teaches · October 29, 2026 · 3 min</p>
+      <h1>What this outage teaches — October 2026: one Google Cloud zone in London, about eight hours</h1>
+      <p class="lede">A power event in one Google Cloud zone took services down for hours. What we know, what we do not know yet, and what to check on Monday.</p>
+    </section><section class="block prose"><div class="prose-in"><dl class="note-facts"><div><dt>When</dt><dd>Impact from about 06:08 UTC on 20 October 2026; “mitigated for most customers” at 14:03 UTC</dd></div><div><dt>Where</dt><dd>europe-west2-b, one of the three zones of the London region</dd></div><div><dt>Cause according to Google</dt><dd>“A power event caused an outage within europe-west2-b zone.”</dd></div><div><dt>Services named</dt><dd>BigQuery Data Transfer Service, Cloud Filestore, Cloud Run, App Engine, NetApp Volumes, GKE, Managed Kafka (per The Register)</dd></div><div><dt>Not yet public</dt><dd>Google's incident analysis, promised once its internal investigation is complete</dd></div></dl><h2>What we know</h2><p>In the early hours of 20 October, a power event took a zone of Google Cloud's London region offline. Customer impact began around 06:08 UTC. At 11:58 UTC Google tentatively projected full recovery by 13:00 UTC, and at 14:03 UTC it described the issue as mitigated for most customers, with a very small number still affected. Roughly eight hours from first impact to “mostly fixed”.</p><p>Several well-known UK organizations were reported as affected, among them Lloyds Bank, HSBC, Royal Mail, Rightmove, DPD, BT, Screwfix and Revolut. Those reports come from the press and outage trackers. In the sources we read, none of those companies had confirmed it, and we do not know which of them depended on the affected zone.</p><h2>What we do not know yet</h2><ul><li>The cause beyond “power event”: Google has promised an analysis once its internal investigation is complete.</li><li>Why the loss of one zone was visible to so many. Google speaks of one zone only; an academic quoted by The Register calls it “a regional outage centered on europe-west2”.</li><li>Whether the affected customers had multi-zone designs that failed to fail over, or single-zone designs.</li></ul><h2>What it teaches</h2><p>A zone is supposed to be the unit you can lose. The useful question is not whether Google failed, but which of your services would have noticed.</p><ul><li>Losing a zone is the failure cloud architecture promises to absorb, and the one most often untested. A service is multi-zone when it has actually failed over, not when the diagram says so.</li><li>Managed services hide their zone. Storage, queues and databases you did not place yourself may be single-zone by default. Check, don't assume.</li><li>Eight hours is a long time against an impact tolerance. If you wrote two hours for a payments service, a zone-level outage like this one exceeds it unless failover works.</li></ul><h2>Check on Monday morning</h2><ol class="mchecks"><li><span>List the services you run in a single zone, including managed ones you did not place yourself.</span></li><li><span>Pick one and fail it over, stopwatch in hand. If you cannot, write down why.</span></li><li><span>Check that your monitoring, status page and alerts do not live in the same zone or provider they watch.</span></li><li><span>Compare eight hours with the impact tolerance you wrote down for your most important service.</span></li></ol><h2>Sources</h2><ul class="sources"><li><a href="https://www.theregister.com/a/5304160" target="_blank" rel="noopener noreferrer">The Register: Google Cloud outage (20 October 2026)</a></li><li><a href="https://www.techradar.com/pro/live/google-cloud-down-major-outage-across-europe-hits-big-brands-banking-apps-and-more" target="_blank" rel="noopener noreferrer">TechRadar: Google Cloud down, live coverage</a></li><li><a href="https://www.thousandeyes.com/blog/google-cloud-outage-analysis-october-20-2026" target="_blank" rel="noopener noreferrer">ThousandEyes: Google Cloud outage analysis, October 20, 2026</a></li></ul></div></section><section class="block"><h2>Go further</h2><ul class="rows"><li><a href="../case-studies/aws-us-east-1-2025.html"><span class="rt">AWS us-east-1: one empty DNS record, a day of cascading failures</span><span class="rs">Worldwide, October 2025. A race condition in DynamoDB's DNS automation leaves a region without an address, and many services fall with it.</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../what-we-do/index.html#prove"><span class="rt">Prove: rehearse before the real day</span><span class="rs"></span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="../resources/downtime-calculator.html"><span class="rt">Downtime cost calculator</span><span class="rs"></span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></section>
+<section class="block" id="next" style="border-top:0;padding-top:24px" data-pagefind-ignore>
+      <aside class="ctx" aria-labelledby="ctx-h"><div><h2 id="ctx-h">Does this sound like your situation?</h2><p>Thirty minutes is enough to say where to start.</p></div><div class="cta-actions"><a class="btn primary" href="https://calendly.com/fabien-mariou" target="_blank" rel="noopener">Book 30 minutes</a><a class="btn ghost" href="../self-assessment.html">Take the self-assessment</a></div></aside>
+    </section>
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap fgrid">
+    <div class="fbrand">
+      <img src="../../assets/logo.webp" alt="FZ Consultation" width="160" height="120" class="flogo">
+      <p>Business resilience, security and disaster recovery.</p>
+      <p><a href="mailto:contact@fzconsultation.xyz">contact@fzconsultation.xyz</a></p>
+    </div>
+    <div><h2 class="fh">What we do</h2><ul><li><a href="../what-we-do/index.html#know">Know</a></li><li><a href="../what-we-do/index.html#prepare">Prepare</a></li><li><a href="../what-we-do/index.html#prove">Prove</a></li><li><a href="../what-we-do/index.html#stay-ready">Stay ready</a></li><li><a href="../what-we-do/methodology.html">Methodology</a></li></ul></div><div><h2 class="fh">Sectors</h2><ul><li><a href="../what-we-do/industries/financial-services.html">Financial services</a></li><li><a href="../what-we-do/industries/healthcare.html">Healthcare</a></li><li><a href="../what-we-do/industries/energy-utilities.html">Energy and utilities</a></li><li><a href="../what-we-do/industries.html">All sectors</a></li><li><a href="../what-we-do/regulations.html">Regulations</a></li></ul></div><div><h2 class="fh">AI</h2><ul><li><a href="../ai/index.html">Overview</a></li><li><a href="../ai/auditor.html">FZ AI Auditor</a></li><li><a href="../ai/citadel.html">Microsoft Foundry Citadel</a></li><li><a href="../ai/vision-questionnaire.html">AI vision questionnaire</a></li></ul></div><div><h2 class="fh">Learn</h2><ul><li><a href="../case-studies/index.html">Case studies</a></li><li><a href="../insights/index.html">Insights</a></li><li><a href="../resources/index.html">Resources</a></li><li><a href="../resources/downtime-calculator.html">Downtime cost calculator</a></li><li><a href="../resources/glossary.html">Glossary</a></li><li><a href="../self-assessment.html">Self-assessment</a></li></ul></div><div><h2 class="fh">FZ Consultation</h2><ul><li><a href="../contact.html">Contact</a></li><li><a href="../partners.html">Ecosystem and partnerships</a></li><li><a href="../search.html">Search</a></li></ul></div>
+  </div>
+  <div class="wrap fbottom">
+    <span>© <span class="year">2026</span> FZ Consultation</span>
+    <span class="flegal"><a href="../privacy.html">Privacy policy</a><a href="../legal.html">Legal notice</a><a href="../accessibility.html">Accessibility</a><a href="../security.html">Site security</a><a href="../governance.html">Governance and corrections</a></span>
+    <span>Europe · UK · Canada · United States</span>
+  </div>
+</footer>
+<script src="../../assets/site.js?v=1391954f"></script>
+
+</body>
+</html>

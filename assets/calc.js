@@ -30,6 +30,10 @@
       box.appendChild(el("p",null,ui.what_if_t.replace("{x}",money(varHour)).replace("{a}",String(v.hours)).replace("{b}",String(half)).replace("{y}",money(saved))));
       out.appendChild(box);
     }
+    if(D.contact){
+      var lines=[D.send_intro+" ("+form.elements.cur.value+")",ui.total+": "+money(total)+(v.hours>0?" / "+v.hours+" h":""),ui.rev+": "+money(rev),ui.prod+": "+money(prod),ui.pen+": "+money(pen),ui.rec+": "+money(rec)];
+      var go=el("p",null);var a=el("a","btn ghost",D.send);a.href=D.contact+"?topic=intro&message="+encodeURIComponent(lines.join("\n"));go.appendChild(a);out.appendChild(go);
+    }
     out.focus({preventScroll:false});
   }
   form.addEventListener("submit",function(e){e.preventDefault();render()});

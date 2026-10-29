@@ -115,36 +115,40 @@ AIPOL = {
  "related": ["ai/governance.html", "ai/citadel.html"],
 }
 
+
+# ---------------- AI agent audit scorecard ----------------
 AISCORE = {
  "slug": "ai-agent-audit-scorecard",
  "title": ("Tableau de bord d'audit d'un agent IA", "AI agent audit scorecard"),
  "short": ("Tableau de bord d'audit d'agent IA", "AI agent audit scorecard"),
  "summary": ("Un tableau pour suivre, agent par agent, la fidélité au périmètre, la valeur réalisée et le rayon d'impact, et le refaire chaque trimestre.", "A table to track, agent by agent, scope fidelity, value realized and blast radius, and to re-run every quarter."),
  "lede": ("La version allégée de la méthode de FZ AI Auditor, pour que votre équipe fasse un premier état des lieux et le répète.", "A lightweight version of the FZ AI Auditor method, so your team can take a first inventory and repeat it."),
- "how": ("Remplissez une ligne par agent ou automatisation déployé. Appuyez chaque colonne sur des preuves (journaux, traces, factures, échantillons revus) plutôt que sur le document de conception. Les cotes ci-dessous sont un exemple : adaptez les seuils à votre tolérance au risque. Refaites le tableau chaque trimestre et à chaque changement de modèle, consigne ou permission.", "Fill in one row per deployed agent or automation. Back every column with evidence (logs, traces, invoices, reviewed samples) rather than the design document. The ratings below are an example: adapt the thresholds to your risk tolerance. Re-run the table every quarter and whenever a model, prompt or permission changes."),
+ "how": ("Remplissez une ligne par agent ou automatisation déployé. Appuyez chaque colonne sur des preuves (journaux, traces, factures, échantillons revus) plutôt que sur le document de conception. Les cotes ci-dessous sont un exemple de grille : adaptez les seuils à votre tolérance au risque. Refaites le tableau chaque trimestre et à chaque changement de modèle, de consigne ou de permission, puis comparez avec le cycle précédent.",
+         "Fill in one row per deployed agent or automation. Back every column with evidence (logs, traces, invoices, reviewed samples) rather than the design document. The ratings below are an example grid: adapt the thresholds to your risk tolerance. Re-run the table every quarter and whenever a model, prompt or permission changes, then compare with the previous cycle."),
  "defs_title": ("Grille de cotation du rayon d'impact (exemple)", "Blast-radius rating grid (example)"),
  "defs": [
-  (("Faible", "Low"), ("Erreurs réversibles, peu de cas touchés, détection le jour même.", "Reversible errors, few cases touched, detection the same day.")),
+  (("Faible", "Low"), ("Erreurs réversibles, peu de cas touchés, détection rapide : une personne s'en aperçoit le jour même.", "Reversible errors, few cases touched, fast detection: a person notices the same day.")),
   (("Modéré", "Moderate"), ("Erreurs réversibles mais nombreuses, ou détection en quelques jours. Correction coûteuse sans être critique.", "Reversible but numerous errors, or detection within days. Costly to correct but not critical.")),
-  (("Élevé", "High"), ("Erreurs partiellement irréversibles, ou touchant clients, argent ou obligations réglementaires, avec détection lente.", "Partly irreversible errors, or errors touching customers, money or regulatory obligations, with slow detection.")),
-  (("Critique", "Critical"), ("Erreurs irréversibles ou touchant la sécurité, des montants importants ou la conformité, à volume élevé, avec détection incertaine. Exige validation humaine, déploiement progressif et interrupteur d'arrêt testé.", "Irreversible errors, or errors affecting safety, large sums or compliance, at high volume, with uncertain detection. Requires human approval, staged rollout and a tested kill switch.")),
+  (("Élevé", "High"), ("Erreurs partiellement irréversibles, ou touchant des clients, de l'argent ou des obligations réglementaires, avec détection lente.", "Partly irreversible errors, or errors touching customers, money or regulatory obligations, with slow detection.")),
+  (("Critique", "Critical"), ("Erreurs irréversibles ou touchant la sécurité des personnes, des montants importants ou la conformité, à un volume élevé, avec détection incertaine. Exige validation humaine, déploiement progressif et interrupteur d'arrêt testé.", "Irreversible errors, or errors touching safety, large sums or compliance, at high volume, with uncertain detection. Requires human approval, staged rollout and a tested kill switch.")),
  ],
  "columns": [
   ("Agent / automatisation", "Agent / automation"), ("Responsable", "Owner"), ("Périmètre : autorisé contre observé", "Scope: authorized vs observed"),
-  ("Dérive (aucune / mineure / importante)", "Drift (none / minor / material)"), ("Coût mensuel", "Monthly cost"), ("Valeur évitée mensuelle", "Monthly value displaced"),
-  ("Exactitude vs référence humaine", "Accuracy vs human baseline"), ("Gravité du pire cas · réversible ?", "Worst-case severity · reversible?"), ("Délai de détection", "Time to detect"),
+  ("Dérive (aucune / mineure / importante)", "Drift (none / minor / material)"), ("Coût d'exploitation mensuel", "Monthly cost to run"), ("Valeur évitée mensuelle", "Monthly value displaced"),
+  ("Exactitude (échantillon) contre référence humaine", "Accuracy (sample) vs human baseline"), ("Gravité du pire cas · réversible ?", "Worst-case severity · reversible?"), ("Délai de détection", "Time to detect"),
   ("Cote de rayon d'impact", "Blast-radius rating"), ("Écart de confinement", "Containment gap"), ("Prochaine revue", "Next review"),
  ],
  "example": [
   ("Agent de tri des courriels clients", "Customer email triage agent"), ("Responsable du soutien", "Support lead"), ("Autorisé : classer et suggérer. Observé : envoie aussi des réponses automatiques", "Authorized: classify and suggest. Observed: also sends auto-replies"),
-  ("Importante", "Material"), ("4 000 $", "$4,000"), ("9 000 $", "$9,000"), ("92 % (n = 200) contre 96 % humain", "92% (n = 200) vs 96% human"),
-  ("Moyenne · en partie irréversible", "Medium · partly irreversible"), ("3 jours", "3 days"), ("Élevée", "High"), ("Pas de validation avant envoi ni d'interrupteur testé", "No approval before sending or tested kill switch"), ("Dans 3 mois ou au prochain changement", "In 3 months or at next change"),
+  ("Importante", "Material"), ("4 000 $", "$4,000"), ("9 000 $", "$9,000"),
+  ("92 % (n = 200) contre 96 % humain", "92% (n = 200) vs 96% human"), ("Moyenne · en partie irréversible (courriel envoyé)", "Medium · partly irreversible (email sent)"), ("3 jours", "3 days"),
+  ("Élevée", "High"), ("Aucune validation avant envoi ; pas d'interrupteur d'arrêt testé", "No approval before sending; no tested kill switch"), ("Dans 3 mois ou au prochain changement de modèle", "In 3 months or at the next model change"),
  ],
  "tips": [
-  (("Commencez par l'inventaire", "Start with the inventory"), ("Incluez les agents adoptés par les équipes sans passer par la TI.", "Include agents teams adopted without going through IT.")),
-  (("Mesurez la valeur", "Measure value"), ("Remplacez les estimations par les coûts réels et un échantillon revu à la main.", "Replace estimates with real costs and a hand-reviewed sample.")),
-  (("Cotez le pire cas", "Rate the worst case"), ("Jugez le rayon d'impact sur ce qui peut mal tourner au volume réel, pas sur la moyenne.", "Rate blast radius by what can go wrong at real volume, not by the average.")),
-  (("Comparez les contrôles à la cote", "Match controls to the rating"), ("Notez l'écart entre les contrôles existants et ceux qu'exige la cote.", "Record the gap between existing controls and those the rating requires.")),
+  (("Commencez par l'inventaire", "Start with the inventory"), ("Vous ne pouvez pas auditer ce que vous ne connaissez pas. Incluez les agents adoptés par les équipes sans passer par la TI.", "You cannot audit what you do not know. Include agents teams adopted without going through IT.")),
+  (("Mesurez la valeur, ne la supposez pas", "Measure value, don't assume it"), ("Remplacez l'estimation de l'analyse de rentabilité par des coûts réels et un échantillon revu à la main.", "Replace the business-case estimate with real costs and a hand-reviewed sample.")),
+  (("Cotez le pire cas", "Rate the worst case"), ("Le rayon d'impact se juge sur ce qui peut aller mal, au volume réel, avant qu'un humain s'en aperçoive, pas sur la moyenne.", "Blast radius is judged on what can go wrong, at real volume, before a human notices, not on the average.")),
+  (("Comparez les contrôles à la cote", "Match controls to the rating"), ("Une cote critique exige plus qu'une revue occasionnelle. Notez l'écart entre les contrôles existants et ceux que la cote demande.", "A critical rating requires more than an occasional review. Record the gap between existing controls and those the rating demands.")),
  ],
  "related": ["ai/auditor.html", "ai/governance.html"],
 }
@@ -205,4 +209,10 @@ GLOSSARY = [
  (("IA de l'ombre (shadow AI)", "Shadow AI"), ("Usage d'outils d'IA par le personnel sans l'approbation ni la connaissance de l'organisation.", "Staff use of AI tools without the organization's approval or knowledge.")),
  (("Gouvernance de l'IA", "AI governance"), ("Politiques, rôles, inventaires et contrôles qui encadrent le développement et l'usage de l'IA dans l'organisation.", "The policies, roles, inventories and controls that frame how AI is built and used in the organization.")),
  (("Microsoft Foundry Citadel", "Microsoft Foundry Citadel"), ("Architecture de référence publiée par Microsoft pour gouverner la plateforme d'IA d'entreprise : voir notre page dédiée.", "A reference architecture published by Microsoft for governing an enterprise AI platform: see our dedicated page.")),
+ (("Rayon d'impact (blast radius)", "Blast radius"), ("Étendue des dégâts qu'une défaillance peut causer avant d'être arrêtée : nombre de cas touchés, gravité, réversibilité et délai de détection.", "The extent of damage a failure can cause before it is stopped: number of cases touched, severity, reversibility and time to detection.")),
+ (("Dérive de périmètre (scope drift)", "Scope drift"), ("Écart croissant entre ce qu'un agent était autorisé à faire et ce qu'il fait réellement en production.", "The growing gap between what an agent was authorized to do and what it actually does in production.")),
+ (("Interrupteur d'arrêt (kill switch)", "Kill switch"), ("Moyen testé d'arrêter rapidement un agent ou un système automatisé, sans dépendre de lui pour s'arrêter.", "A tested way to stop an agent or automated system quickly, without depending on it to stop itself.")),
+ (("Injection de pannes (failure injection)", "Failure injection"), ("Exercice qui provoque volontairement une défaillance, dans un environnement de test ou simulé, pour vérifier que les contrôles et la détection fonctionnent.", "An exercise that deliberately causes a failure, in a test or simulated environment, to check that controls and detection work.")),
+ (("Traces d'exécution", "Execution traces"), ("Enregistrement détaillé de ce qu'un agent a fait : requêtes reçues, outils appelés, données consultées et actions réalisées.", "A detailed record of what an agent did: requests received, tools called, data accessed and actions taken.")),
+ (("Surveillance après mise sur le marché", "Post-market monitoring"), ("Obligation, dans le règlement européen sur l'IA, de suivre le fonctionnement d'un système d'IA à haut risque une fois en service ; comme les autres obligations des systèmes à haut risque, elle est désormais attendue à partir du 2 décembre 2027 (annexe III) ou du 2 août 2028 (annexe I).", "A duty under the EU AI Act to monitor how a high-risk AI system performs once in service. Like the other high-risk obligations, it is now due from 2 December 2027 (Annex III) or 2 August 2028 (Annex I).")),
 ]
